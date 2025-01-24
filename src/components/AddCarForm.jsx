@@ -14,7 +14,8 @@ export function AddCarForm (){
     const [opened, setOpened] = useState("")
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
-    const [collection, setCollection] = useState("6765cb54c9980b2722b1e629")
+    const [collection, setCollection] = useState("")
+    const [userCollections, setUserCollections] = useState([])
     const [moreInfoVisibility, setMoreInfoVisibility] = useState("none")
     const [images, setImages] = useState([])
     const [convertedImages, setConvertedImages] = useState([])
@@ -158,6 +159,16 @@ export function AddCarForm (){
         : null
     },[images])
     
+    useEffect(()=>{
+        const userId = "6764ae99520ac472521c906d"
+        const url= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${userId}`
+        async function getUserCollections(){
+            const usrCollections = await fetch(url)
+            const usrCollectionsData = await usrCollections.json()
+            setUserCollections(usrCollectionsData.data)
+        }
+        getUserCollections()
+    },[])
     
     
     return(
@@ -234,7 +245,16 @@ export function AddCarForm (){
                 <label htmlFor='carCollectionSelectInput'>Colección</label>
                 <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={handleCarCollectionSelect}>
                     <option value={""}></option>
-                    <option value={"6765cb54c9980b2722b1e629"}>Mis Hotwheels</option>
+                    {
+                        userCollections.length>0 ?
+                        userCollections.map((col)=>{
+                            return(
+                                <option key={col._id} value={col._id}>{col.collectionName}</option>
+                            )
+                        })
+                        :
+                        null
+                    }
                     
                 </select>
             </section>
