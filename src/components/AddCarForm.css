@@ -1,0 +1,24 @@
+.addCarForm-section{
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.AddCarForm-moreDataSection{
+    border: 2px solid black;
+    background-color: pink;
+    flex-direction: column;
+}
+
+.imgPrueba{
+    height: 60px;
+}
+
+.AddCarForm-imgPreviewSection{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background-color: skyblue;
+    flex-wrap: wrap;
+}

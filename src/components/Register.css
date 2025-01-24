@@ -1,0 +1,13 @@
+#register-section{
+    display: flex;
+    flex-direction: column;
+    background-color: skyblue;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
