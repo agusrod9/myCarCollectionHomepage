@@ -1,24 +1,27 @@
 .addCarForm-section{
-    background-color: red;
     display: flex;
     flex-direction: column;
-    
 }
 
-.AddCarForm-moreDataSection{
-    border: 2px solid black;
-    background-color: pink;
-    flex-direction: column;
-}
-
-.imgPrueba{
+.imgPreview{
     height: 60px;
 }
 
-.AddCarForm-imgPreviewSection{
+#carNotesInput{
+    resize: none;
+}
+
+.AddCarForm-imgSection-preview{
     display: flex;
     justify-content: center;
     gap: 10px;
-    background-color: skyblue;
     flex-wrap: wrap;
+}
+
+.AddCarForm-imgSection-message{
+    color: red;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

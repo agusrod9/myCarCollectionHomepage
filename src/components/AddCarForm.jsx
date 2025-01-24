@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './AddCarForm.css'
 import base64 from 'base64-encode-file'
+import imageCompression from 'browser-image-compression';
 
 export function AddCarForm (){
     const [make, setMake] = useState("")
@@ -13,16 +14,26 @@ export function AddCarForm (){
     const [opened, setOpened] = useState("")
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
-    const [collection, setCollection] = useState("")
+    const [collection, setCollection] = useState("6765cb54c9980b2722b1e629")
     const [moreInfoVisibility, setMoreInfoVisibility] = useState("none")
     const [images, setImages] = useState([])
     const [convertedImages, setConvertedImages] = useState([])
+    const [doneUploadingImages, setDoneUploadingImages] = useState(true)
+    const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
 
     const moreDataSectionStlyles = {display : moreInfoVisibility}
     const yearsToSelect =[]
     const today = new Date()
     for(let i=today.getFullYear(); i>= 1885 ; i--){
         yearsToSelect.push(i)
+    }
+
+    if(make != "" && model !="" && year!="" && scale!="" && color!=""){
+        if(!requiredFieldsSet){
+            setRequiredFieldsSet(true)
+        }
+    }else if(requiredFieldsSet){
+        setRequiredFieldsSet(false)
     }
 
     async function newCarToApi(make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum) {
@@ -40,13 +51,13 @@ export function AddCarForm (){
         if(opened!=""){data.opened = opened}
         if(series!=""){data.series = series}
         if(seriesNum!=""){data.series_num = seriesNum}
+        if(collection!=""){data.collectionId = collection}
         if(convertedImages.length>0){data.img_urls = convertedImages}
         const opts = {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
             body : JSON.stringify(data)
         }
-        console.log({dataenviadaEnBody : data});
         
         const response = await fetch(url,opts)
         const responseData = await response.json()
@@ -59,8 +70,7 @@ export function AddCarForm (){
             return false
             
         }
-        collection=="" ? setCollection(null) : null
-        opened=="" ? setOpened(null) : null
+        
         const added = await newCarToApi(make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
         console.log(added)
         
@@ -114,16 +124,31 @@ export function AddCarForm (){
         moreInfoVisibility =="none" ? setMoreInfoVisibility("flex") : setMoreInfoVisibility("none")
     }
 
+    const compressImage = async(img)=>{
+        const opts = {
+            maxSizeMB : 1,
+            useWebWorker : true
+        }
+        const compressedImage = await imageCompression(img, opts)
+        return compressedImage
+    }
+
     const imagesToBase64 = async()=>{
         const converted = []
         Array.from(images).map(async(img)=>{
-            const base = await base64(img)
+            const compressedImg = await compressImage(img)
+            const base = await base64(compressedImg)
             converted.push(base)
         })
         setConvertedImages(converted)
+        setTimeout(() => {
+            setDoneUploadingImages(!doneUploadingImages)
+        }, 2000); 
     }
 
+
     const handleNewImg=async(files)=>{
+        setDoneUploadingImages(!doneUploadingImages)
         setImages(files)
     }
 
@@ -133,7 +158,7 @@ export function AddCarForm (){
         : null
     },[images])
     
-
+    
     
     return(
         <section className='addCarForm-section'>
@@ -141,9 +166,9 @@ export function AddCarForm (){
             <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
             <label htmlFor='carModelInput'>*Modelo</label>
             <input type="text" name='carModel' id='carModelInput' value={model} onChange={handleCarModelInput} placeholder='e: Fiesta' />
-            <label htmlFor='carYearInput'>*Año</label>
+            <label htmlFor='carYearSelectInput'>*Año</label>
             <select name='carYear' id='carYearSelectInput' value={year} onChange={handleCarYearInput} placeholder='e: 2019' >
-                <option value={null}></option>
+                <option value={""}></option>
                 {yearsToSelect.map((yearSelect)=>{
                     return(
                         <option key={yearSelect} value={yearSelect}>{yearSelect}</option>
@@ -154,7 +179,7 @@ export function AddCarForm (){
             <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
             <label htmlFor='carScaleSelectInput'>*Escala</label>
             <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
-                <option value={null}></option>
+                <option value={""}></option>
                 <option value="1/5">1/5</option>
                 <option value="1/8">1/8</option>
                 <option value="1/10">1/10</option>
@@ -174,47 +199,48 @@ export function AddCarForm (){
             <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
             <label htmlFor='carImagesInput'>Imágenes</label>
             <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e.target.files)}} />
-            <section className='AddCarForm-imgPreviewSection'>
-            {
-                Array.from(images).map((img)=>{
-                    return(
-                            <img key={img.name} className='imgPrueba' src={URL.createObjectURL(img)} />
-                        )
-                    })
-                }
+            <section className='AddCarForm-imgSection'>
+                <section className='AddCarForm-imgSection-preview'>
+                    {
+                    Array.from(images).map((img)=>{
+                        return(
+                                <img key={img.name} className='imgPreview' src={URL.createObjectURL(img)} />
+                            )
+                        })
+                    }
+                </section>
+            
+                <section className='AddCarForm-imgSection-message'>
+                <p hidden={doneUploadingImages}>Se están cargando las imágenes.</p>
+
+                </section>
             </section>
 
             <button id='AddCarFormMoreInfoButton' onClick={handleMoreInfoClick}>Agregar más info</button>
 
-            <section className='AddCarForm-moreDataSection' style={moreDataSectionStlyles} >
+            <section className='addCarForm-section AddCarForm-moreDataSection' style={moreDataSectionStlyles} >
                 <label htmlFor='carNotesInput'>Notas</label>
-                <input type="text" name='carNotes' id='carNotesInput' value={notes} onChange={handleCarNotesInput} placeholder='e: Regalo de navidad'/>
-                <label htmlFor=''>Estado del paquete</label>
+                <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={handleCarNotesInput} placeholder='e: Regalo de navidad' rows={4}/>
+                <label htmlFor='carOpenedSelectInput'>Estado del paquete</label>
                 <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={handleCarOpenedSelect}  >
-                    <option value={null}></option>
+                    <option value={""}></option>
                     <option value='opened'>Abierto</option>
                     <option value='sealed'>Cerrado</option>
                 </select>
                 <label htmlFor='carSeriesInput'>Series</label>
                 <input type="text" name='carSeries' id='carSeriesInput' value={series} onChange={handleCarSeriesInput} placeholder='e: Hotwheels´s MUSCLE MANIA'  />
-                <label htmlFor=''>Nro Serie</label>
+                <label htmlFor='carSeriesNumberInput'>Nro Serie</label>
                 <input type="text" name='carSeriesNumber' id='carSeriesNumberInput' value={seriesNum} onChange={handleCarSeriesNumberInput} placeholder='e: 44/100'/>
-                <label htmlFor=''>Colección</label>
+                <label htmlFor='carCollectionSelectInput'>Colección</label>
                 <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={handleCarCollectionSelect}>
-                    <option value={null}></option>
-                    <option value={"a"}>Colección "asas" del usuario - Fetch</option>
-                    <option value={"b"}>Colección "wplf" del usuario - Fetch</option>
-                    <option value={"c"}>Colección "sdsd" del usuario - Fetch</option>
-                    <option value={"d"}>Colección "vtun" del usuario - Fetch</option>
-                    <option value={"e"}>Colección "derj" del usuario - Fetch</option>
-                    <option value={"f"}>Colección "fddf" del usuario - Fetch</option>
+                    <option value={""}></option>
+                    <option value={"6765cb54c9980b2722b1e629"}>Mis Hotwheels</option>
+                    
                 </select>
             </section>
-            <button id='addCarFormSaveButton' onClick={handleAddCarButtonClick}>
+            <button id='addCarFormSaveButton' onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
                 Guardar
             </button>
-            
-                
             
         </section>
     )
