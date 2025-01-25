@@ -40,7 +40,43 @@ export function AddCarForm (){
         setRequiredFieldsSet(false)
     }
 
-    async function newCarToApi(make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum) {
+    const imagesToBase64 = async()=>{
+        const converted = []
+        Array.from(images).map(async(img)=>{
+            const compressedImg = await compressImage(img)
+            const base = await base64(compressedImg)
+            converted.push(base)
+        })
+        setConvertedImages(converted)
+        setTimeout(() => {
+            setDoneUploadingImages(!doneUploadingImages)
+        }, 2000); 
+    }
+
+    async function imagesToAWSbucket(){
+        const uploadedURLs = []
+        const selectedImages = Array.from(images);
+        for(const img of selectedImages){
+            const response = await fetch('https://mycarcollectionapi.onrender.com/api/aws')
+            const responseData = await response.json()
+            const urlToPost = responseData.data
+            const opts = {
+                method: 'PUT',
+                headers: {"Content-Type" : "multipart/form-data"},
+                body : img
+            }
+            await fetch(urlToPost,opts)
+            const imgUrl = urlToPost.split('?')[0]
+            uploadedURLs.push(imgUrl)
+        }
+        setTimeout(() => {
+            setDoneUploadingImages(!doneUploadingImages)
+        }, 2000);
+
+        return uploadedURLs
+    }
+
+    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum){
         const url ='https://mycarcollectionapi.onrender.com/api/cars'
         const data = {
             carMake : make,
@@ -56,7 +92,7 @@ export function AddCarForm (){
         if(series!=""){data.series = series}
         if(seriesNum!=""){data.series_num = seriesNum}
         if(collection!=""){data.collectionId = collection}
-        if(convertedImages.length>0){data.img_urls = convertedImages}
+        if(urls.length>0){data.img_urls = urls}
         const opts = {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
@@ -75,7 +111,8 @@ export function AddCarForm (){
             
         }
         
-        const added = await newCarToApi(make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
+        const imgUrls = await imagesToAWSbucket()       
+        const added = await newCarToApi(imgUrls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
         if(added.error){
             alert(added.error)
         }else{
@@ -89,6 +126,7 @@ export function AddCarForm (){
                 toast: true,
                 width : '300px'
             });
+            
             resetStates()
             
         }
@@ -109,6 +147,8 @@ export function AddCarForm (){
             setSeries("")
             setSeriesNum("")
             setCollection("")
+            setMoreInfoVisibility("none")
+            setDoneUploadingImages(true)
     }
 
     const handleCarMakeInput = (e)=>{
@@ -168,18 +208,9 @@ export function AddCarForm (){
         return compressedImage
     }
 
-    const imagesToBase64 = async()=>{
-        const converted = []
-        Array.from(images).map(async(img)=>{
-            const compressedImg = await compressImage(img)
-            const base = await base64(compressedImg)
-            converted.push(base)
-        })
-        setConvertedImages(converted)
-        setTimeout(() => {
-            setDoneUploadingImages(!doneUploadingImages)
-        }, 2000); 
-    }
+    
+
+    
 
 
     const handleNewImg=async(files)=>{
