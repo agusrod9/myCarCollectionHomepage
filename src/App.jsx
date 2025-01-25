@@ -1,10 +1,9 @@
 
-import { useEffect, useState } from 'react'
 import './App.css'
-import { AddCarForm } from './components/AddCarForm.jsx'
+import { AddCarScreen } from './screens/AddCarScreen.jsx'
+
 
 function App() {
-  const [cars, setCars] = useState([])
   /*
   useEffect(()=>{
     fetch('https://mycarcollectionapi.onrender.com/api/cars')
@@ -15,7 +14,7 @@ function App() {
 
   return (
     <>
-      <AddCarForm />
+      <AddCarScreen />
     </>
   )
 }

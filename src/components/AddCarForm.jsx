@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './AddCarForm.css'
 import base64 from 'base64-encode-file'
 import imageCompression from 'browser-image-compression';
+import Swal from 'sweetalert2';
 
 export function AddCarForm (){
     const [make, setMake] = useState("")
@@ -21,6 +22,7 @@ export function AddCarForm (){
     const [convertedImages, setConvertedImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
+    const [loggedUserId, setLoggedUserId] = useState("6764ae99520ac472521c906c")
 
     const moreDataSectionStlyles = {display : moreInfoVisibility}
     const yearsToSelect =[]
@@ -28,6 +30,7 @@ export function AddCarForm (){
     for(let i=today.getFullYear(); i>= 1885 ; i--){
         yearsToSelect.push(i)
     }
+    const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
 
     if(make != "" && model !="" && year!="" && scale!="" && color!=""){
         if(!requiredFieldsSet){
@@ -73,8 +76,39 @@ export function AddCarForm (){
         }
         
         const added = await newCarToApi(make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
-        console.log(added)
+        if(added.error){
+            alert(added.error)
+        }else{
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                titleText: `New car collected!`,
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                toast: true,
+                width : '300px'
+            });
+            resetStates()
+            
+        }
         
+    }
+
+    const resetStates = ()=>{
+        setMake("")
+            setModel("")
+            setYear("")
+            setColor("")
+            setScale("")
+            setManufacturer("")
+            setImages([])
+            setConvertedImages([])
+            setNotes("")
+            setOpened("")
+            setSeries("")
+            setSeriesNum("")
+            setCollection("")
     }
 
     const handleCarMakeInput = (e)=>{
@@ -160,8 +194,7 @@ export function AddCarForm (){
     },[images])
     
     useEffect(()=>{
-        const userId = "6764ae99520ac472521c906d"
-        const url= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${userId}`
+        const url= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const usrCollections = await fetch(url)
             const usrCollectionsData = await usrCollections.json()
@@ -191,20 +224,13 @@ export function AddCarForm (){
             <label htmlFor='carScaleSelectInput'>*Escala</label>
             <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
                 <option value={""}></option>
-                <option value="1/5">1/5</option>
-                <option value="1/8">1/8</option>
-                <option value="1/10">1/10</option>
-                <option value="1/12">1/12</option>
-                <option value="1/18">1/18</option>
-                <option value="1/24">1/24</option>
-                <option value="1/32">1/32</option>
-                <option value="1/36">1/36</option>
-                <option value="1/43">1/43</option>
-                <option value="1/64">1/64</option>
-                <option value="1/72">1/72</option>
-                <option value="1/87">1/87</option>
-                <option value="1/144">1/144</option>
-                <option value="1/160">1/160</option>
+                {
+                    scaleList.map((scaleItem)=>{
+                        return(
+                            <option key={scaleItem} value={scaleItem}>{scaleItem}</option>
+                        )
+                    })
+                }
             </select>
             <label htmlFor='carManufacturerInput'>Fabricante</label>
             <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
