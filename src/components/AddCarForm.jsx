@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import './AddCarForm.css'
-import base64 from 'base64-encode-file'
 import imageCompression from 'browser-image-compression';
 import Swal from 'sweetalert2';
 
@@ -43,7 +42,7 @@ export function AddCarForm (){
     async function compressImages(){
         const compressed = []
         Array.from(images).map(async(img)=>{
-            const compressedImg = await compressImage(img)
+            const compressedImg = await compressImageToWebpFormat(img)
             compressed.push(compressedImg)
         })
         setCompressedImages(compressed)
@@ -61,7 +60,7 @@ export function AddCarForm (){
             const urlToPost = responseData.data
             const opts = {
                 method: 'PUT',
-                headers: {"Content-Type" : "multipart/form-data"},
+                headers: {"Content-Type" : "image/webp"},
                 body : img
             }
             await fetch(urlToPost,opts)
@@ -196,12 +195,14 @@ export function AddCarForm (){
         moreInfoVisibility =="none" ? setMoreInfoVisibility("flex") : setMoreInfoVisibility("none")
     }
 
-    const compressImage = async(img)=>{
+    const compressImageToWebpFormat = async(img)=>{
         const opts = {
             maxSizeMB : 1,
+            fileType: 'image/webp',
             useWebWorker : true
         }
         const compressedImage = await imageCompression(img, opts)
+        
         return compressedImage
     }
 
@@ -210,9 +211,10 @@ export function AddCarForm (){
     
 
 
-    const handleNewImg=async(files)=>{
+    const handleNewImg=async(e)=>{
         setDoneUploadingImages(!doneUploadingImages)
-        setImages(files)
+        setImages(e.target.files)
+        
     }
 
     
@@ -266,7 +268,7 @@ export function AddCarForm (){
             <label htmlFor='carManufacturerInput'>Fabricante</label>
             <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
             <label htmlFor='carImagesInput'>Imágenes</label>
-            <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e.target.files)}} />
+            <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} />
             <section className='AddCarForm-imgSection'>
                 <section className='AddCarForm-imgSection-preview'>
                     {
