@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './AddCarForm.css'
 import imageCompression from 'browser-image-compression';
 import Swal from 'sweetalert2';
@@ -22,6 +22,7 @@ export function AddCarForm (){
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
     const [loggedUserId, setLoggedUserId] = useState("6764ae99520ac472521c906c")
+    const fileInputRef = useRef(null);
 
     const moreDataSectionStlyles = {display : moreInfoVisibility}
     const yearsToSelect =[]
@@ -49,6 +50,7 @@ export function AddCarForm (){
         setTimeout(() => {
             setDoneUploadingImages(!doneUploadingImages)
         }, 2000);
+        
     }
 
     async function imagesToAWSbucket(){
@@ -67,12 +69,11 @@ export function AddCarForm (){
             const imgUrl = urlToPost.split('?')[0]
             uploadedURLs.push(imgUrl)
         }
-        
-
         return uploadedURLs
     }
 
     async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum){
+        
         const url ='https://mycarcollectionapi.onrender.com/api/cars'
         const data = {
             carMake : make,
@@ -102,14 +103,10 @@ export function AddCarForm (){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
-        if(make=="" || model==""|| color==""|| year==""|| scale=="" ){
-            return false
-            
-        }
-        
-        
-        const imgUrls = await imagesToAWSbucket()       
-        const added = await newCarToApi(imgUrls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
+                
+        const urls = await imagesToAWSbucket()
+
+        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
         if(added.error){
             alert(added.error)
         }else{
@@ -145,6 +142,9 @@ export function AddCarForm (){
             setCollection("")
             setMoreInfoVisibility("none")
             setDoneUploadingImages(true)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
     }
 
     const handleCarMakeInput = (e)=>{
@@ -206,18 +206,16 @@ export function AddCarForm (){
         return compressedImage
     }
 
-    
-
-    
-
-
-    const handleNewImg=async(e)=>{
+    const handleNewImg = async(e)=>{
         setDoneUploadingImages(!doneUploadingImages)
         setImages(e.target.files)
         
     }
 
-    
+    const handlePruebaClick = ()=>{
+        fileInputRef.current.click()
+    }
+
     useEffect(()=>{
         images.length>0 ?
         compressImages()
@@ -239,6 +237,25 @@ export function AddCarForm (){
     
     return(
         <section className='addCarForm-section'>
+            <button onClick={handlePruebaClick}>Agregar imágenes</button>
+            <label htmlFor='carImagesInput'>Imágenes</label>
+            <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} ref={fileInputRef} style={{ display: "none" }}/>
+            <section className='AddCarForm-imgSection'>
+                <section className='AddCarForm-imgSection-preview'>
+                    {
+                    Array.from(images).map((img)=>{
+                        return(
+                                <img key={img.name} className='imgPreview' src={URL.createObjectURL(img)} />
+                            )
+                        })
+                    }
+                </section>
+                <section className='AddCarForm-imgSection-message'>
+                <p hidden={doneUploadingImages}>Se están cargando las imágenes.</p>
+
+                </section>
+            </section>
+
             <label htmlFor='carMakeInput'>*Marca</label>
             <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
             <label htmlFor='carModelInput'>*Modelo</label>
@@ -267,24 +284,7 @@ export function AddCarForm (){
             </select>
             <label htmlFor='carManufacturerInput'>Fabricante</label>
             <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
-            <label htmlFor='carImagesInput'>Imágenes</label>
-            <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} />
-            <section className='AddCarForm-imgSection'>
-                <section className='AddCarForm-imgSection-preview'>
-                    {
-                    Array.from(images).map((img)=>{
-                        return(
-                                <img key={img.name} className='imgPreview' src={URL.createObjectURL(img)} />
-                            )
-                        })
-                    }
-                </section>
             
-                <section className='AddCarForm-imgSection-message'>
-                <p hidden={doneUploadingImages}>Se están cargando las imágenes.</p>
-
-                </section>
-            </section>
 
             <button id='AddCarFormMoreInfoButton' onClick={handleMoreInfoClick}>Agregar más info</button>
 

@@ -4,7 +4,11 @@
 }
 
 .imgPreview{
-    height: 60px;
+    object-fit: cover;
+    margin: 5px;
+    width: 90px;
+    height: 90px;
+    aspect-ratio: 1;
 }
 
 #carNotesInput{
@@ -14,8 +18,11 @@
 .AddCarForm-imgSection-preview{
     display: flex;
     justify-content: center;
-    gap: 10px;
     flex-wrap: wrap;
+    min-height: 100px;
+    max-height: 200px;
+    width: 400px;
+    overflow: hidden;
 }
 
 .AddCarForm-imgSection-message{
