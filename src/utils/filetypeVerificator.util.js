@@ -7,7 +7,6 @@ export async function verifyFormat(file){
     
     
     if (fileType) {
-        console.log(fileType.ext)
         return fileType.ext;
     } else {
         return null;

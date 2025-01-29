@@ -232,18 +232,16 @@ export function AddCarForm (){
 
         async function getLoggedUserId(){
             const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
-            const isonlineData = await isonline.json()
-            console.log ({isOnline : isonlineData.message})
-            const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
-            const opts = {method: 'POST', credentials: 'include'}
-        const response = await fetch(userIdUrl, opts)
-        const responseData = await response.json()
-        const loggedUserId = responseData.userId
-        console.log({logged: loggedUserId})
-        setLoggedUserId(loggedUserId)
             
+            if(isonline.status==200){
+                const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+                const opts = {method: 'POST', credentials: 'include'}
+                const response = await fetch(userIdUrl, opts)
+                const responseData = await response.json()
+                const loggedUserId = responseData.userId
+                setLoggedUserId(loggedUserId)
+            }            
         }
-        console.log(loggedUserId)
         if(loggedUserId==null){
             getLoggedUserId()
         }
@@ -262,8 +260,7 @@ export function AddCarForm (){
             
             const usrCollections = await fetch(collectionsUrl)
             const usrCollectionsData = await usrCollections.json()
-            console.log(usrCollectionsData.data)
-            if(usrCollectionsData!=null){
+            if(usrCollections.status==200){
                 setUserCollections(usrCollectionsData.data)
             }
         }
