@@ -21,7 +21,7 @@ export function AddCarForm (){
     const [compressedImages, setCompressedImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
-    const [loggedUserId, setLoggedUserId] = useState("6764ae99520ac472521c906c")
+    const [loggedUserId, setLoggedUserId] = useState(null)
     const fileInputRef = useRef(null);
 
     const moreDataSectionStlyles = {display : moreInfoVisibility}
@@ -225,14 +225,52 @@ export function AddCarForm (){
     
 
     useEffect(()=>{
-        const url= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
-        async function getUserCollections(){
-            const usrCollections = await fetch(url)
-            const usrCollectionsData = await usrCollections.json()
-            setUserCollections(usrCollectionsData.data)
+        
+        
+
+        
+
+        async function getLoggedUserId(){
+            const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
+            const isonlineData = await isonline.json()
+            console.log ({isOnline : isonlineData.message})
+            const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+            const opts = {method: 'POST', credentials: 'include'}
+        const response = await fetch(userIdUrl, opts)
+        const responseData = await response.json()
+        const loggedUserId = responseData.userId
+        console.log({logged: loggedUserId})
+        setLoggedUserId(loggedUserId)
+            
         }
-        getUserCollections()
+        console.log(loggedUserId)
+        if(loggedUserId==null){
+            getLoggedUserId()
+        }
+        
     },[])
+
+    useEffect(()=>{
+
+
+
+        if(!loggedUserId) return
+        
+        
+        const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+        async function getUserCollections(){
+            
+            const usrCollections = await fetch(collectionsUrl)
+            const usrCollectionsData = await usrCollections.json()
+            console.log(usrCollectionsData.data)
+            if(usrCollectionsData!=null){
+                setUserCollections(usrCollectionsData.data)
+            }
+        }
+        
+        getUserCollections()
+
+    }, [loggedUserId])
     
     
     return(

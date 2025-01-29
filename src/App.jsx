@@ -1,6 +1,7 @@
 
 import './App.css'
 import { AddCarScreen } from './screens/AddCarScreen.jsx'
+import {Login} from './components/Login.jsx'
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <>
+      <Login />
       <AddCarScreen />
     </>
   )
