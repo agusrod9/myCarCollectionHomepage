@@ -30,9 +30,9 @@ export function AddCarForm (){
     for(let i=today.getFullYear(); i>= 1885 ; i--){
         yearsToSelect.push(i)
     }
-    const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
+    const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
 
-    if(make != "" && model !="" && year!="" && scale!="" && color!=""){
+    if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
             setRequiredFieldsSet(true)
         }
@@ -78,12 +78,12 @@ export function AddCarForm (){
         const data = {
             carMake : make,
             carModel : model,
-            carColor : color,
-            carYear : year,
             scale,
             userId : '67643865a1ec5563d6e2314d'
         }
         if(manufacturer!=""){data.manufacturer = manufacturer}
+        if(year!=""){data.carYear = year}
+        if(color!=""){data.carColor = color}
         if(notes!=""){data.notes = notes}
         if(opened!=""){data.opened = opened}
         if(series!=""){data.series = series}
@@ -295,7 +295,7 @@ export function AddCarForm (){
             <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
             <label htmlFor='carModelInput'>*Modelo</label>
             <input type="text" name='carModel' id='carModelInput' value={model} onChange={handleCarModelInput} placeholder='e: Fiesta' />
-            <label htmlFor='carYearSelectInput'>*Año</label>
+            <label htmlFor='carYearSelectInput'>Año</label>
             <select name='carYear' id='carYearSelectInput' value={year} onChange={handleCarYearInput} placeholder='e: 2019' >
                 <option value={""}></option>
                 {yearsToSelect.map((yearSelect)=>{
@@ -304,8 +304,6 @@ export function AddCarForm (){
                     )
                 })}
             </select>
-            <label htmlFor='carColorInput'>*Color</label>
-            <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
             <label htmlFor='carScaleSelectInput'>*Escala</label>
             <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
                 <option value={""}></option>
@@ -319,6 +317,8 @@ export function AddCarForm (){
             </select>
             <label htmlFor='carManufacturerInput'>Fabricante</label>
             <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
+            <label htmlFor='carColorInput'>Color</label>
+            <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
             
 
             <button id='AddCarFormMoreInfoButton' onClick={handleMoreInfoClick}>Agregar más info</button>
