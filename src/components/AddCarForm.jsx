@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
 import './AddCarForm.css'
-import imageCompression from 'browser-image-compression';
 import Swal from 'sweetalert2';
 
 export function AddCarForm (){
@@ -18,10 +17,10 @@ export function AddCarForm (){
     const [userCollections, setUserCollections] = useState([])
     const [moreInfoVisibility, setMoreInfoVisibility] = useState("none")
     const [images, setImages] = useState([])
-    const [compressedImages, setCompressedImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
-    const [loggedUserId, setLoggedUserId] = useState(null)
+    //const [loggedUserId, setLoggedUserId] = useState(null)
+    const [loggedUserId, setLoggedUserId] = useState('679e94c79e5e437a2cf1e251')
     const fileInputRef = useRef(null);
 
     const moreDataSectionStlyles = {display : moreInfoVisibility}
@@ -40,36 +39,23 @@ export function AddCarForm (){
         setRequiredFieldsSet(false)
     }
 
-    async function compressImages(){
-        const compressed = []
-        Array.from(images).map(async(img)=>{
-            const compressedImg = await compressImageToWebpFormat(img)
-            compressed.push(compressedImg)
-        })
-        setCompressedImages(compressed)
-        setTimeout(() => {
-            setDoneUploadingImages(!doneUploadingImages)
-        }, 2000);
-        
-    }
-
-    async function imagesToAWSbucket(){
-        const uploadedURLs = []
-        const selectedImages = compressedImages;
-        for(const img of selectedImages){
-            const response = await fetch('https://mycarcollectionapi.onrender.com/api/aws')
-            const responseData = await response.json()
-            const urlToPost = responseData.data
-            const opts = {
-                method: 'PUT',
-                headers: {"Content-Type" : "image/webp"},
-                body : img
-            }
-            await fetch(urlToPost,opts)
-            const imgUrl = urlToPost.split('?')[0]
-            uploadedURLs.push(imgUrl)
+    async function uploadImages(){
+        const url = 'https://mycarcollectionapi.onrender.com/api/aws'
+        const opts = {
+            method : 'POST'
         }
-        return uploadedURLs
+        const imagesUrls = await Promise.all( //hace que se espere a todos los fetch
+            Array.from(images).map(async(img)=>{
+                const formData = new FormData()
+                formData.append('image', img)
+                opts.body = formData
+                const response = await fetch(url,opts)
+                const data = await response.json()
+                const imageUrl = data.url
+                return imageUrl // Pushes the result to imagesUrls directly
+            })
+        )
+        return imagesUrls;
     }
 
     async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum){
@@ -79,7 +65,7 @@ export function AddCarForm (){
             carMake : make,
             carModel : model,
             scale,
-            userId : '67643865a1ec5563d6e2314d'
+            userId : loggedUserId
         }
         if(manufacturer!=""){data.manufacturer = manufacturer}
         if(year!=""){data.carYear = year}
@@ -103,9 +89,7 @@ export function AddCarForm (){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
-                
-        const urls = await imagesToAWSbucket()
-
+        const urls = await uploadImages()
         const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
         if(added.error){
             alert(added.error)
@@ -120,11 +104,8 @@ export function AddCarForm (){
                 toast: true,
                 width : '300px'
             });
-            
             resetStates()
-            
         }
-            
     }
 
     const resetStates = ()=>{
@@ -195,21 +176,9 @@ export function AddCarForm (){
         moreInfoVisibility =="none" ? setMoreInfoVisibility("flex") : setMoreInfoVisibility("none")
     }
 
-    const compressImageToWebpFormat = async(img)=>{
-        const opts = {
-            maxSizeMB : 1,
-            fileType: 'image/webp',
-            useWebWorker : true
-        }
-        const compressedImage = await imageCompression(img, opts)
-        
-        return compressedImage
-    }
-
     const handleNewImg = async(e)=>{
         setDoneUploadingImages(!doneUploadingImages)
         setImages(e.target.files)
-        
     }
 
     const handlePruebaClick = ()=>{
@@ -217,19 +186,6 @@ export function AddCarForm (){
     }
 
     useEffect(()=>{
-        images.length>0 ?
-        compressImages()
-        : null
-    },[images])
-    
-    
-
-    useEffect(()=>{
-        
-        
-
-        
-
         async function getLoggedUserId(){
             const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
             
@@ -249,27 +205,27 @@ export function AddCarForm (){
     },[])
 
     useEffect(()=>{
-
-
-
         if(!loggedUserId) return
-        
         
         const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
-            
             const usrCollections = await fetch(collectionsUrl)
             const usrCollectionsData = await usrCollections.json()
             if(usrCollections.status==200){
                 setUserCollections(usrCollectionsData.data)
             }
         }
-        
         getUserCollections()
-
     }, [loggedUserId])
     
-    
+    useEffect(()=>{
+        if(images.length>0){
+            setTimeout(() => {
+                setDoneUploadingImages(!doneUploadingImages)
+            }, 2000);
+        }
+    },[images])
+
     return(
         <section className='addCarForm-section'>
             <button onClick={handlePruebaClick}>Agregar imágenes</button>
