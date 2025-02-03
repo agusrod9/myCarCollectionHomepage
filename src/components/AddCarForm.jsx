@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import './AddCarForm.css'
 import Swal from 'sweetalert2';
 
-export function AddCarForm (){
+export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [year, setYear] = useState("")
@@ -19,13 +19,11 @@ export function AddCarForm (){
     const [images, setImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
-    //const [loggedUserId, setLoggedUserId] = useState(null)
-    const [loggedUserId, setLoggedUserId] = useState('679e94c79e5e437a2cf1e251')
     const fileInputRef = useRef(null);
-
     const moreDataSectionStlyles = {display : moreInfoVisibility}
     const yearsToSelect =[]
     const today = new Date()
+
     for(let i=today.getFullYear(); i>= 1885 ; i--){
         yearsToSelect.push(i)
     }
@@ -37,6 +35,26 @@ export function AddCarForm (){
         }
     }else if(requiredFieldsSet){
         setRequiredFieldsSet(false)
+    }
+
+    const resetStates = ()=>{
+        setMake("")
+            setModel("")
+            setYear("")
+            setColor("")
+            setScale("")
+            setManufacturer("")
+            setImages([])
+            setNotes("")
+            setOpened("")
+            setSeries("")
+            setSeriesNum("")
+            setCollection("")
+            setMoreInfoVisibility("none")
+            setDoneUploadingImages(true)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
     }
 
     async function uploadImages(){
@@ -108,26 +126,6 @@ export function AddCarForm (){
         }
     }
 
-    const resetStates = ()=>{
-        setMake("")
-            setModel("")
-            setYear("")
-            setColor("")
-            setScale("")
-            setManufacturer("")
-            setImages([])
-            setNotes("")
-            setOpened("")
-            setSeries("")
-            setSeriesNum("")
-            setCollection("")
-            setMoreInfoVisibility("none")
-            setDoneUploadingImages(true)
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
-    }
-
     const handleCarMakeInput = (e)=>{
         setMake(e.target.value)
     }
@@ -186,27 +184,7 @@ export function AddCarForm (){
     }
 
     useEffect(()=>{
-        async function getLoggedUserId(){
-            const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
-            
-            if(isonline.status==200){
-                const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
-                const opts = {method: 'POST', credentials: 'include'}
-                const response = await fetch(userIdUrl, opts)
-                const responseData = await response.json()
-                const loggedUserId = responseData.userId
-                setLoggedUserId(loggedUserId)
-            }            
-        }
-        if(loggedUserId==null){
-            getLoggedUserId()
-        }
-        
-    },[])
-
-    useEffect(()=>{
         if(!loggedUserId) return
-        
         const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const usrCollections = await fetch(collectionsUrl)
@@ -216,7 +194,7 @@ export function AddCarForm (){
             }
         }
         getUserCollections()
-    }, [loggedUserId])
+    }, [])
     
     useEffect(()=>{
         if(images.length>0){
@@ -225,6 +203,7 @@ export function AddCarForm (){
             }, 2000);
         }
     },[images])
+
 
     return(
         <section className='addCarForm-section'>

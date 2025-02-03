@@ -1,21 +1,37 @@
-
 import './App.css'
+import { Login } from './components/Login.jsx'
+import { useState, useEffect } from 'react'
 import { AddCarScreen } from './screens/AddCarScreen.jsx'
-import {Login} from './components/Login.jsx'
 
 
 function App() {
-  /*
-  useEffect(()=>{
-    fetch('https://mycarcollectionapi.onrender.com/api/cars')
-    .then(response => response.json())
-    .then(data => setCars(data.data))
-  },[])
-  */
 
+  const [loggedUserId, setLoggedUserId] = useState(null)
+
+  useEffect(()=>{
+    async function getLoggedUserId(){
+        const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
+        
+        if(isonline.status==200){
+            const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+            const opts = {method: 'POST', credentials: 'include'}
+            const response = await fetch(userIdUrl, opts)
+            const responseData = await response.json()
+            const loggedUserId = responseData.userId
+            setLoggedUserId(loggedUserId)
+        }            
+    }
+    if(loggedUserId==null){
+        getLoggedUserId()
+    }
+    
+},[])
   return (
     <>
-      <AddCarScreen />
+    {
+      loggedUserId!=undefined ? <AddCarScreen loggedUserId={loggedUserId}/> : <Login />
+    }
+      
     </>
   )
 }

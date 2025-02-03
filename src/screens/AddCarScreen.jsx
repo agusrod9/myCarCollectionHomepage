@@ -1,10 +1,10 @@
 import './AddCarScreen.css'
 import { AddCarForm } from "../components/AddCarForm";
 
-export function AddCarScreen(){
+export function AddCarScreen({loggedUserId}){
     return(
         <section className="AddCarBody">
-            <AddCarForm />
+            <AddCarForm loggedUserId={loggedUserId}/>
         </section>
     )
 }

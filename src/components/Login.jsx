@@ -23,7 +23,7 @@ export function Login (){
         const opts = {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
-            credentials: 'include',
+            credentials : 'include',
             body : JSON.stringify(data)
         }
         const response = await fetch(url,opts)
