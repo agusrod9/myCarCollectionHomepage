@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './Login.css'
+import { Link } from 'react-router'
 
 export function Login (){
     const [email, setEmail] = useState("")
@@ -53,8 +54,8 @@ export function Login (){
                     Ingresar
                 </button>
             </form>
-            <p><a href="#">Forgot your password?</a></p>
-            <p>Don´t have an account? <span><a href="#">Register</a></span> </p>
+            <p><Link to='/resetPass'>Forgot your password?</Link></p>
+            <p>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
         </section>
     )
 }

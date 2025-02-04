@@ -1,9 +1,10 @@
 #register-section{
     display: flex;
     flex-direction: column;
-    background-color: skyblue;
     justify-content: center;
     align-items: center;
+    max-width: 800px;
+    min-width: 400px;
 }
 
 .register-form{

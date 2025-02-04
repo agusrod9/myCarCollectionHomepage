@@ -1,7 +1,12 @@
 import './App.css'
-import { Login } from './components/Login.jsx'
 import { useState, useEffect } from 'react'
 import { AddCarScreen } from './screens/AddCarScreen.jsx'
+import { LoginScreen } from './screens/LoginScreen.jsx'
+import { LandingScreen } from './screens/LandingScreen.jsx'
+import { HomeScreen } from './screens/HomeScreen.jsx'
+import { RegisterScreen } from './screens/RegisterScreen.jsx'
+import { ResetPasswordScreen } from './screens/ResetPasswordScreen.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router'
 
 
 function App() {
@@ -27,12 +32,15 @@ function App() {
     
 },[])
   return (
-    <>
-    {
-      loggedUserId!=undefined ? <AddCarScreen loggedUserId={loggedUserId}/> : <Login />
-    }
-      
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={loggedUserId ? <HomeScreen /> : <LandingScreen />} />
+        <Route path='/newCar' element={loggedUserId ? <AddCarScreen loggedUserId={loggedUserId}/> : <LandingScreen />} />
+        <Route path='/login' element={loggedUserId ? null: <LoginScreen />} />
+        <Route path='/register' element={loggedUserId ? null : <RegisterScreen />} />
+        <Route path='/resetPass' element={<ResetPasswordScreen/>} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

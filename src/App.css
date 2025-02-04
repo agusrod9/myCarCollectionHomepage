@@ -2,6 +2,8 @@
   background-color: #32012F;
   width: 1280px;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 /* https://colorhunt.co/palette/32012f524c42e2dfd0f97300

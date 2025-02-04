@@ -1,5 +1,6 @@
 import './Register.css'
 import { useState } from "react"
+import { Link } from 'react-router'
 
 export function Register(){
     const [email, setEmail] = useState("")
@@ -18,19 +19,31 @@ export function Register(){
             return alert("Contraseñas no coinciden")
         }
         
-        registerToApi(email,password)
-        setName("")
-        setLastName("")
-        setEmail("")
-        setPassword("")
-        setPassword2("")
+        let response = await registerToApi(name, lastName, email, password)
+        if(response.message != "USER REGISTERED"){
+            alert(response.message)
+        }else{
+            alert(response.message)
+            setName("")
+            setLastName("")
+            setEmail("")
+            setPassword("")
+            setPassword2("")
+        }
         
         
     }
 
     async function registerToApi(name, lastName, mail, pass){
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/register`
-        const fetchData = {"email" : mail , "password" : pass}
+        const fetchData = {
+            "firstName" : name,
+            "lastName" : lastName,
+            "email" : mail ,
+            "contactEmail" : mail,
+            "profilePicture" : "imgProfile",
+            "password" : pass
+        }
         const opts = {
             method : "POST",
             headers : {'Content-Type' : 'application/json'},
@@ -82,7 +95,7 @@ export function Register(){
                     Registrarse
                 </button>
             </form>
-            <p>Already have an account? <span><a href="#">Login</a></span> </p>
+            <p>Already have an account? <span><Link to='/login' >Login</Link></span> </p>
         </section>
     )
 }

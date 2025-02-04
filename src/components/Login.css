@@ -1,13 +1,14 @@
 .login-section{
     display: flex;
     flex-direction: column;
-    background-color: pink;
     justify-content: center;
     align-items: center;
+    max-width: 800px;
+    min-width: 400px;
 }
 
 .login-form{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    min-width: 60%
 }
