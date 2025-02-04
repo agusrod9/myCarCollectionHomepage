@@ -7,6 +7,7 @@ import { HomeScreen } from './screens/HomeScreen.jsx'
 import { RegisterScreen } from './screens/RegisterScreen.jsx'
 import { ResetPasswordScreen } from './screens/ResetPasswordScreen.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
+import { ProfileScreen } from './screens/ProfileScreen.jsx'
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path='/login' element={loggedUserId ? null: <LoginScreen />} />
         <Route path='/register' element={loggedUserId ? null : <RegisterScreen />} />
         <Route path='/resetPass' element={<ResetPasswordScreen/>} />
+        <Route path='/profile' element={loggedUserId ? <ProfileScreen /> : null} />
       </Routes>
     </BrowserRouter>
   )

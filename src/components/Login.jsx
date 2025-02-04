@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Login.css'
 import { Link } from 'react-router'
 
-export function Login (){
+export function Login ({onSuccess}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
@@ -29,6 +29,11 @@ export function Login (){
         }
         const response = await fetch(url,opts)
         const responseData = await response.json()
+        if(response.status==200){
+            if(onSuccess){
+                onSuccess()
+            }
+        }
         return responseData
         
     }
