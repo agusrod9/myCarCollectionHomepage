@@ -1,14 +1,15 @@
 import './LoginScreen.css'
 import { Login } from "../components/Login";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 
 
 export function LoginScreen(){
-    const nav = useNavigate()
+    const navigate = useNavigate()
     const handleLoginSuccess = ()=>{
         console.log("Login existoso, navegando")
-        //nav('/') not working idkw
+        //window.location.href='/'
+        navigate("/")
     }
     return(
         <section className="LoginBody">

@@ -1,6 +1,6 @@
 import './App.css'
 import { useState, useEffect } from 'react'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { Routes, Route, Navigate} from 'react-router'
 import { HomeScreen } from './screens/HomeScreen.jsx'
 import { AddCarScreen } from './screens/AddCarScreen.jsx'
 import { LoginScreen } from './screens/LoginScreen.jsx'
@@ -38,45 +38,20 @@ function App() {
     getLoggedUserId()
   },[])
 
-  const router = createBrowserRouter([
-    {
-        path: '/',
-        element : <ProtectedRoute user={loggedUserId} Component={HomeScreen} />,
-        errorElement : <NotFoundScreen />
-    },
-    {
-        path: '/login',
-        element: !loggedUserId ? <LoginScreen /> : <Navigate to={'/'} />,
-        errorElement : <NotFoundScreen />
-    },
-    {
-        path: '/register',
-        element: !loggedUserId ? <RegisterScreen /> : <Navigate to={'/'} />,
-        errorElement : <NotFoundScreen />
-    },
-    {
-        path: '/resetPass',
-        element: <ProtectedRoute user={loggedUserId} Component={ResetPasswordScreen}/>,
-        errorElement : <NotFoundScreen />
-    },
-    {
-        path: '/profile',
-        element: <ProtectedRoute user={loggedUserId} Component={ProfileScreen} />,
-        errorElement : <NotFoundScreen />
-    },
-    {
-        path: '/newCar',
-        element: <ProtectedRoute user={loggedUserId} Component={AddCarScreen} />,
-        errorElement : <NotFoundScreen />
-    },
-  ])
-
   if(loading){
     return <Loading />
   }
 
   return (
-    <RouterProvider router={router} />
+      <Routes>
+        <Route path='/' element={<ProtectedRoute user={loggedUserId} Component={HomeScreen} />} />
+        <Route path='/newCar' element={<ProtectedRoute user={loggedUserId} Component={AddCarScreen} />} />
+        <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
+        <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
+        <Route path='/resetPass' element={<ResetPasswordScreen/>} />
+        <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
+        <Route path='*' element={<NotFoundScreen />}/>
+      </Routes>
   )
 }
 
