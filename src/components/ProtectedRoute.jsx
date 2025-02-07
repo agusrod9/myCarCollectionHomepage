@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router';
 
 export default function ProtectedRoute({ user, Component }) {
-  return user ? <Component /> : <Navigate to="/login" />;
+  return user ? <Component loggedUserId={user} /> : <Navigate to="/login" />;
 }

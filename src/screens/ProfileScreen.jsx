@@ -1,7 +1,7 @@
 import './ProfileScreen.css'
 
-export function ProfileScreen(){
+export function ProfileScreen({loggedUserId}){
     return(
-        <h1>Profile Screen</h1>
+        <h1>Profile Screen of {loggedUserId}</h1>
     )
 }
