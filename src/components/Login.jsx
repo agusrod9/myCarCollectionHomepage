@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './Login.css'
 import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
 
 export function Login ({onSuccess}){
     const [email, setEmail] = useState("")
@@ -33,6 +34,7 @@ export function Login ({onSuccess}){
             if(onSuccess){
                 onSuccess()
             }
+            
         }
         return responseData
         
