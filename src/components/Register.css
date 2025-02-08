@@ -1,10 +1,18 @@
-#register-section{
+.register-section{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     max-width: 800px;
     min-width: 400px;
+}
+
+.register-section a{
+    color: inherit
+}
+
+.register-section a:visited{
+    color: inherit
 }
 
 .register-form{

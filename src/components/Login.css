@@ -7,6 +7,14 @@
     min-width: 400px;
 }
 
+.login-section a{
+    color: inherit
+}
+
+.login-section a:visited{
+    color: inherit
+}
+
 .login-form{
     display: flex;
     flex-direction: column;

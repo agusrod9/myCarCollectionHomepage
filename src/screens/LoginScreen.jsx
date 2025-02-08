@@ -1,5 +1,6 @@
 import './LoginScreen.css'
 import { Login } from "../components/Login";
+import { Header } from '../components/Header';
 //import { useNavigate } from 'react-router';
 
 
@@ -13,7 +14,10 @@ export function LoginScreen(){
     }
     return(
         <section className="LoginBody">
-            <Login onSuccess={handleLoginSuccess}/>
+            <Header />
+            <div className='formContainer'>
+                <Login onSuccess={handleLoginSuccess}/>
+            </div>
         </section>
     )
 }

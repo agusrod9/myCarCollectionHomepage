@@ -76,7 +76,7 @@ export function Register(){
     }
 
     return(
-        <section id="register-section">
+        <section className="register-section">
             <h2>Register</h2>
             <form className="register-form">
                 <label htmlFor="register-name-inp">Nombre</label>

@@ -50,7 +50,7 @@ function Main(){
     <Route path='/newCar' element={<ProtectedRoute user={loggedUserId} Component={AddCarScreen} />} />
     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
-    <Route path='/resetPass' element={<ResetPasswordScreen/>} />
+    <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
     <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
     <Route path='*' element={<NotFoundScreen />}/>
   </Routes>
