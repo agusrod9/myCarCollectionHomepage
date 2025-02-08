@@ -7,6 +7,9 @@ export function Header({loggedUserId}){
         return(
             <div className='header'>
             <nav className='navBar'>
+                <NavLink to={'/'} className='navBarLink navBarHomeLink'>
+                    <img src="/wc.png" alt="" />
+                </NavLink>
                 <NavLink to={'/login'} className='navBarLink'>
                     Login
                 </NavLink>
