@@ -18,6 +18,12 @@ export function Login ({onSuccess}){
         
     }
 
+    const handleGoogleLoginBtnClick = async(e)=>{
+        e.preventDefault()
+        const url = `http://mycarcollectionapi.onrender.com/api/sessions/google`
+        fetch(url)
+    }
+
     async function loginToApi(email, password){
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/login`
         const data = {email , password}
@@ -62,6 +68,9 @@ export function Login ({onSuccess}){
             </form>
             <p><Link to='/resetPass'>Forgot your password?</Link></p>
             <p>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
+            <button id='googleLogin-btn' onClick={handleGoogleLoginBtnClick}>
+                Ingresar con google
+            </button>
         </section>
     )
 }
