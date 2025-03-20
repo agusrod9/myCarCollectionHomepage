@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import './Login.css'
 import { Link } from 'react-router'
+import { useNavigate } from 'react-router-dom'
+
 
 export function Login ({onSuccess}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    const navigate = useNavigate()
     const handleLoginBtnClick =async (e)=>{
         e.preventDefault()
         if(email=="" || password==""){
             alert("Faltan datos")
         }else{
-            await loginToApi(email,password)
+            await loginToApi(email,password, navigate)
             setEmail("")
             setPassword("")
         }
@@ -20,11 +22,11 @@ export function Login ({onSuccess}){
 
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
-        const url = `http://mycarcollectionapi.onrender.com/api/sessions/google`
-        fetch(url)
+        const url = `https://mycarcollectionapi.onrender.com/api/sessions/google`
+        window.location.assign(url);
     }
 
-    async function loginToApi(email, password){
+    async function loginToApi(email, password, navigate){
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/login`
         const data = {email , password}
         const opts = {
@@ -36,6 +38,10 @@ export function Login ({onSuccess}){
         const response = await fetch(url,opts)
         const responseData = await response.json()
         if(response.status==200){
+            if(responseData.mustResetPass == true){
+                navigate('/resetPass')
+                return
+            }
             if(onSuccess){
                 onSuccess()
             }

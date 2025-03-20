@@ -16,19 +16,28 @@ import Loading from './components/Loading.jsx'
 function Main(){
 
     const [loggedUserId, setLoggedUserId] = useState(null)
+    const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [loading, setLoading] = useState(true);
-
     useEffect(()=>{
         async function getLoggedUserId(){
         try {
             const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
             if(isonline.status==200){
-            const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
-            const opts = {method: 'POST', credentials: 'include'}
-            const response = await fetch(userIdUrl, opts)
-            const responseData = await response.json()
-            const loggedUserId = responseData.userId
-            setLoggedUserId(loggedUserId)
+                const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+                const opts = {method: 'POST', credentials: 'include'}
+                const response = await fetch(userIdUrl, opts)
+                const responseData = await response.json()
+                setLoggedUserMustResetPass(responseData.mustResetPass)
+                console.log(responseData)
+                //Si el user tiene que cambiar la contraseña no me quedo con el loggedUserId -> para que no pueda entrar a las protected routes, hasta que no cambie la contraseña
+                console.log(loggedUserMustResetPass)
+                if(responseData.mustResetPass){ 
+                    //aca sweetalert con link
+                }else{
+                    const loggedUserId = responseData.userId
+                    setLoggedUserId(loggedUserId)
+
+                }
             }            
         }
         catch (error) {
@@ -45,16 +54,16 @@ function Main(){
     }
 
     return <BrowserRouter>
-    <Routes>
-    <Route path='/' element={<ProtectedRoute user={loggedUserId} Component={HomeScreen} />} />
-    <Route path='/newCar' element={<ProtectedRoute user={loggedUserId} Component={AddCarScreen} />} />
-    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
-    <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
-    <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
-    <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
-    <Route path='*' element={<NotFoundScreen />}/>
-  </Routes>
-</BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<ProtectedRoute user={loggedUserId} Component={HomeScreen} />} />
+                    <Route path='/newCar' element={<ProtectedRoute user={loggedUserId} Component={AddCarScreen} />} />
+                    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
+                    <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
+                    <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
+                    <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
+                    <Route path='*' element={<NotFoundScreen />}/>
+                </Routes>
+            </BrowserRouter>
 }
 createRoot(document.getElementById('root')).render(
     <Main />
