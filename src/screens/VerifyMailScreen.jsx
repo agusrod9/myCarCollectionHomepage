@@ -1,4 +1,4 @@
-import './LoginScreen.css'
+import './VerifyMailScreen.css'
 import { VerifyMail } from '../components/VerifyMail';
 import { Header } from '../components/Header';
 import { useNavigate } from 'react-router-dom';

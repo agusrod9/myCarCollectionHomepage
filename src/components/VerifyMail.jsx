@@ -52,12 +52,12 @@ export function VerifyMail ({onSuccess}){
 
     return(
         <section className="verify-section">
-            <h2>Verify your e-Mail</h2>
-            <p></p>
+            <h2>Verifica tu e-Mail</h2>
+            <p>Ingresa el código que te enviamos</p>
             <form className="verify-form">
                 <label htmlFor="verify-email-inp">E-mail</label>
                 <input type="email" name="email" id="verify-email-inp" placeholder="Ingresa tu E-mail" value={email} onChange={handleEmailChange}/>
-                <label htmlFor="verify-password-inp">Código</label>
+                <label htmlFor="verify-code-inp">Código</label>
                 <input type="string" name='code' id='verify-code-inp' placeholder='Ingresa tu código' value={verificationCode} onChange={handleVerificationCodeChange} />
                 <button id='verify-btn' onClick={handleVerifyCodeBtnClick}>
                     Verificar
