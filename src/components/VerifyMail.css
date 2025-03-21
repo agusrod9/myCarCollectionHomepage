@@ -1,0 +1,22 @@
+.verify-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    min-width: 400px;
+}
+
+.verify-section a{
+    color: inherit
+}
+
+.verify-section a:visited{
+    color: inherit
+}
+
+.verify-form{
+    display: flex;
+    flex-direction: column;
+    min-width: 60%
+}

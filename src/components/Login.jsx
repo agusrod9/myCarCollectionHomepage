@@ -77,6 +77,7 @@ export function Login ({onSuccess}){
             <button id='googleLogin-btn' onClick={handleGoogleLoginBtnClick}>
                 Ingresar con google
             </button>
+            <Link to='/verify'>Verificar Mail</Link>
         </section>
     )
 }
