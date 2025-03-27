@@ -13,6 +13,7 @@ import { VerifyMailScreen } from './screens/VerifyMailScreen.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { useState, useEffect } from 'react'
 import Loading from './components/Loading.jsx'
+import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
 
 function Main(){
 
@@ -62,6 +63,7 @@ function Main(){
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
+                    <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
                     <Route path='*' element={<NotFoundScreen />}/>
                 </Routes>

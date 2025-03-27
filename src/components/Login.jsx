@@ -39,7 +39,7 @@ export function Login ({onSuccess}){
         const responseData = await response.json()
         if(response.status==200){
             if(responseData.mustResetPass == true){
-                navigate('/resetPass')
+                navigate('/changePass')
                 return
             }
             if(onSuccess){

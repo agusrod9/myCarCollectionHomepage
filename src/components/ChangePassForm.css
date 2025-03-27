@@ -1,0 +1,22 @@
+.changePass-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    min-width: 400px;
+}
+
+.changePass-section a{
+    color: inherit
+}
+
+.changePass-section a:visited{
+    color: inherit
+}
+
+.changePass-form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}

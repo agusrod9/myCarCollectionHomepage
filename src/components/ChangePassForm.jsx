@@ -1,17 +1,16 @@
-import './Register.css'
+import './ChangePassForm.css';
 import { useState } from "react"
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 
-export function Register(){
+export function ChangePassForm(){
     const [email, setEmail] = useState("")
-    const [name, setName] = useState("")
-    const [lastName, setLastName] = useState("")
     const [password, setPassword] = useState("")
     const [password2, setPassword2] = useState("")
-
-    const handleRegisterBtnClick =async (e)=>{
+    const navigate = useNavigate()
+    const handleChangePassBtnClick =async (e)=>{
+    
         e.preventDefault()
-        if(email=="" || password=="" || password2=="" ||name=="" || lastName==""){
+        if(email=="" || password=="" || password2==""){
             return alert("Faltan datos")
         }
 
@@ -19,13 +18,13 @@ export function Register(){
             return alert("Contraseñas no coinciden")
         }
         
-        let response = await registerToApi(name, lastName, email, password)
-        if(response.message != "USER REGISTERED"){
-            alert(response.message)
+        let response = await requestChangePass(email, password)
+        let responseData = await response.json()
+        if(response.status != 200){
+            alert(responseData.message)
         }else{
-            alert(response.message)
-            setName("")
-            setLastName("")
+            alert(responseData.message)
+            navigate('/',{replace:true})
             setEmail("")
             setPassword("")
             setPassword2("")
@@ -33,14 +32,10 @@ export function Register(){
         
     }
 
-    async function registerToApi(name, lastName, mail, pass){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/register`
+    async function requestChangePass(mail, pass){
+        const url = `https://mycarcollectionapi.onrender.com/api/sessions/changePass`
         const fetchData = {
-            "firstName" : name,
-            "lastName" : lastName,
             "email" : mail ,
-            "contactEmail" : mail,
-            "profilePicture" : "imgProfile",
             "password" : pass
         }
         const opts = {
@@ -49,8 +44,7 @@ export function Register(){
             body : JSON.stringify(fetchData)
         }
         const response = await fetch(url,opts)
-        const data = await response.json()
-        return data
+        return response
         
     }
 
@@ -66,22 +60,11 @@ export function Register(){
         setPassword2(e.target.value)
     }
 
-    const handleNameChange=(e)=>{
-        setName(e.target.value)
-    }
-
-    const handleLastNameChange=(e)=>{
-        setLastName(e.target.value)
-    }
-
     return(
-        <section className="register-section">
-            <h2>Register</h2>
-            <form className="register-form">
-                <label htmlFor="register-name-inp">Nombre</label>
-                <input type="text" name="name" id="register-name-inp" placeholder="Ingresa tu Nombre" value={name} onChange={handleNameChange}/>
-                <label htmlFor="register-name-inp">Apellido</label>
-                <input type="text" name="lastName" id="register-lastName-inp" placeholder="Ingresa tu Apellido" value={lastName} onChange={handleLastNameChange}/>
+        <section className="changePass-section">
+            <h2>Nueva contraseña</h2>
+            <form className="changePass-form">
+                
                 <label htmlFor="register-email-inp">E-mail</label>
                 <input type="email" name="email" id="register-email-inp" placeholder="Ingresa tu E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="register-password-inp">Contraseña</label>
@@ -90,11 +73,11 @@ export function Register(){
                 <input type="password" name='password2' id='register-password2-inp' placeholder='Repite tu contraseña' value={password2} onChange={handlePassword2Change} />
 
 
-                <button id='register-btn' onClick={handleRegisterBtnClick}>
-                    Registrarse
+                <button id='register-btn' onClick={handleChangePassBtnClick}>
+                    Enviar
                 </button>
             </form>
-            <p>Already have an account? <span><Link to='/login' >Login</Link></span> </p>
+            
         </section>
     )
 }
