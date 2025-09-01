@@ -20,6 +20,7 @@ function Main(){
     const [loggedUserId, setLoggedUserId] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [loading, setLoading] = useState(true);
+    
     useEffect(()=>{
         async function getLoggedUserId(){
         try {
