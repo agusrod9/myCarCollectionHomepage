@@ -1,6 +1,7 @@
 import './HomeScreen.css'
 import { Link } from 'react-router'
 import { Header } from '../components/Header.jsx'
+import { DashBoard } from '../components/DashBoard.jsx'
 import { useEffect, useState } from 'react'
 
 export function HomeScreen({loggedUserId}){
@@ -23,14 +24,12 @@ export function HomeScreen({loggedUserId}){
     }, [])
 
     return(
-        <section className='HomeBody'>
+        <section className='homeBody'>
             <Header loggedUserId={loggedUserId}/>
-            <h1>Home of {loggedUsername}</h1>
-            <ul>
-                <li><Link to="/newCar">Add New Car</Link></li>
-                <li><Link to="/resetPass">Reset Password</Link></li>
-                <li><Link to="/profile">Profile</Link></li>
-            </ul>
+            <h1>Bienvenido {loggedUsername}!</h1>
+            <div className='main'>
+                <DashBoard />
+            </div>
         </section>
     )
 }

@@ -1,0 +1,33 @@
+.dashBoard{
+    /*border: 1px solid black;*/
+    width: 700px;
+    height: 450px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr;;
+    grid-template-areas:
+        "perfil   .    metrics"
+        ".      newcar    ."
+        "wishlist  .    notif";
+
+    gap:10px;
+    align-items: center;
+    justify-items: center;
+
+}
+
+.notif{
+    grid-area: notif;
+}
+.metrics{
+    grid-area: metrics;
+}
+.wishlist{
+    grid-area: wishlist;
+}
+.perfil{
+    grid-area: perfil;
+}
+.newcar{
+    grid-area: newcar;
+}
