@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './main.css'
 import { BrowserRouter } from 'react-router'
 import { Routes, Route, Navigate} from 'react-router'
 import { HomeScreen } from './screens/HomeScreen.jsx'
@@ -18,6 +18,7 @@ import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
 function Main(){
 
     const [loggedUserId, setLoggedUserId] = useState(null)
+    const [loggedUserName, setLoggedUserName] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [loading, setLoading] = useState(true);
     
@@ -31,14 +32,12 @@ function Main(){
                 const response = await fetch(userIdUrl, opts)
                 const responseData = await response.json()
                 setLoggedUserMustResetPass(responseData.mustResetPass)
-                console.log(responseData)
-                //Si el user tiene que cambiar la contraseña no me quedo con el loggedUserId -> para que no pueda entrar a las protected routes, hasta que no cambie la contraseña
-                console.log(loggedUserMustResetPass)
-                if(responseData.mustResetPass){ 
+                
+                if(loggedUserMustResetPass){ 
                     //aca sweetalert con link
                 }else{
-                    const loggedUserId = responseData.userId
-                    setLoggedUserId(loggedUserId)
+                    setLoggedUserId(responseData.userId)
+                    setLoggedUserName(responseData.userName)
 
                 }
             }            
@@ -58,14 +57,14 @@ function Main(){
 
     return <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<ProtectedRoute user={loggedUserId} Component={HomeScreen} />} />
-                    <Route path='/newCar' element={<ProtectedRoute user={loggedUserId} Component={AddCarScreen} />} />
+                    <Route path='/' element={<ProtectedRoute userId={loggedUserId} Component={HomeScreen} />} />
+                    <Route path='/newCar' element={<ProtectedRoute userId={loggedUserId} Component={AddCarScreen} />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
-                    <Route path='/profile' element={<ProtectedRoute user={loggedUserId} Component={ProfileScreen} />}/>
+                    <Route path='/profile' element={<ProtectedRoute userName= {loggedUserName} userId={loggedUserId} Component={ProfileScreen} />}/>
                     <Route path='*' element={<NotFoundScreen />}/>
                 </Routes>
             </BrowserRouter>

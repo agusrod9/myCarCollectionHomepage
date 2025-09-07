@@ -10,7 +10,6 @@ export function LoginScreen(){
     }
     return(
         <section className="LoginBody">
-            <Header />
             <div className='formContainer'>
                 <Login onSuccess={handleLoginSuccess}/>
             </div>

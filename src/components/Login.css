@@ -1,14 +1,42 @@
 .login-section{
+    color: #222222;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     max-width: 800px;
     min-width: 400px;
+    min-height: 500px;
+    background-color: #fafafa;
+    border-radius: 15px;
+}
+
+.login-section label{
+    color: #222222;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.login-section input{
+    
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
+.login-section input::placeholder{
+    font-style: italic;
+    font-weight: 400;
 }
 
 .login-section a{
-    color: inherit
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .login-section a:visited{
@@ -18,5 +46,65 @@
 .login-form{
     display: flex;
     flex-direction: column;
-    min-width: 60%
+    min-width: 70%
+}
+
+#forgotPass{
+    align-self:end;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.login-links{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+}
+
+.altLogins{
+    display: flex;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+}
+
+.altLoginBtn{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 5px;
+}
+
+#googleLogin{
+    background-image: url("src/assets/Google-icon.webp");
+}
+
+#facebookLogin{
+    background-image: url("src/assets/Facebook-icon.png");
+}
+
+#login-btn{
+    color: #fafafa;
+    font-size: 18px;
+    background: linear-gradient(to bottom , #3953a8, #a777e3);
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+#login-btn:hover {
+  /*background-color: #efa424;*/
+  box-shadow: 3px 1px #3953a8;
+  top: 1px;
+}
+
+#login-btn:active{
+    transform: scale(0.9);
 }

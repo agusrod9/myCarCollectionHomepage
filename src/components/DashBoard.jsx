@@ -4,7 +4,7 @@ export function DashBoard(){
     return(
         <section>
             <div className='dashBoard'>
-                <DashBoardItem text="Notificaciones" className = "dbItem notif" imgUrl= "src/assets/react.svg" />
+                <DashBoardItem text="Notificaciones" className = "dbItem notif" imgUrl= "src/assets/pexels-maltelu-1412213.jpg" />
                 <DashBoardItem text="Métricas" className = "dbItem metrics" imgUrl= "src/assets/react.svg"/>
                 <DashBoardItem text="WishList" className = "dbItem wishlist"imgUrl= "src/assets/react.svg"/>
                 <DashBoardItem text="perfil" className = "dbItem perfil" imgUrl= "src/assets/react.svg" nav="/profile"/>

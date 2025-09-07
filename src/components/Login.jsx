@@ -65,19 +65,24 @@ export function Login ({onSuccess}){
             <h2>Login</h2>
             <form className="login-form">
                 <label htmlFor="login-email-inp">E-mail</label>
-                <input type="email" name="email" id="login-email-inp" placeholder="Ingresa tu E-mail" value={email} onChange={handleEmailChange}/>
-                <label htmlFor="login-password-inp">Contraseña</label>
-                <input type="password" name='password' id='login-password-inp' placeholder='Ingresa tu contraseña' value={password} onChange={handlePasswordChange} />
-                <button id='login-btn' onClick={handleLoginBtnClick}>
-                    Ingresar
-                </button>
+                <div></div>
+                <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
+                <label htmlFor="login-password-inp">Password</label>
+                <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} />
+                <p id='forgotPass'><Link to='/resetPass'>Forgot your password?</Link></p>
             </form>
-            <p><Link to='/resetPass'>Forgot your password?</Link></p>
-            <p>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
-            <button id='googleLogin-btn' onClick={handleGoogleLoginBtnClick}>
-                Ingresar con google
-            </button>
-            <Link to='/verify'>Verificar Mail</Link>
+                <button id='login-btn' onClick={handleLoginBtnClick}>
+                    Login
+                </button>
+            <div className='altLogins'>
+                <p>Or Login using:</p>
+                <button className="altLoginBtn" id='googleLogin' onClick={handleGoogleLoginBtnClick}/>
+                <button className= "altLoginBtn" id='facebookLogin' onClick={()=>{alert("Feature Coming Soon")}}/>
+            </div>
+            <div className='login-links'>
+                <p id='forgotPass'>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
+                <p id='forgotPass'>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
+            </div>
         </section>
     )
 }
