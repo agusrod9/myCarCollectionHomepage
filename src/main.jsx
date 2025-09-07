@@ -22,7 +22,7 @@ function Main(){
 
     return <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<ProtectedRoute userId={loggedUserId} Component={HomeScreen} />} />
+                    <Route path='/' element={<ProtectedRoute userName={loggedUserName} userId={loggedUserId} Component={HomeScreen} />} />
                     <Route path='/newCar' element={<ProtectedRoute userId={loggedUserId} Component={AddCarScreen} />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />

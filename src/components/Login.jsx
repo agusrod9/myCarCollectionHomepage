@@ -11,8 +11,9 @@ export function Login ({onSuccess}){
     const navigate = useNavigate()
     const handleLoginBtnClick =async (e)=>{
         e.preventDefault()
+        setLoginError("")
         if(email=="" || password==""){
-            alert("Missing mandatory fields.")
+            setLoginError("Missing mandatory fields.")
         }else{
             await loginToApi(email,password, navigate)
             setEmail("")
@@ -23,12 +24,12 @@ export function Login ({onSuccess}){
 
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
+        setLoginError("")
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/google`
         window.location.assign(url);
     }
 
     async function loginToApi(email, password, navigate){
-        setLoginError("")
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/login`
         const data = {email , password}
         const opts = {
@@ -74,19 +75,21 @@ export function Login ({onSuccess}){
                 <label htmlFor="login-password-inp">Password</label>
                 <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} />
                 <p id='loginErrorLabel'>{loginError}</p>
-                <p id='forgotPass'><Link to='/resetPass'>Forgot your password?</Link></p>
+                <p className='loginLink'><Link to='/resetPass'>Forgot your password?</Link></p>
             </form>
-                <button id='login-btn' onClick={handleLoginBtnClick}>
-                    Login
-                </button>
+
+            <button id='login-btn' onClick={handleLoginBtnClick}>
+                Login
+            </button>
+
             <div className='altLogins'>
                 <p>Or Login using:</p>
                 <button className="altLoginBtn" id='googleLogin' onClick={handleGoogleLoginBtnClick}/>
                 <button className= "altLoginBtn" id='facebookLogin' onClick={()=>{alert("Feature Coming Soon")}}/>
             </div>
-            <div className='login-links'>
-                <p id='forgotPass'>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
-                <p id='forgotPass'>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
+            <div className='login-linksContainer'>
+                <p className='loginLink'>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
+                <p className='loginLink'>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
             </div>
         </section>
     )
