@@ -1,5 +1,5 @@
+import { AppContext, AppContextProvider } from './context/AppContext.jsx'
 import { createRoot } from 'react-dom/client'
-import './main.css'
 import { BrowserRouter } from 'react-router'
 import { Routes, Route, Navigate} from 'react-router'
 import { HomeScreen } from './screens/HomeScreen.jsx'
@@ -11,49 +11,14 @@ import { ProfileScreen } from './screens/ProfileScreen.jsx'
 import { NotFoundScreen } from './screens/NotFoundScreen.jsx'
 import { VerifyMailScreen } from './screens/VerifyMailScreen.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
-import { useState, useEffect } from 'react'
-import Loading from './components/Loading.jsx'
+import { useContext } from 'react'
 import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
+import './main.css'
 
 function Main(){
 
-    const [loggedUserId, setLoggedUserId] = useState(null)
-    const [loggedUserName, setLoggedUserName] = useState(null)
-    const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
-    const [loading, setLoading] = useState(true);
+    const {loggedUserId, loggedUserName} = useContext(AppContext)
     
-    useEffect(()=>{
-        async function getLoggedUserId(){
-        try {
-            const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
-            if(isonline.status==200){
-                const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
-                const opts = {method: 'POST', credentials: 'include'}
-                const response = await fetch(userIdUrl, opts)
-                const responseData = await response.json()
-                setLoggedUserMustResetPass(responseData.mustResetPass)
-                
-                if(loggedUserMustResetPass){ 
-                    //aca sweetalert con link
-                }else{
-                    setLoggedUserId(responseData.userId)
-                    setLoggedUserName(responseData.userName)
-
-                }
-            }            
-        }
-        catch (error) {
-            setLoggedUserId(null)
-        } finally{
-            setLoading(false)
-        }
-        }
-        getLoggedUserId()
-    },[])
-
-    if(loading){
-        return <Loading />
-    }
 
     return <BrowserRouter>
                 <Routes>
@@ -70,5 +35,7 @@ function Main(){
             </BrowserRouter>
 }
 createRoot(document.getElementById('root')).render(
-    <Main />
+    <AppContextProvider>
+        <Main />
+    </AppContextProvider>
 )

@@ -108,3 +108,11 @@
 #login-btn:active{
     transform: scale(0.9);
 }
+
+#loginErrorLabel{
+    font-style: italic;
+    align-self:end;
+    color: red;
+    height: 20px;
+    font-size: 14px;
+}

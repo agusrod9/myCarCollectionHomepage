@@ -7,11 +7,12 @@ import { useNavigate } from 'react-router-dom'
 export function Login ({onSuccess}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loginError, setLoginError] = useState("")
     const navigate = useNavigate()
     const handleLoginBtnClick =async (e)=>{
         e.preventDefault()
         if(email=="" || password==""){
-            alert("Faltan datos")
+            alert("Missing mandatory fields.")
         }else{
             await loginToApi(email,password, navigate)
             setEmail("")
@@ -27,6 +28,7 @@ export function Login ({onSuccess}){
     }
 
     async function loginToApi(email, password, navigate){
+        setLoginError("")
         const url = `https://mycarcollectionapi.onrender.com/api/sessions/login`
         const data = {email , password}
         const opts = {
@@ -46,6 +48,8 @@ export function Login ({onSuccess}){
                 onSuccess()
             }
             
+        }else{
+            setLoginError(responseData.message)
         }
         return responseData
         
@@ -69,6 +73,7 @@ export function Login ({onSuccess}){
                 <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="login-password-inp">Password</label>
                 <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} />
+                <p id='loginErrorLabel'>{loginError}</p>
                 <p id='forgotPass'><Link to='/resetPass'>Forgot your password?</Link></p>
             </form>
                 <button id='login-btn' onClick={handleLoginBtnClick}>
