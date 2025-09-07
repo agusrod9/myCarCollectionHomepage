@@ -58,7 +58,7 @@ export function Register(){
         const responseData = await response.json()
 
         if(response.status != 200){
-            setRegisterError(responsData.message)
+            setRegisterError(responseData.message)
         }else{
             alert(responseData.message)
             setName("")

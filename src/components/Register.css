@@ -81,12 +81,12 @@
 }
 
 #googleLogin{
-    background-image: url("src/assets/Google-icon.webp");
+    background-image: url("/Google-icon.webp");
     transition: all 0.2s ease;
 }
 
 #facebookLogin{
-    background-image: url("src/assets/Facebook-icon.png");
+    background-image: url("/Facebook-icon.png");
     transition: all 0.2s ease;
 }
 
