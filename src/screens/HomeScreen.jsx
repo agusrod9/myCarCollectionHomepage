@@ -8,7 +8,7 @@ export function HomeScreen({loggedUserId, loggedUserName}){
     return(
         <section className='homeBody'>
             <Header loggedUserId={loggedUserId}/>
-            <h1>Bienvenido {loggedUserName}!</h1>
+            <h1>Welcome back {loggedUserName}!</h1>
             <div className='main'>
                 <DashBoard />
             </div>

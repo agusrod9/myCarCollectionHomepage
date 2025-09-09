@@ -103,9 +103,9 @@ export function Register(){
                 <input type="text" name="lastName" id="register-lastName-inp" placeholder="Type your Last Name" value={lastName} onChange={handleLastNameChange}/>
                 <label htmlFor="register-email-inp">E-mail</label>
                 <input type="email" name="email" id="register-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
-                <label htmlFor="register-password-inp">Contraseña</label>
+                <label htmlFor="register-password-inp">Password</label>
                 <input type="password" name='password' id='register-password-inp' placeholder='Choose your password' value={password} onChange={handlePasswordChange} />
-                <label htmlFor="register-password2-inp">Repite la contraseña</label>
+                <label htmlFor="register-password2-inp">Confirm Password</label>
                 <input type="password" name='password2' id='register-password2-inp' placeholder='Re-Enter your password' value={password2} onChange={handlePassword2Change} />
                 <p id='registerErrorLabel'>{registerError}</p>
             </form>

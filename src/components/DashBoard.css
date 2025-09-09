@@ -1,33 +1,64 @@
 .dashBoard{
-    /*border: 1px solid black;*/
+    background-color: transparent;
+    /*border: 1px solid black;
     background: linear-gradient(to bottom right, #1e1e2f, #121212);
-    padding: 10px;
+    */padding: 10px;
     width: 700px;
-    height: 450px;
+    max-height: 550px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 2fr 1fr;;
+    grid-template-rows: 1fr 2fr 1fr;
     grid-template-areas:
-        "perfil   .    metrics"
-        ".      newcar    ."
-        "wishlist  .    notif";
+        "stats stats stats"
+        "btns btns btns"
+        "recAdd recAdd recAdd";
 
-    gap:10px;
+    gap: 10px;
     align-items: center;
-    justify-items: center;
+    justify-items:center
 
 }
 
 
-.notif{
-    grid-area: notif;
+.stats{
+    grid-area: stats;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 10px;
 }
-.metrics{
-    grid-area: metrics;
+.btns{
+    grid-area: btns;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
-.wishlist{
-    grid-area: wishlist;
+.recentlyAddedCars{
+    
+    grid-area: recAdd;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
 }
+
+#recAddTitleContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+}
+
+#recAddCardsContainer{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
 .perfil{
     grid-area: perfil;
 }
