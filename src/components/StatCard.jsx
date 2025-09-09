@@ -1,6 +1,7 @@
 import './StatCard.css'
 
 
+
 export function StatCard({icon, value, label, onClick}){
     return(
         <div className='statCardContent' onClick={onClick}>

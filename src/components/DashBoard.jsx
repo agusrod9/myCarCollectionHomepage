@@ -25,9 +25,19 @@ export function DashBoard(){
                         <h3>Recently added</h3>
                     </div>
                     <span id='recAddCardsContainer'>
-                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/200"}} />
-                        <CarCard car={{carMake: "Ford", carModel: "Escort", carColor:"White", imgUrl: "https://picsum.photos/201"}} />
-                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/202"}} />
+                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/200", manuf: "Bburago"}} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"}/>
+                        <CarCard car={{carMake: "Ford", carModel: "Escort", carColor:"White", imgUrl: "https://picsum.photos/201"}} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"} />
+                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/202"}} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"}/>
+                    </span>
+                </div>
+                <div className='wlCars'>
+                    <div id='wlTitleContainer'>
+                        <h3>My Wishlist</h3>
+                    </div>
+                    <span id='wlCardsContainer'>
+                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/203", manuf: "Bburago"}} containerClass = {"wlCardContainer"} infoClass={"wlCardInfo"} includeManuf/>
+                        <CarCard car={{carMake: "Ford", carModel: "Escort", carColor:"White", imgUrl: "https://picsum.photos/204", manuf: "Maisto"}} containerClass = {"wlCardContainer"} infoClass={"wlCardInfo"} includeManuf/>
+                        <CarCard car={{carMake: "Ford", carModel: "Fiesta", carColor:"White", imgUrl: "https://picsum.photos/205", manuf: "HotWheels"}} containerClass = {"wlCardContainer"} infoClass={"wlCardInfo"} includeManuf/>
                     </span>
                 </div>
             </div>
