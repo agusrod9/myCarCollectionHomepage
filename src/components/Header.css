@@ -1,12 +1,22 @@
 .header{
     width: 100vw;
-    height: 60px;
-    background-color: gray;
+    height: 65px;
+    padding: 0px 10px;
+    background: linear-gradient(to left, #0d1b2a, #1e1e2f);
     display: flex;
     align-items: center;
+    justify-content: space-between
 }
 
-.navBarHomeLink img{
+.homeLink{
+    height: 100%;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.homeLink img{
     height: 100px;
     -webkit-filter: grayscale(30%);
 	filter: grayscale(30%);
@@ -14,52 +24,40 @@
 	transition: .2s ease-in-out;
 }
 
-.navBar{
-    display: flex;
-    gap: 20px;
-    height: 100%;
-    margin-right: 60px;
-    width: 100%;
-    justify-content: end;
-}
-
-.navBarLink{
-    padding: 5px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    color: black;
-    min-width: 100px
-}
-
-.navBarHomeLink{
-    margin-left: 60px;
-    width: 100px;
-    margin-right: auto;
-}
-.navBarLink.active{
-    background-color: #fff;
-}
-
-.navBarHomeLink.active{
-    background: transparent;
-}
-
-.navBarLink:visited {
-    color: black;
-}
-
-.navBarLink:hover{
-    background-color: #fff;
-}
-
-.navBarHomeLink:hover{
-    background-color: transparent;
-}
-
-.navBarHomeLink img:hover{
+.homeLink img:hover{
     -webkit-filter: grayscale(0);
 	filter: grayscale(0);
+}
+
+.headerProfileContainer{
+    user-select: none;
+    color: #fafafa;
+    width: 180px;
+    height: 100%;
+    padding: 5px;
+    gap : 10px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.headerProfilePic{
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.headerMenu{
+    border: 1px solid white;
+    width: 180px;
+    position: absolute;
+    z-index: 1;
+    top: 65;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
 }

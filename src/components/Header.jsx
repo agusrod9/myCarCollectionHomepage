@@ -1,42 +1,34 @@
+import { useState } from 'react'
 import './Header.css'
-import { NavLink } from 'react-router'
+import { ChevronDown, ChevronUp, User, Car, Cog, LogOut } from 'lucide-react'
+import { MenuItem } from './MenuItem'
+import { useNavigate } from 'react-router-dom'
 
-export function Header({loggedUserId}){
-    
-    if(!loggedUserId){
-        return(
-            <div className='header'>
-            <nav className='navBar'>
-                <NavLink to={'/'} className='navBarLink navBarHomeLink'>
-                    <img src="/wc.png" alt="" />
-                </NavLink>
-                <NavLink to={'/login'} className='navBarLink'>
-                    Login
-                </NavLink>
-                <NavLink to={'/register'} className='navBarLink'>
-                    Register
-                </NavLink>
-            </nav>
-        </div> 
-        )
-    }
+export function Header({loggedUserId,loggedUserName}){
 
+    const [menuIsOpen, setMenuIsOpen] = useState(false)
+    const navigate = useNavigate()
     return(
-        <div className='header'>
-            <nav className='navBar'>
-                <NavLink to={'/'} className='navBarLink navBarHomeLink'>
-                    <img src="/wc.png" alt="" />
-                </NavLink>
-                <NavLink to={'/newCar'} className='navBarLink'>
-                    Add new Car
-                </NavLink>
-                <NavLink to={'/resetPass'} className='navBarLink'>
-                    Reset Password
-                </NavLink>
-                <NavLink to={'/profile'} className='navBarLink'>
-                    Profile
-                </NavLink>
-            </nav>
-        </div>   
+        <section>
+            <div className='header'>
+                    <div className='homeLink'>
+                        <img src="/wc.png" alt="Logotipo de WeCollect" />
+                    </div>
+                    <div className='headerProfileContainer' onClick={()=>setMenuIsOpen(!menuIsOpen)}>
+                        <img src="https://avatar.iran.liara.run/public" alt={`Profile picture of ${loggedUserName}`} className='headerProfilePic'/>
+                        {loggedUserName}
+                        {menuIsOpen ? <ChevronUp /> : <ChevronDown />}
+                    </div>   
+            </div>
+            {menuIsOpen ? 
+                <div className='headerMenu'>
+                    <MenuItem icon={<User />} text="Profile" onClick={()=>{navigate('/profile')}}/>
+                    <MenuItem icon={<Car />} text="My Collections"/>
+                    <MenuItem icon={<Cog />} text="Configuration"/>
+                    <MenuItem icon={<LogOut />} text="Log out"/>
+                </div> 
+                : null
+            }
+        </section>
     )
 }
