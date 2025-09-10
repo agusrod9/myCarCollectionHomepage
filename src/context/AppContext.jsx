@@ -7,8 +7,27 @@ export function AppContextProvider ({children}){
 
     const [loggedUserId, setLoggedUserId] = useState(null)
     const [loggedUserName, setLoggedUserName] = useState(null)
+    const [loggedUserFirstName, setLoggedUserFirstName] = useState(null)
+    const [loggedUserLastName, setLoggedUserLastName] = useState(null)
+    const [loggedUserContactEmail, setLoggedUserContactEmail] = useState(null)
+    const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
+    const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [loading, setLoading] = useState(true);
+
+    const handleLogOut = async ()=>{
+            const url = 'https://mycarcollectionapi.onrender.com/api/sessions/logout'
+            const opts = { method : 'POST', credentials: 'include'}
+            await fetch(url, opts)
+            setLoggedUserId(null)
+            setLoggedUserName(null)
+            setLoggedUserContactEmail(null)
+            setLoggedUserFirstName(null)
+            setLoggedUserLastName(null)
+            setLoggedUserProfilePicture(null)
+            navigate('/')
+        }
+
     useEffect(()=>{
             async function getLoggedUserId(){
             try {
@@ -25,6 +44,7 @@ export function AppContextProvider ({children}){
                     }else{
                         setLoggedUserId(responseData.userId)
                         setLoggedUserName(responseData.userName)
+                        setLoggedUserProfilePicture(responseData.userProfilePicture)
     
                     }
                 }            
@@ -44,7 +64,19 @@ export function AppContextProvider ({children}){
 
     return(
         <AppContext.Provider value={{
-            loggedUserId, setLoggedUserId, loggedUserName, setLoggedUserName
+            loggedUserId,
+            loggedUserName, 
+            loggedUserProfilePicture, 
+            loggedUserContactEmail, 
+            loggedUserFirstName,
+            loggedUserLastName,
+            setLoggedUserId, 
+            setLoggedUserName, 
+            setLoggedUserProfilePicture, 
+            setLoggedUserFirstName, 
+            setLoggedUserLastName, 
+            setLoggedUserContactEmail, 
+            handleLogOut
         }}
         >
             {children}

@@ -1,6 +1,50 @@
 .ProfileScreenBody{
+    height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+}
+
+.userBriefDataContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+}
+
+.userBriefDataContainer p{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.userBriefDataContainer img{
+    height: 300px;
+    width: 300px;
+    border: 4px solid #0d1b2a;
+    border-radius: 50%;
+
+}
+
+.userDataContainer{
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.userDataContainer label{
+    color: #fafafa;
+    font-weight: 500;
+}
+
+.userDataContainer input{
+    color: #fafafa;
+    padding: 2px;
+    border: none;
+    border-bottom: 1px solid #fafafa;
+    outline: none;
+    background-color: transparent;
 }

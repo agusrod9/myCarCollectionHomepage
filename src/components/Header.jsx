@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, User, Car, Cog, LogOut } from 'lucide-react'
 import { MenuItem } from './MenuItem'
 import { useNavigate } from 'react-router-dom'
 
-export function Header({loggedUserId,loggedUserName, handleLogOut}){
+export function Header({loggedUserId,loggedUserName, handleLogOut, loggedUserProfilePicture}){
 
     const [menuIsOpen, setMenuIsOpen] = useState(false)
     const navigate = useNavigate()
@@ -16,7 +16,7 @@ export function Header({loggedUserId,loggedUserName, handleLogOut}){
                         <img src="/wc.png" alt="Logotipo de WeCollect" />
                     </div>
                     <div className='headerProfileContainer' onClick={()=>setMenuIsOpen(!menuIsOpen)}>
-                        <img src="https://avatar.iran.liara.run/public/boy" alt={`Profile picture of ${loggedUserName}`} className='headerProfilePic'/>
+                        <img src={ loggedUserProfilePicture || "https://avatar.iran.liara.run/public"} alt={`Profile picture of ${loggedUserName}`} className='headerProfilePic'/>
                         <span className='headerProfileUserName'>{loggedUserName}</span>
                         {menuIsOpen ? <ChevronUp /> : <ChevronDown />}
                     </div>   
