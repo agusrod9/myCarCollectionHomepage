@@ -17,19 +17,18 @@ import './main.css'
 
 function Main(){
 
-    const {loggedUserId, loggedUserName} = useContext(AppContext)
-    
+    const {loggedUserId} = useContext(AppContext)
 
     return <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<ProtectedRoute userName={loggedUserName} userId={loggedUserId} Component={HomeScreen} />} />
-                    <Route path='/newCar' element={<ProtectedRoute userId={loggedUserId} Component={AddCarScreen} />} />
+                    <Route path='/' element={<ProtectedRoute Component={HomeScreen} />} />
+                    <Route path='/newCar' element={<ProtectedRoute Component={AddCarScreen} />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
-                    <Route path='/profile' element={<ProtectedRoute userName= {loggedUserName} userId={loggedUserId} Component={ProfileScreen} />}/>
+                    <Route path='/profile' element={<ProtectedRoute Component={ProfileScreen} />}/>
                     <Route path='*' element={<NotFoundScreen />}/>
                 </Routes>
             </BrowserRouter>

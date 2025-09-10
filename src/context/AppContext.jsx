@@ -44,7 +44,7 @@ export function AppContextProvider ({children}){
 
     return(
         <AppContext.Provider value={{
-            loggedUserId, loggedUserName, setLoggedUserName
+            loggedUserId, setLoggedUserId, loggedUserName, setLoggedUserName
         }}
         >
             {children}

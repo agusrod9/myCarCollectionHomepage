@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import './Login.css'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../context/AppContext'
 
 
 export function Login ({onSuccess}){
@@ -9,6 +10,7 @@ export function Login ({onSuccess}){
     const [password, setPassword] = useState("")
     const [loginError, setLoginError] = useState("")
     const navigate = useNavigate()
+    const {setLoggedUserId} = useContext(AppContext)
     const handleLoginBtnClick =async (e)=>{
         e.preventDefault()
         setLoginError("")
@@ -46,6 +48,7 @@ export function Login ({onSuccess}){
                 return
             }
             if(onSuccess){
+                setLoggedUserId('67dadf9ce155a59a2a232584')
                 onSuccess()
             }
             
