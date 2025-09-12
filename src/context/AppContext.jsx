@@ -15,6 +15,18 @@ export function AppContextProvider ({children}){
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [loading, setLoading] = useState(true);
 
+
+    const handleLogin = async()=>{
+        const url = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+        const opts = {method: 'POST', credentials: 'include'}
+        const response = await fetch(url, opts)
+        const responseData = await response.json()
+        setLoggedUserId(responseData.userId)
+        setLoggedUserName(responseData.userName)
+        setLoggedUserProfilePicture(responseData.userProfilePicture)
+        navigate('/')
+    }
+
     const handleLogOut = async ()=>{
             const url = 'https://mycarcollectionapi.onrender.com/api/sessions/logout'
             const opts = { method : 'POST', credentials: 'include'}
@@ -38,15 +50,9 @@ export function AppContextProvider ({children}){
                     const response = await fetch(userIdUrl, opts)
                     const responseData = await response.json()
                     setLoggedUserMustResetPass(responseData.mustResetPass)
-                    
-                    if(loggedUserMustResetPass){ 
-                        //aca sweetalert con link
-                    }else{
-                        setLoggedUserId(responseData.userId)
-                        setLoggedUserName(responseData.userName)
-                        setLoggedUserProfilePicture(responseData.userProfilePicture)
-    
-                    }
+                    setLoggedUserId(responseData.userId)
+                    setLoggedUserName(responseData.userName)
+                    setLoggedUserProfilePicture(responseData.userProfilePicture)
                 }            
             }
             catch (error) {
@@ -75,7 +81,8 @@ export function AppContextProvider ({children}){
             setLoggedUserProfilePicture, 
             setLoggedUserFirstName, 
             setLoggedUserLastName, 
-            setLoggedUserContactEmail, 
+            setLoggedUserContactEmail,
+            handleLogin, 
             handleLogOut
         }}
         >

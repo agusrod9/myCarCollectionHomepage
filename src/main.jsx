@@ -17,13 +17,13 @@ import './main.css'
 
 function Main(){
 
-    const {loggedUserId} = useContext(AppContext)
+    const {loggedUserId, handleLogin} = useContext(AppContext)
 
     return <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<ProtectedRoute Component={HomeScreen} />} />
                     <Route path='/newCar' element={<ProtectedRoute Component={AddCarScreen} />} />
-                    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen />} />
+                    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen/>}/>
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
