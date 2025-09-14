@@ -38,13 +38,31 @@
 .userDataContainer label{
     color: #fafafa;
     font-weight: 500;
+    font-size: 20px;
 }
 
-.userDataContainer input{
+.formInput{
     color: #fafafa;
+    font-size: 18px;
+    padding: 2px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.editingFormInput{
+    color: #fafafa;
+    font-size: 18px;
+    font-style: italic;
     padding: 2px;
     border: none;
     border-bottom: 1px solid #fafafa;
     outline: none;
-    background-color: transparent;
+    background-color: blue;
+}
+
+
+#saveOrEdit{
+    margin-top: 20px;
+    gap: 20px;
 }

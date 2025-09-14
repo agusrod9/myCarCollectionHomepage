@@ -1,12 +1,29 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './ProfileScreen.css'
 import { AppContext } from '../context/AppContext'
 import { Header } from '../components/Header'
+import {ActionBtn} from '../components/ActionBtn'
+import { Save, SquarePen } from 'lucide-react'
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
 
-    const{loggedUserContactEmail, loggedUserFirstName, loggedUserLastName, logged, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, setLoggedUserContactEmail, handleLogOut } = useContext(AppContext)
+    const{loggedUserContactEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, setLoggedUserContactEmail, handleLogOut } = useContext(AppContext)
 
+    const [isEditing, setIsEditing] = useState(false)
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [contactEmail, setContactEmail] = useState("")
+
+    const handleEditOrSave = ()=>{
+        const isEditinigInitialValue = isEditing
+        setIsEditing(!isEditing)
+
+        if(isEditinigInitialValue){
+            
+        }else{
+            
+        }
+    }
 
     useEffect(()=>{
         async function getLoggedUserInfo(){
@@ -18,11 +35,13 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             const response = await fetch(url,opts)
             const responseData = await response.json()
             const loggedUser = responseData.userData
-            console.log(loggedUser);
             
             setLoggedUserFirstName(loggedUser.firstName)
             setLoggedUserLastName(loggedUser.lastName)
             setLoggedUserContactEmail(loggedUser.contactEmail)
+            setFirstName(loggedUser.firstName)
+            setLastName(loggedUser.lastName)
+            setContactEmail(loggedUser.contactEmail)
         }
         getLoggedUserInfo()
     },[])
@@ -36,12 +55,13 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             </div>
             <div className='userDataContainer'>
                 <label>Name</label>
-                <input type="text" name="" id="" value={loggedUserFirstName} />
+                <input type="text" name="" className={isEditing ? "editingFormInput" : "formInput"} value={firstName} disabled={!isEditing} onChange={(e)=>setFirstName(e.target.value)}/>
                 <label>Last Name</label>
-                <input type="text" name="" id="" value={loggedUserLastName} />
+                <input type="text" name="" className={isEditing ? "editingFormInput" : "formInput"}  value={lastName} disabled={!isEditing} onChange={(e)=>setLastName(e.target.value)}/>
                 <label>Contact E-Mail</label>
-                <input type="text" name="" id="" value={loggedUserContactEmail} />
+                <input type="text" name="" className={isEditing ? "editingFormInput" : "formInput"}  value={contactEmail} disabled={!isEditing} onChange={(e)=>setContactEmail(e.target.value)}/>
             </div>
+            <ActionBtn id="saveOrEdit" icon={isEditing ? <Save /> : <SquarePen />} label={isEditing ? "Save" : "Edit"} onClick={handleEditOrSave}/>
         </section>
     )
 }
