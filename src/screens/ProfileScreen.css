@@ -40,7 +40,7 @@
 }
 
 .profilePictureOverlay{
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 65%, rgba(0,0,0,0));
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0));
     height: 60px;
     padding: 40px;
     display: flex;

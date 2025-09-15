@@ -72,7 +72,13 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             setLastName(loggedUser.lastName)
             setContactEmail(loggedUser.contactEmail)
         }
-        getLoggedUserInfo()
+        if(!loggedUserFirstName && !loggedUserLastName && !loggedUserContactEmail){
+            getLoggedUserInfo()
+        }else{
+            setFirstName(loggedUserFirstName)
+            setLastName(loggedUserLastName)
+            setContactEmail(loggedUserContactEmail)
+        }
     },[])
     
     return(
