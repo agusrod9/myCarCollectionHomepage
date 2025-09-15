@@ -7,6 +7,7 @@
 }
 
 .userBriefDataContainer{
+    user-select: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,17 +16,56 @@
     padding: 20px;
 }
 
-.userBriefDataContainer p{
-    font-weight: bold;
-    font-size: 20px;
-}
-
 .userBriefDataContainer img{
     height: 300px;
     width: 300px;
     border: 4px solid #0d1b2a;
     border-radius: 50%;
+    
+}
 
+.profilePictureOverlayContainer{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.profilePictureOverlay{
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 65%, rgba(0,0,0,0));
+    height: 60px;
+    padding: 40px;
+    display: flex;
+    align-items: flex-end;
+
+}
+
+.profilePictureOverlayContainer:hover{
+    opacity: 1;
+}
+
+.userNameInput{
+    font-weight: bold;
+    color: #fafafa;
+    font-size: 20px;
+    height: 50px;
+    text-align: center;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: transparent;
+}
+
+.userNameIcon{
+    cursor: pointer;
 }
 
 .userDataContainer{
@@ -33,6 +73,7 @@
     flex-direction: column;
     min-width: 250px;
     max-width: 350px;
+    user-select: none;
 }
 
 .userDataContainer label{
@@ -44,25 +85,27 @@
 .formInput{
     color: #fafafa;
     font-size: 18px;
-    padding: 2px;
+    height: 50px;
+    padding: 0px 2px 0px 15px;
     border: none;
+    border-radius: 10px;
     outline: none;
-    background-color: transparent;
+    background-color: #0d1b2a;
 }
 
-.editingFormInput{
-    color: #fafafa;
-    font-size: 18px;
+.editingMode{
     font-style: italic;
-    padding: 2px;
-    border: none;
-    border-bottom: 1px solid #fafafa;
     outline: none;
-    background-color: blue;
+    background-color: #1b263b;
 }
 
+.editingMode:focus{
+    border-bottom: 1px solid #fafafa;
+    background-color: #2c3e50;
+}
 
 #saveOrEdit{
+    cursor: pointer;
     margin-top: 20px;
     gap: 20px;
 }
