@@ -8,6 +8,7 @@
     max-height: 200px;
     border-radius: 10px;
     overflow: hidden;   
+    cursor: pointer;
 }
 
 .recentCardContainer img{
@@ -47,6 +48,7 @@
     max-height: 180px;
     border-radius: 10px;
     overflow: hidden;   
+    cursor: pointer;
 }
 
 .wlCardContainer img{

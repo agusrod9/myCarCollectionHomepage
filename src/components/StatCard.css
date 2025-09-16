@@ -10,7 +10,6 @@
     grid-template-areas: 
         "statIcon statValue"
         "statLabel statLabel";
-    
     align-items: center;
     justify-items: center;
     padding: 10px;
@@ -20,7 +19,6 @@
 
 .statIcon{
     grid-area: statIcon;
-    
 }
 
 .statLabel{
@@ -32,5 +30,4 @@
 .statValue{
     grid-area: statValue;
     font-size: 30px;
-    
 }

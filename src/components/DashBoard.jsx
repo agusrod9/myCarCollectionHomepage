@@ -7,7 +7,7 @@ import { toDo } from '../utils/toDo'
 import {CarCard} from './CarCard'
 
 
-export function DashBoard(){
+export function DashBoard({handleAddCarBtnClick}){
     return(
         <section>
             <div className='dashBoard'>
@@ -17,7 +17,7 @@ export function DashBoard(){
                     <StatCard icon={<DollarSign size={40}/>} label="Total Value" value={2450} onClick={()=>toDo()}/>
                 </div>
                 <div className='btns'>
-                    <ActionBtn icon={<PlusCircle />} label="Add new car" extraClass="specialBtn" onClick={()=>toDo()}/>
+                    <ActionBtn icon={<PlusCircle />} label="Add new car" extraClass="specialBtn" onClick={handleAddCarBtnClick}/>
                     <ActionBtn icon={<Car />} label="My collections" onClick={()=>toDo()}/>
                 </div>
                 <div className='recentlyAddedCars'>

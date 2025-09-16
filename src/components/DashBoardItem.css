@@ -20,7 +20,6 @@
     object-fit: center; /* ocupa todo el div */
     z-index: 0; /* al fondo */
     filter: blur(1px) brightness(0.6);
-
     overflow: hidden;
 }
 

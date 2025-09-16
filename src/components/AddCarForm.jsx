@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import './AddCarForm.css'
 import Swal from 'sweetalert2';
+import { CloudUpload } from 'lucide-react';
 
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
@@ -21,12 +22,11 @@ export function AddCarForm ({loggedUserId}){
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
     const fileInputRef = useRef(null);
     const moreDataSectionStlyles = {display : moreInfoVisibility}
-    const yearsToSelect =[]
     const today = new Date()
 
-    for(let i=today.getFullYear(); i>= 1885 ; i--){
-        yearsToSelect.push(i)
-    }
+    
+    const anioActual = today.getFullYear()
+    const anioMinimo = 1885
     const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -206,9 +206,40 @@ export function AddCarForm ({loggedUserId}){
 
     return(
         <section className='addCarForm-section'>
-            <button onClick={handlePruebaClick}>Agregar imágenes</button>
-            <label htmlFor='carImagesInput'>Imágenes</label>
-            <input type="file" multiple id='carImagesInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} ref={fileInputRef} style={{ display: "none" }}/>
+            
+
+            <label htmlFor='carMakeInput'>Make</label>
+            <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
+            <label htmlFor='carModelInput'>Model</label>
+            <input type="text" name='carModel' id='carModelInput' value={model} onChange={handleCarModelInput} placeholder='e: Fiesta' />
+            <label htmlFor='carScaleSelectInput'>Scale</label>
+            <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
+                <option value={""}></option>
+                {
+                    scaleList.map((scaleItem)=>{
+                        return(
+                            <option key={scaleItem} value={scaleItem}>{scaleItem}</option>
+                        )
+                    })
+                }
+            </select>
+            <label htmlFor='carYearSelectInput'>Year</label>
+            <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={handleCarYearInput} placeholder='e: 2019'></input>
+            <label htmlFor='carManufacturerInput'>Fabricante</label>
+            <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
+            <label htmlFor='carColorInput'>Color</label>
+            <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
+            <section className='dropArea'>
+
+                <label id='pruebaWrap' htmlFor="browseFileClick">
+                    <CloudUpload size={300}/>
+                    <p>Drag & drop your pictures here</p>
+                    <p>OR</p>
+                    <p><span id='browseFileClick'>Click to browse</span> from your device</p>
+                    <input type="file" multiple id='subirImg' accept='image/*' onChange={(e)=>{handleNewImg(e)}} ref={fileInputRef} />
+                </label>
+            </section>
+            
             <section className='AddCarForm-imgSection'>
                 <section className='AddCarForm-imgSection-preview'>
                     {
@@ -224,36 +255,6 @@ export function AddCarForm ({loggedUserId}){
 
                 </section>
             </section>
-
-            <label htmlFor='carMakeInput'>*Marca</label>
-            <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
-            <label htmlFor='carModelInput'>*Modelo</label>
-            <input type="text" name='carModel' id='carModelInput' value={model} onChange={handleCarModelInput} placeholder='e: Fiesta' />
-            <label htmlFor='carYearSelectInput'>Año</label>
-            <select name='carYear' id='carYearSelectInput' value={year} onChange={handleCarYearInput} placeholder='e: 2019' >
-                <option value={""}></option>
-                {yearsToSelect.map((yearSelect)=>{
-                    return(
-                        <option key={yearSelect} value={yearSelect}>{yearSelect}</option>
-                    )
-                })}
-            </select>
-            <label htmlFor='carScaleSelectInput'>*Escala</label>
-            <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
-                <option value={""}></option>
-                {
-                    scaleList.map((scaleItem)=>{
-                        return(
-                            <option key={scaleItem} value={scaleItem}>{scaleItem}</option>
-                        )
-                    })
-                }
-            </select>
-            <label htmlFor='carManufacturerInput'>Fabricante</label>
-            <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
-            <label htmlFor='carColorInput'>Color</label>
-            <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
-            
 
             <button id='AddCarFormMoreInfoButton' onClick={handleMoreInfoClick}>Agregar más info</button>
 
