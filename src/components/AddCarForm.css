@@ -1,4 +1,27 @@
 .addCarForm-section{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "basic basic"
+        "droparea droparea"
+        "img img"
+        "btnMore btnMore"
+        "more more"
+        "btnSave btnSave";
+
+    gap: 10px;
+    
+}
+
+.addCarForm-basicFields{
+    grid-area: basic;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.fieldContainer{
     display: flex;
     flex-direction: column;
 }
@@ -15,14 +38,27 @@
     resize: none;
 }
 
+.AddCarForm-imgSection{
+    grid-area: img;
+}
+
+.imgSectionHidden{
+    display: none;
+}
+
 .AddCarForm-imgSection-preview{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     min-height: 100px;
     max-height: 200px;
-    width: 400px;
+    width: 100%;
+    padding: 0px 10px;
     overflow: hidden;
+}
+
+.AddCarForm-imgSection-preview img{
+    border-radius: 15px;
 }
 
 .AddCarForm-imgSection-message{
@@ -80,7 +116,28 @@
     background-color: #0d1b2a;
 }
 
+.addCarForm-section textarea{
+    color: #fafafa;
+    font-size: 18px;
+    height: 50px;
+    padding: 0px 2px 0px 15px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: #0d1b2a;
+}
+
 .addCarForm-section input:focus{
+    border-bottom: 1px solid #fafafa;
+    background-color: #2c3e50;
+}
+
+.addCarForm-section select:focus{
+    border-bottom: 1px solid #fafafa;
+    background-color: #2c3e50;
+}
+
+.addCarForm-section textarea:focus{
     border-bottom: 1px solid #fafafa;
     background-color: #2c3e50;
 }
@@ -91,8 +148,40 @@
     font-size: 20px;
 }
 
+.dropArea{
+    grid-area: droparea;
+}
+
 .dropArea label{
     color: #fafafa;
     font-weight: normal;
     font-size: 14px;
+}
+
+
+.AddCarForm-moreDataSection{
+    grid-area: more;
+}
+
+.moreDataSectionHidden{
+    grid-area: more;
+    display: none;
+}
+
+.addCarForm-moreInfoFields{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+#AddCarFormMoreInfoButton{
+    grid-area: btnMore;
+    width: 100%;
+}
+
+#addCarFormSaveButton{
+    grid-area: btnSave;
 }
