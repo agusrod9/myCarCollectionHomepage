@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import './AddCarForm.css'
 import Swal from 'sweetalert2';
-import { CloudUpload } from 'lucide-react';
+import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
+import { ActionBtn } from './ActionBtn';
 
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
@@ -16,13 +17,11 @@ export function AddCarForm ({loggedUserId}){
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
     const [userCollections, setUserCollections] = useState([])
-    const [moreInfoVisibility, setMoreInfoVisibility] = useState("none")
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [moreInfoBtnText, setMoreInfoBtnText] = useState("More...")
     const [images, setImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
-    const fileInputRef = useRef(null);
     const today = new Date()
 
     
@@ -52,9 +51,6 @@ export function AddCarForm ({loggedUserId}){
             setCollection("")
             setMoreInfoDisplayed(false)
             setDoneUploadingImages(true)
-            if (fileInputRef.current) {
-                fileInputRef.current.value = "";
-            }
     }
 
     async function uploadImages(){
@@ -181,13 +177,11 @@ export function AddCarForm ({loggedUserId}){
 
     const handleNewImg = async(e)=>{
         setDoneUploadingImages(!doneUploadingImages)
-        setImages(e.target.files)
+        const newImages = Array.from(e.target.files)
+        setImages(prev => [...prev, ...newImages])        
     }
 
-    const handlePruebaClick = ()=>{
-        fileInputRef.current.click()
-    }
-
+console.log(images);
     useEffect(()=>{
         if(!loggedUserId) return
         const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
@@ -234,16 +228,18 @@ export function AddCarForm ({loggedUserId}){
                         }
                     </select>
                 </div>
+                <div className='fieldContainer'>
+                    <ActionBtn id='AddCarFormMoreInfoButton' label={moreInfoBtnText} icon={moreInfoDisplayed ? <ChevronUp /> : <ChevronDown />} onClick={handleMoreInfoClick}>  </ActionBtn>
+                </div>
                 
             </div>
             <section className='dropArea'>
-
-                <label id='pruebaWrap' htmlFor="browseFileClick">
+                <label id='dropaAreaWrapper' htmlFor="browseFileClick">
                     <CloudUpload size={300}/>
                     <p>Drag & drop your pictures here</p>
                     <p>OR</p>
                     <p><span id='browseFileClick'>Click to browse</span> from your device</p>
-                    <input type="file" multiple id='subirImg' accept='image/*' onChange={(e)=>{handleNewImg(e)}} ref={fileInputRef} />
+                    <input type="file" multiple id='filesUploadInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} />
                 </label>
             </section>
             
@@ -262,8 +258,6 @@ export function AddCarForm ({loggedUserId}){
 
                 </section>
             </section>
-
-            <button id='AddCarFormMoreInfoButton' onClick={handleMoreInfoClick}>{moreInfoBtnText}</button>
             
             <section className={moreInfoDisplayed ? 'AddCarForm-moreDataSection': 'moreDataSectionHidden'}  >
                 <div className='addCarForm-moreInfoFields'>
@@ -319,9 +313,8 @@ export function AddCarForm ({loggedUserId}){
                 </div>
             </section>
            
-            <button id='addCarFormSaveButton' onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
-                Guardar
-            </button>
+            <ActionBtn id='addCarFormSaveButton' icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
+            </ActionBtn>
             
         </section>
     )

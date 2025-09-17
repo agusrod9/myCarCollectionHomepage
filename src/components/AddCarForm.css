@@ -4,10 +4,9 @@
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
         "basic basic"
+        "more more"
         "droparea droparea"
         "img img"
-        "btnMore btnMore"
-        "more more"
         "btnSave btnSave";
 
     gap: 10px;
@@ -24,6 +23,7 @@
 .fieldContainer{
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .imgPreview{
@@ -69,7 +69,7 @@
     justify-content: center;
 }
 
-#pruebaWrap{
+#dropaAreaWrapper{
     width: 100%;
     height: 160px;
     width: 100%;
@@ -85,7 +85,7 @@
     position: relative;
     
 }
-#subirImg{
+#filesUploadInput{
     width: 100%;
     height: 100%;
     opacity: 0;
@@ -114,6 +114,7 @@
     border-radius: 10px;
     outline: none;
     background-color: #0d1b2a;
+    cursor: pointer;
 }
 
 .addCarForm-section textarea{
@@ -178,10 +179,16 @@
 
 
 #AddCarFormMoreInfoButton{
-    grid-area: btnMore;
-    width: 100%;
+    height: 80%;
+    width: 80%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
 }
 
 #addCarFormSaveButton{
     grid-area: btnSave;
+    background-color: #0a76e3;
 }
