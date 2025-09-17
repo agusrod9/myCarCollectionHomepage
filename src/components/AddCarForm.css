@@ -10,7 +10,6 @@
         "btnSave btnSave";
 
     gap: 10px;
-    
 }
 
 .addCarForm-basicFields{
@@ -188,7 +187,14 @@
     align-self: center;
 }
 
-#addCarFormSaveButton{
+.saveBtnContainer{
     grid-area: btnSave;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#addCarFormSaveButton{
     background-color: #0a76e3;
 }
+

@@ -23,6 +23,7 @@
   /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
 }
 :root {
+  
   margin: 0;
   padding: 0;
   /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
@@ -31,12 +32,13 @@
   display: flex;
   justify-content: center;
   /*color-scheme: light dark;*/
-  background: linear-gradient(to bottom, #1e1e2f, #121212) ;
+  background: linear-gradient(to bottom, #1e1e2f, #121212);
   color: rgba(255, 255, 255, 0.87);
   background-color: rgba(66, 66, 66, 0.726);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 

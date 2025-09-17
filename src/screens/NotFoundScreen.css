@@ -4,4 +4,19 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    font-size: 25px;
+}
+
+.NotFoundScreenBody img{
+    height: 400px;
+}
+
+.NotFoundScreenBody a{
+    font-style:italic;
+    text-decoration: underline;
+    color: #fafafa;
+}
+
+.NotFoundScreenBody a:visited{
+    color: #fafafa;
 }

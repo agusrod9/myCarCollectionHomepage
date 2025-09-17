@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import './AddCarForm.css'
 import Swal from 'sweetalert2';
 import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
@@ -181,7 +181,6 @@ export function AddCarForm ({loggedUserId}){
         setImages(prev => [...prev, ...newImages])        
     }
 
-console.log(images);
     useEffect(()=>{
         if(!loggedUserId) return
         const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
@@ -312,9 +311,11 @@ console.log(images);
                     </div>
                 </div>
             </section>
-           
+            <div className='saveBtnContainer'>
             <ActionBtn id='addCarFormSaveButton' icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
             </ActionBtn>
+
+            </div>
             
         </section>
     )
