@@ -23,11 +23,10 @@ export function AddCarForm ({loggedUserId}){
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
     const [requiredFieldsSet, setRequiredFieldsSet] = useState(false)
     const today = new Date()
-
-    
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
     const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
+
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
             setRequiredFieldsSet(true)
@@ -54,7 +53,7 @@ export function AddCarForm ({loggedUserId}){
     }
 
     async function uploadImages(){
-        const url = 'https://mycarcollectionapi.onrender.com/api/aws'
+        const url = `https://mycarcollectionapi.onrender.com/api/aws?userId=${loggedUserId}`
         const opts = {
             method : 'POST'
         }
@@ -122,50 +121,6 @@ export function AddCarForm ({loggedUserId}){
         }
     }
 
-    const handleCarMakeInput = (e)=>{
-        setMake(e.target.value)
-    }
-    
-    const handleCarModelInput = (e)=>{
-        setModel(e.target.value)
-    }
-
-    const handleCarYearInput = (e)=>{
-        setYear(e.target.value)
-    }
-
-    const handleCarColorInput = (e)=>{
-        setColor(e.target.value)
-    }
-
-    const handleScaleSelect = (e)=>{
-        setScale(e.target.value)
-    }
-
-    const handleCarManufacturerInput = (e)=>{
-        setManufacturer(e.target.value)
-    }
-
-    const handleCarNotesInput = (e)=>{
-        setNotes(e.target.value)
-    }
-
-    const handleCarOpenedSelect = (e)=>{
-        setOpened(e.target.value)
-    }
-
-    const handleCarSeriesInput = (e)=>{
-        setSeries(e.target.value)
-    }
-
-    const handleCarSeriesNumberInput = (e)=>{
-        setSeriesNum(e.target.value)
-    }
-
-    const handleCarCollectionSelect = (e)=>{
-        setCollection(e.target.value)
-    }
-
     const handleMoreInfoClick = ()=>{
         setMoreInfoDisplayed(!moreInfoDisplayed)
         if(moreInfoBtnText=="More..."){
@@ -202,21 +157,20 @@ export function AddCarForm ({loggedUserId}){
         }
     },[images])
 
-
     return(
         <section className='addCarForm-section'>
             <div className='addCarForm-basicFields'>
                 <div className='fieldContainer'> 
                     <label htmlFor='carMakeInput'>Make</label>
-                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={handleCarMakeInput} placeholder='e: Ford' />
+                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(e.target.value)} placeholder='e: Ford' />
                 </div>
                 <div className='fieldContainer'>
                     <label htmlFor='carModelInput'>Model</label>
-                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={handleCarModelInput} placeholder='e: Fiesta' />
+                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(e.target.value)} placeholder='e: Fiesta' />
                 </div>
                 <div className='fieldContainer'>
                     <label htmlFor='carScaleSelectInput'>Scale</label>
-                    <select name="carScale" id="carScaleSelectInput" value={scale} onChange={handleScaleSelect} >
+                    <select name="carScale" id="carScaleSelectInput" value={scale} onChange={(e)=>setScale(e.target.value)} >
                         <option value={""}></option>
                         {
                             scaleList.map((scaleItem)=>{
@@ -238,7 +192,7 @@ export function AddCarForm ({loggedUserId}){
                     <p>Drag & drop your pictures here</p>
                     <p>OR</p>
                     <p><span id='browseFileClick'>Click to browse</span> from your device</p>
-                    <input type="file" multiple id='filesUploadInput' accept='image/*' onChange={(e)=>{handleNewImg(e)}} />
+                    <input type="file" multiple id='filesUploadInput' accept='image/*' onChange={(e)=>handleNewImg(e)} />
                 </label>
             </section>
             
@@ -262,27 +216,27 @@ export function AddCarForm ({loggedUserId}){
                 <div className='addCarForm-moreInfoFields'>
                     <div className='fieldContainer'>
                         <label htmlFor='carManufacturerInput'>Manufacturer</label>
-                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={handleCarManufacturerInput} placeholder='e: Hotwheels'/>
+                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(e.target.value)} placeholder='e: Hotwheels'/>
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carSeriesInput'>Series</label>
-                        <input type="text" name='carSeries' id='carSeriesInput' value={series} onChange={handleCarSeriesInput} placeholder='e: Hotwheels´s MUSCLE MANIA'  />
+                        <input type="text" name='carSeries' id='carSeriesInput' value={series} onChange={(e)=>setSeries(e.target.value)} placeholder='e: Hotwheels´s MUSCLE MANIA'  />
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carSeriesNumberInput'>Series Number</label>
-                        <input type="text" name='carSeriesNumber' id='carSeriesNumberInput' value={seriesNum} onChange={handleCarSeriesNumberInput} placeholder='e: 44/100'/>
+                        <input type="text" name='carSeriesNumber' id='carSeriesNumberInput' value={seriesNum} onChange={(e)=>setSeriesNum(e.target.value)} placeholder='e: 44/100'/>
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carYearSelectInput'>Year</label>
-                        <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={handleCarYearInput} placeholder='e: 2019'></input>
+                        <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={(e)=>setYear(e.target.value)} placeholder='e: 2019'></input>
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carColorInput'>Color</label>
-                        <input type="text" name='carColor' id='carColorInput' value={color} onChange={handleCarColorInput} placeholder='e: Blanco' />
+                        <input type="text" name='carColor' id='carColorInput' value={color} onChange={(e)=>setColor(e.target.value)} placeholder='e: Blanco' />
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carOpenedSelectInput'>Package</label>
-                        <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={handleCarOpenedSelect}  >
+                        <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={(e)=>setOpened(e.target.value)}  >
                             <option value={""}></option>
                             <option value='opened'>Opened</option>
                             <option value='sealed'>Closed</option>
@@ -290,11 +244,11 @@ export function AddCarForm ({loggedUserId}){
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carNotesInput'>Notes</label>
-                        <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={handleCarNotesInput} placeholder='e: Birthday gift' rows={4}/>
+                        <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carCollectionSelectInput'>Collection</label>
-                        <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={handleCarCollectionSelect}>
+                        <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={(e)=>setCollection(e.target.value)}>
                             <option value={""}></option>
                             {
                                 userCollections.length>0 ?
@@ -312,11 +266,9 @@ export function AddCarForm ({loggedUserId}){
                 </div>
             </section>
             <div className='saveBtnContainer'>
-            <ActionBtn id='addCarFormSaveButton' icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
-            </ActionBtn>
-
+                <ActionBtn id='addCarFormSaveButton' icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
+                </ActionBtn>
             </div>
-            
         </section>
     )
 }

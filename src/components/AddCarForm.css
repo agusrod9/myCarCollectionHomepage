@@ -8,8 +8,7 @@
         "droparea droparea"
         "img img"
         "btnSave btnSave";
-
-    gap: 10px;
+    gap: 20px;
 }
 
 .addCarForm-basicFields{
@@ -84,6 +83,7 @@
     position: relative;
     
 }
+
 #filesUploadInput{
     width: 100%;
     height: 100%;
@@ -158,7 +158,6 @@
     font-size: 14px;
 }
 
-
 .AddCarForm-moreDataSection{
     grid-area: more;
 }
@@ -176,10 +175,7 @@
     grid-template-columns: 1fr 1fr;
 }
 
-
 #AddCarFormMoreInfoButton{
-    height: 80%;
-    width: 80%;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
