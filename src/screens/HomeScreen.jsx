@@ -6,17 +6,17 @@ import { AppContext } from '../context/AppContext.jsx'
 import { useNavigate } from 'react-router-dom'
 
 export function HomeScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const {setLoggedUserId, setLoggedUserName, handleLogOut} = useContext(AppContext)
+    const {setLoggedUserId, setLoggedUserName, handleLogOut, userCarCount, userCarsValue} = useContext(AppContext)
     const navigate = useNavigate()
     const handleAddCarBtnClick = ()=>{
         navigate('/newCar')
     }
-    
+
     return(
         <section className='homeBody'>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
             <div className='main'>
-                <DashBoard handleAddCarBtnClick= {handleAddCarBtnClick}/>
+                <DashBoard userCarCount={userCarCount} userCarsValue={userCarsValue} handleAddCarBtnClick= {handleAddCarBtnClick}/>
             </div>
         </section>
     )

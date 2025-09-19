@@ -13,6 +13,8 @@ export function AppContextProvider ({children}){
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
+    const [userCarCount, setUserCarCount] = useState(null)
+    const [userCarsValue, setUserCarsValue] = useState(null)
     const [loading, setLoading] = useState(true);
 
 
@@ -24,6 +26,8 @@ export function AppContextProvider ({children}){
         setLoggedUserId(responseData.userId)
         setLoggedUserName(responseData.userName)
         setLoggedUserProfilePicture(responseData.userProfilePicture)
+        setUserCarCount(responseData.userCarCount)
+        setUserCarsValue(responseData.userCarsTotalAmount)
         navigate('/')
     }
 
@@ -53,6 +57,8 @@ export function AppContextProvider ({children}){
                     setLoggedUserId(responseData.userId)
                     setLoggedUserName(responseData.userName)
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
+                    setUserCarCount(responseData.userCarCount)
+                    setUserCarsValue(responseData.userCarsTotalAmount)
                 }            
             }
             catch (error) {
@@ -83,7 +89,11 @@ export function AppContextProvider ({children}){
             setLoggedUserLastName, 
             setLoggedUserContactEmail,
             handleLogin, 
-            handleLogOut
+            handleLogOut,
+            setUserCarCount,
+            userCarCount,
+            setUserCarsValue,
+            userCarsValue
         }}
         >
             {children}

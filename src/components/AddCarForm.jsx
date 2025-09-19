@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './AddCarForm.css'
 import Swal from 'sweetalert2';
 import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
+import { AppContext } from '../context/AppContext';
 
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
@@ -26,6 +27,9 @@ export function AddCarForm ({loggedUserId}){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
     const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
+
+
+    const{setUserCarCount, userCarCount} = useContext(AppContext);
 
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -117,6 +121,8 @@ export function AddCarForm ({loggedUserId}){
                 toast: true,
                 width : '300px'
             });
+            
+            setUserCarCount(prev => prev +1)
             resetStates()
         }
     }
