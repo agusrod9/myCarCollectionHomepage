@@ -35,7 +35,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
     const handleSaveUserName = ()=>{
         setIsEditingUserName(!isEditingUserName)
-        console.log("Username a guardar en BD: " + userName);
         
     }
 
@@ -48,7 +47,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
         typeTimeoutRef.current = setTimeout(() => {
             if(e.target.value.length!=0){
-                //console.log('Voy a chequear si existe ' + e.target.value)
                 setUserNameOKtoSave(true)
             }
         }, 1000);

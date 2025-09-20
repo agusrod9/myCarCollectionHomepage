@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext.jsx'
 import { useNavigate } from 'react-router-dom'
 
 export function HomeScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const {setLoggedUserId, setLoggedUserName, handleLogOut, userCarCount, userCarsValue} = useContext(AppContext)
+    const {setLoggedUserId, setLoggedUserName, handleLogOut, userCarCount, userCarsValue,recentlyAddedCars} = useContext(AppContext)
     const navigate = useNavigate()
     const handleAddCarBtnClick = ()=>{
         navigate('/newCar')
@@ -16,7 +16,7 @@ export function HomeScreen({loggedUserId, loggedUserName, loggedUserProfilePictu
         <section className='homeBody'>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
             <div className='main'>
-                <DashBoard userCarCount={userCarCount} userCarsValue={userCarsValue} handleAddCarBtnClick= {handleAddCarBtnClick}/>
+                <DashBoard userCarCount={userCarCount} userCarsValue={userCarsValue} handleAddCarBtnClick= {handleAddCarBtnClick} recentlyAddedCars={recentlyAddedCars}/>
             </div>
         </section>
     )

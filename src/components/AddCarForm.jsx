@@ -17,6 +17,7 @@ export function AddCarForm ({loggedUserId}){
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
+    const [price, setPrice] = useState("")
     const [userCollections, setUserCollections] = useState([])
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [moreInfoBtnText, setMoreInfoBtnText] = useState("More...")
@@ -52,6 +53,7 @@ export function AddCarForm ({loggedUserId}){
             setSeries("")
             setSeriesNum("")
             setCollection("")
+            setPrice("")
             setMoreInfoDisplayed(false)
             setDoneUploadingImages(true)
     }
@@ -75,9 +77,9 @@ export function AddCarForm ({loggedUserId}){
         return imagesUrls;
     }
 
-    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum){
-        
+    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price){
         const url ='https://mycarcollectionapi.onrender.com/api/cars'
+        
         const data = {
             carMake : make,
             carModel : model,
@@ -93,6 +95,7 @@ export function AddCarForm ({loggedUserId}){
         if(seriesNum!=""){data.series_num = seriesNum}
         if(collection!=""){data.collectionId = collection}
         if(urls.length>0){data.img_urls = urls}
+        if(price!=""){data.price = price}
         const opts = {
             method : 'POST',
             headers : {'Content-Type' : 'application/json'},
@@ -107,7 +110,7 @@ export function AddCarForm ({loggedUserId}){
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
         const urls = await uploadImages()
-        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection)
+        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
         if(added.error){
             alert(added.error)
         }else{
@@ -221,6 +224,23 @@ export function AddCarForm ({loggedUserId}){
             <section className={moreInfoDisplayed ? 'AddCarForm-moreDataSection': 'moreDataSectionHidden'}  >
                 <div className='addCarForm-moreInfoFields'>
                     <div className='fieldContainer'>
+                        <label htmlFor='carCollectionSelectInput'>Add to collection</label>
+                        <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={(e)=>setCollection(e.target.value)}>
+                            <option value={""}></option>
+                            {
+                                userCollections.length>0 ?
+                                userCollections.map((col)=>{
+                                    return(
+                                        <option key={col._id} value={col._id}>{col.collectionName}</option>
+                                    )
+                                })
+                                :
+                                null
+                            }
+                            
+                        </select>
+                    </div>
+                    <div className='fieldContainer'>
                         <label htmlFor='carManufacturerInput'>Manufacturer</label>
                         <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(e.target.value)} placeholder='e: Hotwheels'/>
                     </div>
@@ -249,26 +269,14 @@ export function AddCarForm ({loggedUserId}){
                         </select>
                     </div>
                     <div className='fieldContainer'>
+                        <label htmlFor='carPriceInput'>Price</label>
+                        <input type="number" name='carPrice' id='carPriceInput' value={price} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
+                    </div>
+                    <div className='fieldContainer'>
                         <label htmlFor='carNotesInput'>Notes</label>
                         <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
                     </div>
-                    <div className='fieldContainer'>
-                        <label htmlFor='carCollectionSelectInput'>Collection</label>
-                        <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={(e)=>setCollection(e.target.value)}>
-                            <option value={""}></option>
-                            {
-                                userCollections.length>0 ?
-                                userCollections.map((col)=>{
-                                    return(
-                                        <option key={col._id} value={col._id}>{col.collectionName}</option>
-                                    )
-                                })
-                                :
-                                null
-                            }
-                            
-                        </select>
-                    </div>
+                    
                 </div>
             </section>
             <div className='saveBtnContainer'>

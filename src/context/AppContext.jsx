@@ -15,6 +15,7 @@ export function AppContextProvider ({children}){
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
     const [userCarCount, setUserCarCount] = useState(null)
     const [userCarsValue, setUserCarsValue] = useState(null)
+    const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
     const [loading, setLoading] = useState(true);
 
 
@@ -28,6 +29,10 @@ export function AppContextProvider ({children}){
         setLoggedUserProfilePicture(responseData.userProfilePicture)
         setUserCarCount(responseData.userCarCount)
         setUserCarsValue(responseData.userCarsTotalAmount)
+        const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
+        const recentCarsResponseData = await recentCarsResponse.json()
+        setRecentlyAddedCars(recentCarsResponseData.data)
+        
         navigate('/')
     }
 
@@ -59,6 +64,9 @@ export function AppContextProvider ({children}){
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
                     setUserCarCount(responseData.userCarCount)
                     setUserCarsValue(responseData.userCarsTotalAmount)
+                    const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
+                    const recentCarsResponseData = await recentCarsResponse.json()
+                    setRecentlyAddedCars(recentCarsResponseData.data)
                 }            
             }
             catch (error) {
@@ -93,7 +101,9 @@ export function AppContextProvider ({children}){
             setUserCarCount,
             userCarCount,
             setUserCarsValue,
-            userCarsValue
+            userCarsValue,
+            recentlyAddedCars,
+            setRecentlyAddedCars
         }}
         >
             {children}

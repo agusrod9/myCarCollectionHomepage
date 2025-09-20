@@ -2,8 +2,9 @@ import './CarCard.css'
 
 export function CarCard({car, containerClass, infoClass, includeManuf}){
     return(
+        
         <div className={containerClass}>
-            <img src={car.imgUrl}/>
+            <img src={car.img_urls[0]}/>
             <div className={infoClass}>
                 <p>{car.carMake} {car.carModel}</p>
                 <p>{car.carColor}</p>
