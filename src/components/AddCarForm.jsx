@@ -4,12 +4,13 @@ import Swal from 'sweetalert2';
 import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
 import { AppContext } from '../context/AppContext';
+import { CirclePicker } from 'react-color';
 
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [year, setYear] = useState("")
-    const [color, setColor] = useState("")
+    const [color, setColor] = useState("#fff")
     const [scale, setScale] = useState("")
     const [manufacturer, setManufacturer] = useState("")
     const [notes, setNotes] = useState("")
@@ -20,6 +21,7 @@ export function AddCarForm ({loggedUserId}){
     const [price, setPrice] = useState("")
     const [userCollections, setUserCollections] = useState([])
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
+    const [colorSelectDisplayed, setColorSelectDisplayed] = useState(false)
     const [moreInfoBtnText, setMoreInfoBtnText] = useState("More...")
     const [images, setImages] = useState([])
     const [doneUploadingImages, setDoneUploadingImages] = useState(true)
@@ -30,7 +32,7 @@ export function AddCarForm ({loggedUserId}){
     const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
 
 
-    const{setUserCarCount, userCarCount} = useContext(AppContext);
+    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue} = useContext(AppContext);
 
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -126,6 +128,9 @@ export function AddCarForm ({loggedUserId}){
             });
             
             setUserCarCount(prev => prev +1)
+            setUserCarsValue(prev => prev + added.data.price)
+            setRecentlyAddedCars(prev => [added.data, ...prev].slice(0,3))
+
             resetStates()
         }
     }
@@ -257,8 +262,17 @@ export function AddCarForm ({loggedUserId}){
                         <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={(e)=>setYear(e.target.value)} placeholder='e: 2019'></input>
                     </div>
                     <div className='fieldContainer'>
-                        <label htmlFor='carColorInput'>Color</label>
-                        <input type="text" name='carColor' id='carColorInput' value={color} onChange={(e)=>setColor(e.target.value)} placeholder='e: Blanco' />
+                        <label htmlFor='carColorInput'>Main Color</label>
+                        <div id='carColorInput' style={{backgroundColor:color}} onClick={()=>setColorSelectDisplayed(!colorSelectDisplayed)} ></div>
+                        {colorSelectDisplayed ?
+                            <CirclePicker className='colorPicker' onChangeComplete={(color)=>{
+                                setColor(color.hex)
+                                setColorSelectDisplayed(!colorSelectDisplayed)
+                            }}/>
+                            :
+                            null
+                        }
+                        
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carOpenedSelectInput'>Package</label>
@@ -275,6 +289,9 @@ export function AddCarForm ({loggedUserId}){
                     <div className='fieldContainer'>
                         <label htmlFor='carNotesInput'>Notes</label>
                         <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
+                    </div>
+                    <div className='fieldContainer'>
+                            
                     </div>
                     
                 </div>

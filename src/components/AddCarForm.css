@@ -194,3 +194,12 @@
     background-color: #0a76e3;
 }
 
+#carColorInput{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.colorPicker{
+}
+
