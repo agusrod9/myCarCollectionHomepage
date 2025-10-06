@@ -4,11 +4,12 @@ import { AppContext } from '../context/AppContext'
 import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
 import { Edit, Save, SquarePen } from 'lucide-react'
+import Loading from '../components/Loading'
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
 
     const{loggedUserContactEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, setLoggedUserContactEmail, handleLogOut } = useContext(AppContext)
-
+    const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
     const [isEditingUserName, setIsEditingUserName] = useState(false)
     const [firstName, setFirstName] = useState("")
@@ -69,6 +70,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             setFirstName(loggedUser.firstName)
             setLastName(loggedUser.lastName)
             setContactEmail(loggedUser.contactEmail)
+            setLoading(!loading)
         }
         if(!loggedUserFirstName && !loggedUserLastName && !loggedUserContactEmail){
             getLoggedUserInfo()
@@ -76,8 +78,13 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             setFirstName(loggedUserFirstName)
             setLastName(loggedUserLastName)
             setContactEmail(loggedUserContactEmail)
+            setLoading(!loading)
         }
     },[])
+
+    if(loading){
+        return <Loading />
+    }
     
     return(
         <section className='ProfileScreenBody'>

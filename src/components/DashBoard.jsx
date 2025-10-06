@@ -1,5 +1,4 @@
 import './DashBoard.css'
-import { DashBoardItem } from './DashBoardItem'
 import {StatCard} from './StatCard'
 import { ActionBtn } from './ActionBtn'
 import { CarFront, Star, DollarSign, PlusCircle, Car } from "lucide-react"
