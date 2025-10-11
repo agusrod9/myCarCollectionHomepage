@@ -1,0 +1,33 @@
+.SBContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: peachpuff;
+    height: 70px;
+}
+
+.SBSerchInput{
+    display: flex;
+    align-items: center;
+    width: 400px;
+    height: 40px;
+    background-color: #232323;
+}
+
+.SBSerchInput input{
+    width: 100%;
+    height: 100%;
+    color: #fafafa;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.SBOrderBy{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+    width: 150px;
+    background-color: darkslategrey;
+}

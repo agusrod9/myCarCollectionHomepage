@@ -73,7 +73,11 @@ export function Login ({onSuccess}){
                 <div></div>
                 <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="login-password-inp">Password</label>
-                <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} />
+                <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} onKeyDown={(e)=>{
+                    if(e.key=='Enter'){
+                        handleLoginBtnClick(e)
+                    }
+                }}/>
                 <p id='loginErrorLabel'>{loginError}</p>
                 <p className='loginLink'><Link to='/resetPass'>Forgot your password?</Link></p>
             </form>

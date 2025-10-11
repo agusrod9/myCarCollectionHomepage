@@ -1,6 +1,6 @@
-import './CarCard.css'
+import './DashBoardCard.css'
 
-export function CarCard({car, containerClass, infoClass, includeManuf}){
+export function DashBoardCard({car, containerClass, infoClass, includeManuf}){
     
     return(
         <div className={containerClass}>

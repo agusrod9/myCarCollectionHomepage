@@ -3,15 +3,17 @@ import {StatCard} from './StatCard'
 import { ActionBtn } from './ActionBtn'
 import { CarFront, Star, DollarSign, PlusCircle, Car } from "lucide-react"
 import { toDo } from '../utils/toDo'
-import {CarCard} from './CarCard'
+import { useNavigate } from 'react-router'
+import { DashBoardCard } from './DashBoardCard'
 
 
 export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, recentlyAddedCars}){
+    const navigate = useNavigate()
     return(
         <section>
             <div className='dashBoard'>
                 <div className='stats'>
-                    <StatCard icon={<CarFront size={40}/>} label="My Garage" value={userCarCount} onClick={()=>toDo("implementar my garage screen")}/>
+                    <StatCard icon={<CarFront size={40}/>} label="My Garage" value={userCarCount} onClick={()=>navigate('/myGarage')}/>
                     <StatCard icon={<Star size={40}/>} label="Wishlist" value={3} onClick={()=>toDo("Ver que modulo agregar acá, Wishlist no voy a tener en MVP")}/>
                     <StatCard icon={<DollarSign size={40}/>} label="Total Value" value={userCarsValue} onClick={()=>toDo("Etapa 2: Ver si se puede agregar pantalla con datos económicos, tablas, reportes por mes")}/>
                 </div>
@@ -27,7 +29,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
                         {
                             recentlyAddedCars.length>0 ?
                             recentlyAddedCars.map(car=>(
-                                <CarCard car={car} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"} key={car._id}/>
+                                <DashBoardCard car={car} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"} key={car._id}/>
                             ))
                             :
                             <div className='noRecentCars'>
