@@ -4,6 +4,7 @@ import styles from  './MyGarageScreen.module.css'
 import { AppContext } from '../context/AppContext'
 import Loading from '../components/Loading'
 import { SearchBar } from '../components/SearchBar'
+import { CarCard } from '../components/CarCard'
 
 export function MyGarageScreen(){
     const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
@@ -33,7 +34,7 @@ export function MyGarageScreen(){
                 <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>
                 <div className={styles.myGMain}>
                     {
-                        userCollectedCars.map(car=> <p key={car._id}>{car.carModel}</p>)
+                        userCollectedCars.map(car=> CarCard(car))
                     }
                 </div>
             </div>

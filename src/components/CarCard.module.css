@@ -1,0 +1,51 @@
+.cardContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 15px;
+    height: 300px;
+    width: 350px;
+    overflow: hidden;
+}
+
+.cardInfoContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: baseline;
+    gap: 10px;
+    padding-left: 10px;
+}
+
+.cardCarMake{
+    font-style: italic;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.cardCarModel{
+    font-style: italic;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.cardCarScale{
+    color: #fafafa;
+    flex-basis: 100%;
+}
+
+.cardImg{
+    height: 60%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.carCardBtn{
+    align-self: flex-end;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    width: 100px;
+}
