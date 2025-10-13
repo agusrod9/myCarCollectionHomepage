@@ -3,16 +3,12 @@ import styles from './FiltersPanel.module.css'
 import { AppContext } from '../context/AppContext'
 import {ActionBtn} from './ActionBtn'
 import { BrushCleaning } from 'lucide-react'
+import Loading from './Loading'
 
-export function FiltersPanel({className}){
+export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     const {loggedUserId} = useContext(AppContext)
     const [availableFilters, setAvailableFilters] = useState({})
-    const [selectedFilters, setSelectedFilters] = useState({
-        availableManufacturers : [],
-        availableCarMakes : [],
-        availableScales : [],
-        availablePrices : []
-    })
+    
     const FILTER_LABELS = {
         availableManufacturers : 'Manufacturer',
         availableCarMakes : 'Make',
@@ -38,7 +34,6 @@ export function FiltersPanel({className}){
         } 
         getFilters()
     },[])
-    console.log(selectedFilters)
     return(
         <span className={className}>
             {
