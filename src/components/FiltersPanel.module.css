@@ -1,0 +1,15 @@
+.FPContainer{
+    display: flex;
+    flex-direction: column;
+    background-color: #0000ff;
+    
+}
+
+.filterGroup{
+    display: flex;
+    flex-direction: column;
+}
+
+.filterCheck{
+    margin-left: 20px;
+}

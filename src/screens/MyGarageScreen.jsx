@@ -6,6 +6,7 @@ import Loading from '../components/Loading'
 import { SearchBar } from '../components/SearchBar'
 import { CarCard } from '../components/CarCard'
 import { toDo } from '../utils/toDo'
+import { FiltersPanel } from '../components/FiltersPanel'
 
 export function MyGarageScreen(){
     const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
@@ -24,7 +25,7 @@ export function MyGarageScreen(){
     },[])
 
     function handleSearch(query){
-        alert(query)
+        toDo(query)
     }
 
     const acBtnClick = useCallback((carId)=>{
@@ -36,11 +37,11 @@ export function MyGarageScreen(){
         <section className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
             <div className={styles.myGarageContainer}>
-                <div className={styles.myGFilters}>Filters</div>
+                <FiltersPanel className={styles.myGFilters}/>
                 <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>
                 <div className={styles.myGMain}>
                     {
-                        userCollectedCars.map(car=> <CarCard car={car} acBtnClick={acBtnClick}/>)
+                        userCollectedCars.map(car=> <CarCard key={car._id} car={car} acBtnClick={acBtnClick}/>)
                     }
                 </div>
             </div>

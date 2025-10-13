@@ -1,40 +1,35 @@
 .root{
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
 
 
 .myGarageContainer{
-    background-color: #fff;
-    width: 100vw;
-    height: 100vh;
+    flex:1;
+    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 4fr;
     grid-template-rows: auto 1fr;
     grid-template-areas: 
         "filters search"
         "filters main";
-
 }
 
 .myGFilters{
     grid-area: filters;
-    background-color: red;
-    min-width: 200px;
+    padding-top: 70px;
+    padding-left: 15px;
 }
 
 .myGSearchBar{
     grid-area: search;
-    color: yellow;
-    background-color: blue;
-    min-width: 200px
+
 }
 
 .myGMain{
     grid-area: main;
-    background-color: #151c2d;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;

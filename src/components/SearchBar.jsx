@@ -14,10 +14,10 @@ export function SearchBar({title, handleSearch}){
                         setQuery("")
                     }}}
                 />
-                <Search onClick={()=>{
+                <Search size={30} onClick={()=>{
                     handleSearch(query);
                     setQuery("")
-                    }
+                    } 
                 }/>
             </div>
             <div className={styles.SBOrderBy}>
