@@ -67,11 +67,13 @@ export function MyGarageScreen(){
 
             const q= selectedFilters.query?.trim().toLowerCase();
             if(q){
-                const matches = 
-                car.carMake.toLowerCase().includes(q) ||
-                car.carModel.toLowerCase().includes(q)
+                const words = selectedFilters.query.trim().toLowerCase().split(/\s+/)
+                const matches = words.every(word=>
+                    car.carMake.toLowerCase().includes(word) ||
+                    car.carModel.toLowerCase().includes(word)
+                )
 
-                    if(!matches) return false
+                if(!matches) return false
             }
             return true;
         })

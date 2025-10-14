@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import styles from './SearchBar.module.css'
 import { ChevronDown, Search } from 'lucide-react'
 
 export function SearchBar({title, handleSearch}){
     const [query, setQuery] = useState("")
+    const searchTimeOutRef = useRef(null)
     return(
         <section className={styles.SBContainer}>
             <p>{title}</p>
@@ -11,9 +12,10 @@ export function SearchBar({title, handleSearch}){
                 <input type="text" value={query} 
                 onChange={(e)=>{
                     setQuery(e.target.value)
-                    setTimeout(() => {
+                    if(searchTimeOutRef.current) clearTimeout(searchTimeOutRef.current)
+                    searchTimeOutRef.current = setTimeout(() => {
                         handleSearch(e.target.value)
-                    }, 1000);
+                    }, 300);
                 }}
                 onKeyDown={(e)=>{
                     if(e.key=='Enter'){
