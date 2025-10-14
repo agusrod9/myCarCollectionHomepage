@@ -8,15 +8,20 @@ export function SearchBar({title, handleSearch}){
         <section className={styles.SBContainer}>
             <p>{title}</p>
             <div className={styles.SBSerchInput}>
-                <input type="text" value={query} onChange={(e)=>setQuery(e.target.value)} onKeyDown={(e)=>{
+                <input type="text" value={query} 
+                onChange={(e)=>{
+                    setQuery(e.target.value)
+                    setTimeout(() => {
+                        handleSearch(e.target.value)
+                    }, 1000);
+                }}
+                onKeyDown={(e)=>{
                     if(e.key=='Enter'){
                         handleSearch(query);
-                        setQuery("")
                     }}}
                 />
                 <Search size={30} onClick={()=>{
                     handleSearch(query);
-                    setQuery("")
                     } 
                 }/>
             </div>

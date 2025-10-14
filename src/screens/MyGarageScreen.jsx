@@ -17,7 +17,8 @@ export function MyGarageScreen(){
         availableManufacturers : [],
         availableCarMakes : [],
         availableScales : [],
-        availablePrices : []
+        availablePrices : [],
+        query:""
     })
 
     const FILTER_KEYS = {
@@ -27,8 +28,11 @@ export function MyGarageScreen(){
         availablePrices : 'price'
     }
 
-    function handleSearch(query){
-        toDo(query)
+    function handleSearch(q){
+        setSelectedFilters(prev=>({
+            ...prev,
+            query: q
+        }))
     }
 
     const acBtnClick = useCallback((carId)=>{
@@ -51,6 +55,7 @@ export function MyGarageScreen(){
         
         const filteredCars = userCollectedCars.filter(car=>{
             for(const[key, values] of Object.entries(selectedFilters)){
+                if(key==='query')continue
                 const carKey= FILTER_KEYS[key]
 
                 if(!values || values.length===0) continue;
@@ -58,6 +63,15 @@ export function MyGarageScreen(){
                 if(!values.includes(car[carKey])){
                     return false;
                 }
+            }
+
+            const q= selectedFilters.query?.trim().toLowerCase();
+            if(q){
+                const matches = 
+                car.carMake.toLowerCase().includes(q) ||
+                car.carModel.toLowerCase().includes(q)
+
+                    if(!matches) return false
             }
             return true;
         })

@@ -3,7 +3,6 @@ import styles from './FiltersPanel.module.css'
 import { AppContext } from '../context/AppContext'
 import {ActionBtn} from './ActionBtn'
 import { BrushCleaning } from 'lucide-react'
-import Loading from './Loading'
 
 export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     const {loggedUserId} = useContext(AppContext)
