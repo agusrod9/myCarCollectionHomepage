@@ -1,0 +1,25 @@
+.screen{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: fr 1fr;
+    grid-template-areas:
+        "img info"
+        "img info";
+    min-height: 100%;
+
+}
+
+.imagesContainer{
+    grid-area: img;
+    background-color: blue;
+}
+
+.infoContainer{
+    grid-area: info;
+    background-color: red;
+}

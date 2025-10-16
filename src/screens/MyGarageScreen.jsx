@@ -5,11 +5,12 @@ import { AppContext } from '../context/AppContext'
 import Loading from '../components/Loading'
 import { SearchBar } from '../components/SearchBar'
 import { CarCard } from '../components/CarCard'
-import { toDo } from '../utils/toDo'
 import { FiltersPanel } from '../components/FiltersPanel'
+import { useNavigate } from 'react-router'
 
 export function MyGarageScreen(){
     const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [userCollectedCars, SetUserCollectedCars] = useState([])
     const [filteredCars, setFilteredCars] = useState([])
@@ -35,8 +36,8 @@ export function MyGarageScreen(){
         }))
     }
 
-    const acBtnClick = useCallback((carId)=>{
-        toDo(`Implementar navegación a nuevo layout para el auto con id: ${carId}`)
+    const acBtnClick = useCallback((car)=>{
+        navigate('/details', {state: {car}})
     },[])
 
     useEffect(()=>{
@@ -89,7 +90,7 @@ export function MyGarageScreen(){
                 <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>
                 <div className={styles.myGMain}>
                     {
-                        filteredCars.map(car=> <CarCard key={car._id} car={car} acBtnClick={acBtnClick}/>)
+                        filteredCars.map(car=> <CarCard key={car._id} car={car} acBtnClick={()=>acBtnClick(car)}/>)
                     }
                 </div>
             </div>
