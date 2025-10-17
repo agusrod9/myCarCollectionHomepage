@@ -9,6 +9,10 @@ import { DashBoardCard } from './DashBoardCard'
 
 export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, recentlyAddedCars}){
     const navigate = useNavigate()
+    function handleCarDetailClick(car){
+        console.log("ejecuta onclick")
+        navigate('details', {state:{car}})
+    }
     return(
         <section>
             <div className='dashBoard'>
@@ -29,7 +33,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
                         {
                             recentlyAddedCars.length>0 ?
                             recentlyAddedCars.map(car=>(
-                                <DashBoardCard car={car} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"} key={car._id}/>
+                                <DashBoardCard car={car} containerClass = {"recentCardContainer"} infoClass={"recentCardInfo"} key={car._id} onClick={()=>handleCarDetailClick(car)}/>
                             ))
                             :
                             <div className='noRecentCars'>

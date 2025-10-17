@@ -284,7 +284,7 @@ export function AddCarForm ({loggedUserId}){
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carPriceInput'>Price</label>
-                        <input type="number" name='carPrice' id='carPriceInput' value={price} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
+                        <input type="number" name='carPrice' id='carPriceInput' value={price} min={0} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
                     </div>
                     <div className='fieldContainer'>
                         <label htmlFor='carNotesInput'>Notes</label>

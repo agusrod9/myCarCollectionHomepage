@@ -6,11 +6,11 @@
 
 .container{
     display: grid;
-    grid-template-columns: fr 1fr;
+    grid-template-columns: 3fr 1fr;
     grid-template-areas:
         "img info"
         "img info";
-    min-height: 100%;
+    height: 100%;
 
 }
 
@@ -21,5 +21,61 @@
 
 .infoContainer{
     grid-area: info;
-    background-color: red;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.infoContainer label{
+    width: 100%;
+}
+
+.inputContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    background-color: skyblue;
+    align-items: center;
+}
+
+.dataInput{
+    width: 80%;
+    background-color: transparent;
+    height: 100%;
+    border: none;
+    padding-left: 10px;
+    outline: none;
+}
+
+.dataInput:focus{
+    background-color: #fff;
+}
+
+.notesContainer{
+    height: 100px;
+}
+
+.notesInput{
+    resize: none;
+}
+
+.noteLengthIndicator{
+    font-style: italic;
+    font-size: 14px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.green{
+    color: green;
+}
+
+.yellow{
+    color: yellow;
+}
+
+.red{
+    color: red;
 }
