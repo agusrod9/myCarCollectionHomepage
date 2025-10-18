@@ -29,10 +29,8 @@ export function AddCarForm ({loggedUserId}){
     const today = new Date()
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
-    const scaleList = ['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']
 
-
-    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue} = useContext(AppContext);
+    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList} = useContext(AppContext);
 
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){

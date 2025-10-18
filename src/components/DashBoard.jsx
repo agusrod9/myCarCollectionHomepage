@@ -10,7 +10,6 @@ import { DashBoardCard } from './DashBoardCard'
 export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, recentlyAddedCars}){
     const navigate = useNavigate()
     function handleCarDetailClick(car){
-        console.log("ejecuta onclick")
         navigate('details', {state:{car}})
     }
     return(

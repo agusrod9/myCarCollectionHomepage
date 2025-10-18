@@ -1,32 +1,78 @@
 import { useLocation } from 'react-router'
 import styles from './CarDetailsScreen.module.css'
 import { Header } from '../components/Header'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
-import { Edit, Save } from 'lucide-react'
+import { ChevronLeftCircle, ChevronRightCircle, Edit, Save } from 'lucide-react'
 import { ActionBtn } from '../components/ActionBtn'
 
 export function CarDetailsScreen(){
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList} = useContext(AppContext)
     const car = location.state?.car
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
+    const [userCollections, setUserCollections] = useState([])
     const today = new Date()
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
+    const carImgCount = editableCar.img_urls.length
+    const [viewingImageIndex, setViewingImageIndex] = useState(0)
+    const imgContainerRef = useRef(null);
     const getClassByLength = (length) => {
         if (length < 70) return styles.green;
         if (length < 140) return styles.yellow;
         return styles.red;
     };
-    console.log(editableCar)
+    const nextImageIndex = ()=>{
+        if(viewingImageIndex+1<carImgCount){
+            setViewingImageIndex(viewingImageIndex+1)
+        }
+    }
+    const prevImageIndex = ()=>{
+        if(viewingImageIndex>0){
+            setViewingImageIndex(viewingImageIndex-1)
+        }
+    }
+
+    useEffect(()=>{
+            if(!loggedUserId) return
+            const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+            async function getUserCollections(){
+                const usrCollections = await fetch(collectionsUrl)
+                const usrCollectionsData = await usrCollections.json()
+                if(usrCollections.status==200){
+                    setUserCollections(usrCollectionsData.data)
+                }
+            }
+            getUserCollections()
+        }, [loggedUserId])
+
+    useEffect(()=>{
+        if (imgContainerRef.current) {
+            setTimeout(() => imgContainerRef.current.focus(), 100);
+        }
+    },[])
+
     return(
         <span className={styles.screen}>
             <Header loggedUserId={loggedUserId} loggedUserProfilePicture={loggedUserProfilePicture} loggedUserName={loggedUserName} handleLogOut={handleLogOut}/>
             <div className={styles.container}>
-                <div className={styles.imagesContainer}>
-                    <p>Imágenes</p>
+                <div className={styles.imagesSection} tabIndex={0} ref={imgContainerRef} onKeyDown={
+                    (e)=>{
+                        if(e.key === 'ArrowLeft') prevImageIndex()
+                        if(e.key === 'ArrowRight') nextImageIndex()
+                    }
+                }>
+                    <div className={styles.imageContainer}>
+                        <img src={car.img_urls[viewingImageIndex]} alt="" className={styles.imgDisplayed} />
+                    </div>
+                    <div className={styles.navLeft}>
+                        <ChevronLeftCircle size={36} onClick={prevImageIndex}/>
+                    </div>
+                    <div className={styles.navRight}>
+                        <ChevronRightCircle size={36} onClick={nextImageIndex}/>
+                    </div>
                 </div>
                 <div className={styles.infoContainer}>
                     <label htmlFor="carMake">Make</label>
@@ -87,7 +133,16 @@ export function CarDetailsScreen(){
                     </div>
                     <label htmlFor="scale">Scale</label>
                     <div className={styles.inputContainer}>
-                        <input name='scale' type="text" value={editableCar.scale} className={styles.dataInput} disabled={!editingFields.scale} onChange={(e)=>{setEditableCar(prev=>({...prev, scale: e.target.value }))}}/>
+                        <select name="scale" value={editableCar.scale} className={styles.dataInput} disabled={!editingFields.scale} onChange={(e)=>{setEditableCar(prev=>({...prev, scale: e.target.value }))}} >
+                        <option value={""}></option>
+                        {
+                            scaleList.map((scaleItem)=>{
+                                return(
+                                    <option key={scaleItem} value={scaleItem}>{scaleItem}</option>
+                                )
+                            })
+                        }
+                    </select>
                         {editingFields.scale 
                         ? 
                         <Save onClick={()=>setEditingFields(prev=>{
@@ -143,7 +198,11 @@ export function CarDetailsScreen(){
                     </div>
                     <label htmlFor="opened">Package</label>
                     <div className={styles.inputContainer}>
-                        <input name='opened' type="text" value={editableCar.opened} className={styles.dataInput} disabled={!editingFields.opened} onChange={(e)=>{setEditableCar(prev=>({...prev, opened: e.target.value }))}}/>
+                        <select name="opened" value={editableCar.opened} className={styles.dataInput} disabled={!editingFields.opened} onChange={(e)=>{setEditableCar(prev=>({...prev, opened: e.target.value }))}}>
+                            <option value={""}></option>
+                            <option value='opened'>Opened</option>
+                            <option value='sealed'>Closed</option>
+                        </select>
                         {editingFields.opened 
                         ? 
                         <Save onClick={()=>setEditingFields(prev=>{
@@ -157,7 +216,20 @@ export function CarDetailsScreen(){
                     </div>
                     <label htmlFor="collection">Collection</label>
                     <div className={styles.inputContainer}>
-                        <input name='collection' type="text" value={editableCar.collectionId} className={styles.dataInput} disabled={!editingFields.collectionId} onChange={(e)=>{setEditableCar(prev=>({...prev, collectionId: e.target.value }))}}/>
+                        <select name="collection" value={editableCar.collectionId} className={styles.dataInput} disabled={!editingFields.collectionId} onChange={(e)=>{setEditableCar(prev=>({...prev, collectionId: e.target.value }))}}>
+                            <option value={""}></option>
+                            {
+                                userCollections.length>0 ?
+                                userCollections.map((col)=>{
+                                    return(
+                                        <option key={col._id} value={col._id}>{col.collectionName}</option>
+                                    )
+                                })
+                                :
+                                null
+                            }
+                            
+                        </select>
                         {editingFields.collectionId 
                         ? 
                         <Save onClick={()=>setEditingFields(prev=>{
