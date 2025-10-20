@@ -16,7 +16,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
         <section>
             <div className='dashBoard'>
                 <div className='stats'>
-                    <StatCard icon={<CarFront size={40}/>} label="My Garage" value={userCarCount} onClick={()=>navigate('/myGarage')}/>
+                    <StatCard icon={<CarFront size={40}/>} label="My Garage" value={userCarCount} onClick={()=>navigate('/myGarage')} pointerCursor/>
                     <StatCard icon={<Star size={40}/>} label="Wishlist" value={3} onClick={()=>toDo("Ver que modulo agregar acá, Wishlist no voy a tener en MVP")}/>
                     <StatCard icon={<DollarSign size={40}/>} label="Total Value" value={userCarsValue} onClick={()=>toDo("Etapa 2: Ver si se puede agregar pantalla con datos económicos, tablas, reportes por mes")}/>
                 </div>

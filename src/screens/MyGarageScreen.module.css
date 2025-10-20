@@ -31,10 +31,10 @@
 .myGMain{
     grid-area: main;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    overflow-x: hidden;
     align-items: flex-start;
     justify-content: center;
-    justify-items: center;
     gap: 20px;
     padding: 10px;
 }

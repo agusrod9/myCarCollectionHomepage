@@ -31,3 +31,7 @@
     grid-area: statValue;
     font-size: 30px;
 }
+
+.pointerCursor{
+    cursor: pointer;
+}

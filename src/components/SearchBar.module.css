@@ -5,6 +5,12 @@
     height: 70px;
 }
 
+.SBTitle{
+    font-size: 30px;
+    font-weight: 500;
+    color: #fafafa;
+}
+
 .SBSerchInput{
     display: flex;
     align-items: center;
@@ -28,7 +34,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60%;
-    width: 150px;
-    background-color: darkslategrey;
+    height: 65%;
+    width: 160px;
+    margin-right: 40px;
+    background-color: #232323;
+    cursor: pointer;
 }

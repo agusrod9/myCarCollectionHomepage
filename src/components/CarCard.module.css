@@ -6,7 +6,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
     height: 300px;
-    width: 350px;
+    width: 300px;
     overflow: hidden;
 }
 
@@ -27,13 +27,10 @@
 .cardCarMake{
     font-style: italic;
     font-weight: bold;
-    font-size: 30px;
-}
-
-.cardCarModel{
-    font-style: italic;
-    font-weight: bold;
     font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 
 .cardCarScale{

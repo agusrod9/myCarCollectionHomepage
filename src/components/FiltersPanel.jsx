@@ -43,7 +43,7 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
                         </h3>
 
                         {values.map((val,i)=>(
-                            <label key={i}>
+                            <label key={i} className={styles.filterLabel}>
                                 <input 
                                     type="checkbox"
                                     value={val}
@@ -64,7 +64,7 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
                                         });
                                     }}
                                 />
-                                {val}
+                                {val || "•Not Specified"}
                             </label>
                         ))}
                     </div>

@@ -44,7 +44,7 @@ export function AddCarForm ({loggedUserId}){
         setMake("")
             setModel("")
             setYear("")
-            setColor("")
+            setColor("#fff")
             setScale("")
             setManufacturer("")
             setImages([])

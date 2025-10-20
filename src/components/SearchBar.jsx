@@ -1,13 +1,14 @@
 import { useRef, useState } from 'react'
 import styles from './SearchBar.module.css'
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown, ChevronUp, Search } from 'lucide-react'
 
 export function SearchBar({title, handleSearch}){
     const [query, setQuery] = useState("")
     const searchTimeOutRef = useRef(null)
+    const [orderByMenuOpened, setOrderByMenuOpened] = useState(false)
     return(
         <section className={styles.SBContainer}>
-            <p>{title}</p>
+            <p className={styles.SBTitle}>{title}</p>
             <div className={styles.SBSerchInput}>
                 <input type="text" value={query} 
                 onChange={(e)=>{
@@ -27,9 +28,9 @@ export function SearchBar({title, handleSearch}){
                     } 
                 }/>
             </div>
-            <div className={styles.SBOrderBy}>
+            <div className={styles.SBOrderBy} onClick={()=>{setOrderByMenuOpened(!orderByMenuOpened)}}>
                 <p>Order by </p>
-                <ChevronDown />
+                {orderByMenuOpened ? <ChevronUp/> : <ChevronDown />}
             </div>
         </section>
     )
