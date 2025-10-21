@@ -6,7 +6,7 @@
 
 .container{
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-template-areas:
         "img info"
         "img info";
@@ -82,24 +82,54 @@
     grid-area: info;
     display: flex;
     flex-direction: column;
+    gap: 10px;
     user-select: none;
     padding: 2px 0px 0px 15px;
 }
 
-.infoContainer label{
-    width: 100%;
+.infoTitleContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 20px 0px 2px;
+}
+
+.infoTitle{
+    font-size: 30px;
+    font-weight: 600;
+    color: #fafafa;
+}
+
+.inputGroup{
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.02); 
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 10px 0px 10px 0px;
+    width: 95%;
+}
+
+.inputGroupName{
+    font-size: 22px;
+    margin: 2px;
+    font-style: italic;
+    color: #ffffffcc;
+}
+
+.inputSubGroup{
+    padding: 5px;
 }
 
 .inputContainer{
     display: flex;
     flex-wrap: wrap;
     border-radius: 10px;
-    width: 85%;
     color: #fafafa;
     background-color: #0d1b2a;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 5px;
     padding-right: 10px;
 }
 
@@ -139,7 +169,11 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    padding-right: 60px;
+    padding-right: 10px;
+}
+
+.transparentIndicator{
+    color: transparent;
 }
 
 .green{
@@ -153,3 +187,4 @@
 .red{
     color: red;
 }
+
