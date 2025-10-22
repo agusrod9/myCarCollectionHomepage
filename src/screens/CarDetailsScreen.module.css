@@ -188,3 +188,7 @@
     color: red;
 }
 
+.saveAllBtn{
+    display: flex;
+    align-self: center;
+}

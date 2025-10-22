@@ -6,6 +6,7 @@ import { AppContext } from '../context/AppContext'
 import { ChevronLeftCircle, ChevronRightCircle, Edit, Save, Trash2Icon } from 'lucide-react'
 import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
+import { toDo } from '../utils/toDo'
 
 export function CarDetailsScreen(){
     const location = useLocation()
@@ -34,6 +35,56 @@ export function CarDetailsScreen(){
         if(viewingImageIndex>0){
             setViewingImageIndex(viewingImageIndex-1)
         }
+    }
+
+    const handleCarDelete = async()=>{
+        Swal.fire({
+            title: "Are you sure you want to delete this car?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`
+        }).then(async(result) => {
+            if (result.isConfirmed) {
+                const url = `https://mycarcollectionapi.onrender.com/api/cars/${car._id}`
+                const opts = {
+                    method : "DELETE",
+            }
+            const response = await fetch(url,opts)
+            if(response.status == 200){
+                Swal.fire("Deleted!", "", "success");
+                toDo("Quitar auto del caché y navegar una pantalla para atrás.")
+            }else{
+                Swal.fire("Please try again!", "", "error");
+            }
+        }
+        });
+    }
+
+    async function saveCar(){
+        const url = `https://mycarcollectionapi.onrender.com/api/cars/${editableCar._id}`
+        const opts = {
+            method: "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body: JSON.stringify(editableCar)
+        }
+        const response = await fetch(url,opts)
+        if(response.status==200){
+            alert("Modificado con éxito")
+        }
+    }
+
+    const handleSaveAll = async()=>{
+        await saveCar()
+        setEditingFields({})
+    }
+
+    const handleSave = async(field)=>{
+        await saveCar()
+        setEditingFields(prev=>{
+            const{[field] : _, ...rest}=prev
+            return rest
+        })
     }
 
     useEffect(()=>{
@@ -85,29 +136,7 @@ export function CarDetailsScreen(){
                 <div className={styles.infoContainer}>
                     <div className={styles.infoTitleContainer}>
                         <p className={styles.infoTitle}>{`${car.carMake} ${car.carModel}`}</p>
-                        <Trash2Icon onClick={async()=>{
-                            Swal.fire({
-                                title: "Are you sure you want to delete this car?",
-                                showDenyButton: true,
-                                showCancelButton: false,
-                                confirmButtonText: "Delete",
-                                denyButtonText: `Cancel`
-                                }).then(async(result) => {
-                                if (result.isConfirmed) {
-                                    const url = `https://mycarcollectionapi.onrender.com/api/cars/${car._id}`
-                                    const opts = {
-                                        method : "DELETE",
-                                    }
-                                    const response = await fetch(url,opts)
-                                    if(response.status == 200){
-                                        Swal.fire("Deleted!", "", "success");
-                                    }else{
-                                        Swal.fire("Please try again!", "", "error");
-                                    }
-                                } else if (result.isDenied) {
-                                }
-                                });
-                        }}/>
+                        <Trash2Icon onClick={handleCarDelete} size={30}/>
                     </div>
                     <fieldset className={styles.inputGroup}>
                         <legend className={styles.inputGroupName}>Vehicle</legend>
@@ -117,10 +146,7 @@ export function CarDetailsScreen(){
                                 <input name='carMake' type="text" value={editableCar.carMake} className={editingFields.carMake ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carMake} onChange={(e)=>{setEditableCar(prev=>({...prev, carMake: e.target.value}))}}/>
                                 {editingFields.carMake 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{carMake, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={()=>handleSave("carMake")}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carMake:true}))}/>
@@ -133,10 +159,7 @@ export function CarDetailsScreen(){
                                 <input name='carModel' type="text" value={editableCar.carModel} className={editingFields.carModel ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carModel} onChange={(e)=>{setEditableCar(prev=>({...prev, carModel: e.target.value }))}}/>
                                 {editingFields.carModel 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{carModel, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carModel:true}))}/>
@@ -149,10 +172,7 @@ export function CarDetailsScreen(){
                                 <input name='carYear' type="number" min={anioMinimo} max={anioActual+1} value={editableCar.carYear} className={editingFields.carYear ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carYear} onChange={(e)=>{setEditableCar(prev=>({...prev, carYear: e.target.value }))}}/>
                                 {editingFields.carYear
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{carYear, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carYear:true}))}/>
@@ -177,10 +197,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.scale 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{scale, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, scale:true}))}/>
@@ -193,10 +210,7 @@ export function CarDetailsScreen(){
                                 <input name='manufacturer' type="text" value={editableCar.manufacturer} className={editingFields.manufacturer ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.manufacturer} onChange={(e)=>{setEditableCar(prev=>({...prev, manufacturer: e.target.value }))}}/>
                                 {editingFields.manufacturer 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{manufacturer, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, manufacturer:true}))}/>
@@ -209,10 +223,7 @@ export function CarDetailsScreen(){
                                 <input name='series' type="text" value={editableCar.series} className={editingFields.series ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series} onChange={(e)=>{setEditableCar(prev=>({...prev, series: e.target.value }))}}/>
                                 {editingFields.series 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{series, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series:true}))}/>
@@ -225,10 +236,7 @@ export function CarDetailsScreen(){
                                 <input name='series_num' type="text" value={editableCar.series_num} className={editingFields.series_num ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series_num} onChange={(e)=>{setEditableCar(prev=>({...prev, series_num: e.target.value }))}}/>
                                 {editingFields.series_num 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{series_num, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series_num:true}))}/>
@@ -257,10 +265,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.collectionId 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{collectionId, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, collectionId:true}))}/>
@@ -273,10 +278,7 @@ export function CarDetailsScreen(){
                                 <input name='price' type="number" min={0} value={editableCar.price} className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.price} onChange={(e)=>{setEditableCar(prev=>({...prev, price: e.target.value }))}}/>
                                 {editingFields.price 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{price, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, price:true}))}/>
@@ -293,10 +295,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.opened 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{opened, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, opened:true}))}/>
@@ -309,10 +308,7 @@ export function CarDetailsScreen(){
                                 <textarea name='notes' type="textarea" maxLength={140} value={editableCar.notes} className={editingFields.notes ? `${styles.dataInput} ${styles.notesInput} ${styles.editingMode}` : `${styles.dataInput} ${styles.notesInput}`} disabled={!editingFields.notes} onChange={(e)=>{setEditableCar(prev=>({...prev, notes: e.target.value }))}}/>
                                 {editingFields.notes 
                                 ? 
-                                <Save size={30} onClick={()=>setEditingFields(prev=>{
-                                    const{notes, ...rest}=prev
-                                    return rest
-                                    })}
+                                <Save size={30} onClick={handleSave}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, notes:true}))}/>
@@ -329,7 +325,7 @@ export function CarDetailsScreen(){
                         
                     </fieldset>
                     
-                    {Object.keys(editingFields).length>1 ? <ActionBtn label={"Save all"} icon={<Save/>}/> : null}
+                    {Object.keys(editingFields).length>1 ? <ActionBtn label={"Save all"} icon={<Save/>} extraClass={styles.saveAllBtn} onClick={handleSaveAll}/> : null}
                 </div>
             </div>
         </span>
