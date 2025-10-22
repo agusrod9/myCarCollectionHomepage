@@ -3,7 +3,7 @@ import styles from './CarDetailsScreen.module.css'
 import { Header } from '../components/Header'
 import { useContext, useEffect, useState, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
-import { ChevronLeftCircle, ChevronRightCircle, Edit, Save, Trash2Icon } from 'lucide-react'
+import { Ban, ChevronLeftCircle, ChevronRightCircle, Edit, Save, Trash2Icon } from 'lucide-react'
 import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
 import { toDo } from '../utils/toDo'
@@ -15,6 +15,7 @@ export function CarDetailsScreen(){
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
     const [userCollections, setUserCollections] = useState([])
+    const [changesMade, setChangesMade] = useState(false)
     const today = new Date()
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
@@ -77,6 +78,7 @@ export function CarDetailsScreen(){
     const handleSaveAll = async()=>{
         await saveCar()
         setEditingFields({})
+        setChangesMade(false)
     }
 
     const handleSave = async(field)=>{
@@ -99,6 +101,13 @@ export function CarDetailsScreen(){
             }
             getUserCollections()
         }, [loggedUserId])
+
+    useEffect(()=>{
+        if(!car || !editableCar) return
+        setChangesMade(Object.keys(editableCar).some((key)=>{
+            return editableCar[key] !== car[key]
+        }))
+    },[editableCar])
 
     useEffect(()=>{
         if (imgContainerRef.current) {
@@ -146,7 +155,7 @@ export function CarDetailsScreen(){
                                 <input name='carMake' type="text" value={editableCar.carMake} className={editingFields.carMake ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carMake} onChange={(e)=>{setEditableCar(prev=>({...prev, carMake: e.target.value}))}}/>
                                 {editingFields.carMake 
                                 ? 
-                                <Save size={30} onClick={()=>handleSave("carMake")}
+                                <Save size={30} onClick={()=>handleSave("carMake")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carMake:true}))}/>
@@ -159,7 +168,7 @@ export function CarDetailsScreen(){
                                 <input name='carModel' type="text" value={editableCar.carModel} className={editingFields.carModel ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carModel} onChange={(e)=>{setEditableCar(prev=>({...prev, carModel: e.target.value }))}}/>
                                 {editingFields.carModel 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("carModel")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carModel:true}))}/>
@@ -172,7 +181,7 @@ export function CarDetailsScreen(){
                                 <input name='carYear' type="number" min={anioMinimo} max={anioActual+1} value={editableCar.carYear} className={editingFields.carYear ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carYear} onChange={(e)=>{setEditableCar(prev=>({...prev, carYear: e.target.value }))}}/>
                                 {editingFields.carYear
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("carYear")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carYear:true}))}/>
@@ -197,7 +206,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.scale 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("scale")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, scale:true}))}/>
@@ -210,7 +219,7 @@ export function CarDetailsScreen(){
                                 <input name='manufacturer' type="text" value={editableCar.manufacturer} className={editingFields.manufacturer ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.manufacturer} onChange={(e)=>{setEditableCar(prev=>({...prev, manufacturer: e.target.value }))}}/>
                                 {editingFields.manufacturer 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("manufacturer")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, manufacturer:true}))}/>
@@ -223,7 +232,7 @@ export function CarDetailsScreen(){
                                 <input name='series' type="text" value={editableCar.series} className={editingFields.series ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series} onChange={(e)=>{setEditableCar(prev=>({...prev, series: e.target.value }))}}/>
                                 {editingFields.series 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("series")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series:true}))}/>
@@ -236,7 +245,7 @@ export function CarDetailsScreen(){
                                 <input name='series_num' type="text" value={editableCar.series_num} className={editingFields.series_num ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series_num} onChange={(e)=>{setEditableCar(prev=>({...prev, series_num: e.target.value }))}}/>
                                 {editingFields.series_num 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("series_num")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series_num:true}))}/>
@@ -265,7 +274,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.collectionId 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("collectionId")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, collectionId:true}))}/>
@@ -278,7 +287,7 @@ export function CarDetailsScreen(){
                                 <input name='price' type="number" min={0} value={editableCar.price} className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.price} onChange={(e)=>{setEditableCar(prev=>({...prev, price: e.target.value }))}}/>
                                 {editingFields.price 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("price")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, price:true}))}/>
@@ -295,7 +304,7 @@ export function CarDetailsScreen(){
                                 </select>
                                 {editingFields.opened 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("opened")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, opened:true}))}/>
@@ -308,7 +317,7 @@ export function CarDetailsScreen(){
                                 <textarea name='notes' type="textarea" maxLength={140} value={editableCar.notes} className={editingFields.notes ? `${styles.dataInput} ${styles.notesInput} ${styles.editingMode}` : `${styles.dataInput} ${styles.notesInput}`} disabled={!editingFields.notes} onChange={(e)=>{setEditableCar(prev=>({...prev, notes: e.target.value }))}}/>
                                 {editingFields.notes 
                                 ? 
-                                <Save size={30} onClick={handleSave}
+                                <Save size={30} onClick={()=>handleSave("notes")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
                                 <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, notes:true}))}/>
@@ -324,8 +333,13 @@ export function CarDetailsScreen(){
                         </div>
                         
                     </fieldset>
-                    
-                    {Object.keys(editingFields).length>1 ? <ActionBtn label={"Save all"} icon={<Save/>} extraClass={styles.saveAllBtn} onClick={handleSaveAll}/> : null}
+                    <div className={styles.lowerBtnContainer}>
+                        {Object.keys(editingFields).length>0 ? <ActionBtn label={"Cancel"} icon={<Ban/>}  onClick={()=>{
+                            setEditingFields({})
+                            setChangesMade(false)
+                        }} /> : null}
+                        {Object.keys(editingFields).length>1 ? <ActionBtn label={"Save all"} icon={<Save/>}  onClick={handleSaveAll} disabled={!changesMade}/> : null}
+                    </div>
                 </div>
             </div>
         </span>

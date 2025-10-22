@@ -188,7 +188,26 @@
     color: red;
 }
 
-.saveAllBtn{
+.lowerBtnContainer{
     display: flex;
-    align-self: center;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    gap: 10px;
+}
+
+.saveBtnDisabled{
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.saveBtnActive{
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.saveBtnActive:hover{
+    opacity: 0.8;
 }
