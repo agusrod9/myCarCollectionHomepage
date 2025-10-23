@@ -11,7 +11,7 @@ import { toDo } from '../utils/toDo'
 export function CarDetailsScreen(){
     const location = useLocation()
     const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList} = useContext(AppContext)
-    const car = location.state?.car
+    const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
     const [userCollections, setUserCollections] = useState([])
@@ -71,6 +71,7 @@ export function CarDetailsScreen(){
         }
         const response = await fetch(url,opts)
         if(response.status==200){
+            setCar(editableCar)
             alert("Modificado con éxito")
         }
     }
@@ -78,6 +79,8 @@ export function CarDetailsScreen(){
     const handleSaveAll = async()=>{
         await saveCar()
         setEditingFields({})
+        console.log({car:car, editableCar:editableCar})
+        setCar(editableCar)
         setChangesMade(false)
     }
 

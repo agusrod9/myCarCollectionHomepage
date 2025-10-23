@@ -1,4 +1,4 @@
-import './DashBoardCard.css'
+
 
 export function DashBoardCard({car, containerClass, infoClass, includeManuf, onClick}){
     
