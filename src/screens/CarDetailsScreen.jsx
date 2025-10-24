@@ -62,34 +62,69 @@ export function CarDetailsScreen(){
         });
     }
 
-    async function saveCar(){
+    async function saveCar(key){
+        const url = `https://mycarcollectionapi.onrender.com/api/cars/${editableCar._id}`
+        const newValue = editableCar[key]==="" ? null : editableCar[key]
+        if(editableCar[key]==car[key] || (editableCar[key]=="" && car[key]==null)){
+            toDo("No changes to save")
+            return
+        }
+        const opts = {
+            method: "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body: JSON.stringify({[key]:newValue})
+        }
+        const response = await fetch(url,opts)
+        if(response.status==200){
+            const updatedCar = {...car}
+            Object.keys(editingFields).forEach(key=>{
+                updatedCar[key] = editableCar[key] == "" ? null : editableCar[key]
+            })
+            setCar(updatedCar)
+        }
+    }
+
+    async function saveAllCar(){
+        const updatedFields = {}
+        Object.keys(editingFields).forEach(key=>{
+            if(editableCar[key] !== car[key]){
+                updatedFields[key] = editableCar[key] == "" ? null : editableCar[key]
+            }
+        })
+
+        if(Object.keys(updatedFields).length===0){
+            return
+        }
+
         const url = `https://mycarcollectionapi.onrender.com/api/cars/${editableCar._id}`
         const opts = {
             method: "PUT",
             headers : {'Content-Type' : 'application/json'},
-            body: JSON.stringify(editableCar)
+            body: JSON.stringify(updatedFields)
         }
         const response = await fetch(url,opts)
         if(response.status==200){
-            setCar(editableCar)
-            alert("Modificado con éxito")
+            const updatedCar = {...car}
+            Object.keys(editingFields).forEach(key=>{
+                updatedCar[key] = editableCar[key] == "" ? null : editableCar[key]
+            })
+            setCar(updatedCar)
         }
     }
 
     const handleSaveAll = async()=>{
-        await saveCar()
+        await saveAllCar()
         setEditingFields({})
-        console.log({car:car, editableCar:editableCar})
-        setCar(editableCar)
         setChangesMade(false)
     }
 
     const handleSave = async(field)=>{
-        await saveCar()
+        await saveCar(field)
         setEditingFields(prev=>{
             const{[field] : _, ...rest}=prev
             return rest
         })
+        setChangesMade(false)
     }
 
     useEffect(()=>{
@@ -262,7 +297,7 @@ export function CarDetailsScreen(){
                             <label htmlFor="collection">Collection</label>
                             <div className={editingFields.collectionId ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
                                 <select name="collection" value={editableCar.collectionId} className={editingFields.collectionId ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.collectionId} onChange={(e)=>{setEditableCar(prev=>({...prev, collectionId: e.target.value }))}}>
-                                    <option value={""}></option>
+                                    <option value={null}></option>
                                     {
                                         userCollections.length>0 ?
                                         userCollections.map((col)=>{
