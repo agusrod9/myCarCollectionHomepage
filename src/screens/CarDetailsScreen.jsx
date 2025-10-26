@@ -10,11 +10,10 @@ import { toDo } from '../utils/toDo'
 
 export function CarDetailsScreen(){
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
-    const [userCollections, setUserCollections] = useState([])
     const [changesMade, setChangesMade] = useState(false)
     const today = new Date()
     const anioActual = today.getFullYear()
@@ -128,19 +127,6 @@ export function CarDetailsScreen(){
     }
 
     useEffect(()=>{
-            if(!loggedUserId) return
-            const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
-            async function getUserCollections(){
-                const usrCollections = await fetch(collectionsUrl)
-                const usrCollectionsData = await usrCollections.json()
-                if(usrCollections.status==200){
-                    setUserCollections(usrCollectionsData.data)
-                }
-            }
-            getUserCollections()
-        }, [loggedUserId])
-
-    useEffect(()=>{
         if(!car || !editableCar) return
         setChangesMade(Object.keys(editableCar).some((key)=>{
             return editableCar[key] !== car[key]
@@ -151,6 +137,18 @@ export function CarDetailsScreen(){
         if (imgContainerRef.current) {
             setTimeout(() => imgContainerRef.current.focus(), 100);
         }
+        if(!loggedUserId) return
+            const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+            async function getUserCollections(){
+                const usrCollections = await fetch(collectionsUrl)
+                const usrCollectionsData = await usrCollections.json()
+                if(usrCollections.status==200){
+                    setUserCollections(usrCollectionsData.data)
+                }
+            }
+            if(!userCollections){
+                getUserCollections()
+            }
     },[])
 
     return(
@@ -299,7 +297,7 @@ export function CarDetailsScreen(){
                                 <select name="collection" value={editableCar.collectionId} className={editingFields.collectionId ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.collectionId} onChange={(e)=>{setEditableCar(prev=>({...prev, collectionId: e.target.value }))}}>
                                     <option value={null}></option>
                                     {
-                                        userCollections.length>0 ?
+                                        userCollections?.length>0 ?
                                         userCollections.map((col)=>{
                                             return(
                                                 <option key={col._id} value={col._id}>{col.collectionName}</option>
