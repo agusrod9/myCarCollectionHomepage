@@ -9,10 +9,9 @@ import { FiltersPanel } from '../components/FiltersPanel'
 import { useNavigate } from 'react-router'
 
 export function MyGarageScreen(){
-    const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
+    const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut, userCollectedCars, setUserCollectedCars} = useContext(AppContext)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
-    const [userCollectedCars, SetUserCollectedCars] = useState([])
     const [filteredCars, setFilteredCars] = useState([])
     const [selectedFilters, setSelectedFilters] = useState({
         availableManufacturers : [],
@@ -45,16 +44,18 @@ export function MyGarageScreen(){
             const url = `https://mycarcollectionapi.onrender.com/api/cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
-            SetUserCollectedCars(responseData.data)
+            setUserCollectedCars(responseData.data)
             setFilteredCars(responseData.data)
         }
-        getUsercollectedCars()
+        if(!userCollectedCars){
+            getUsercollectedCars()
+        }
         setLoading(!loading)
     },[])
 
     useEffect(()=>{
         
-        const filteredCars = userCollectedCars.filter(car=>{
+        const filteredCars = userCollectedCars?.filter(car=>{
             for(const[key, values] of Object.entries(selectedFilters)){
                 if(key==='query')continue
                 const carKey= FILTER_KEYS[key]
@@ -90,7 +91,7 @@ export function MyGarageScreen(){
                 <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>
                 <div className={styles.myGMain}>
                     {
-                        filteredCars.map(car=> <CarCard key={car._id} car={car} acBtnClick={()=>acBtnClick(car)}/>)
+                        filteredCars?.map(car=> <CarCard key={car._id} car={car} acBtnClick={()=>acBtnClick(car)}/>)
                     }
                 </div>
             </div>
