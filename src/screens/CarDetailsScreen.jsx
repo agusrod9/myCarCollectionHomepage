@@ -126,6 +126,19 @@ export function CarDetailsScreen(){
         setChangesMade(false)
     }
 
+    const handleKeyDownSaveOrCancel = async(e,field)=>{
+        if(e.key==="Enter"){
+            e.preventDefault()
+            handleSave(field)
+        }
+
+        if(e.key==="Esc" || e.key==="Escape"){
+            e.preventDefault()
+            setEditingFields({})
+            setChangesMade(false)
+        }
+    }
+
     useEffect(()=>{
         if(!car || !editableCar) return
         setChangesMade(Object.keys(editableCar).some((key)=>{
@@ -188,7 +201,17 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="carMake">Make</label>
                             <div className={editingFields.carMake ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='carMake' type="text" value={editableCar.carMake} className={editingFields.carMake ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carMake} onChange={(e)=>{setEditableCar(prev=>({...prev, carMake: e.target.value}))}}/>
+                                <input 
+                                    name='carMake' 
+                                    type="text" 
+                                    value={editableCar.carMake} 
+                                    className={editingFields.carMake ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.carMake} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, carMake: e.target.value}))}
+                                    }
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"carMake")}
+                                />
                                 {editingFields.carMake 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("carMake")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -201,7 +224,17 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="carModel">Model</label>
                             <div className={editingFields.carModel ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='carModel' type="text" value={editableCar.carModel} className={editingFields.carModel ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carModel} onChange={(e)=>{setEditableCar(prev=>({...prev, carModel: e.target.value }))}}/>
+                                <input 
+                                    name='carModel' 
+                                    type="text" 
+                                    value={editableCar.carModel} 
+                                    className={editingFields.carModel ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.carModel} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, carModel: e.target.value }))}
+                                    }
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"carModel")}
+                                />
                                 {editingFields.carModel 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("carModel")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -214,7 +247,19 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="carYear">Year</label>
                             <div className={editingFields.carYear ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='carYear' type="number" min={anioMinimo} max={anioActual+1} value={editableCar.carYear} className={editingFields.carYear ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.carYear} onChange={(e)=>{setEditableCar(prev=>({...prev, carYear: e.target.value }))}}/>
+                                <input 
+                                    name='carYear' 
+                                    type="number" 
+                                    min={anioMinimo} 
+                                    max={anioActual+1} 
+                                    value={editableCar.carYear} 
+                                    className={editingFields.carYear ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.carYear} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, carYear: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"carYear")}
+                                />
                                 {editingFields.carYear
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("carYear")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -230,7 +275,16 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="scale">Scale</label>
                             <div className={editingFields.scale ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <select name="scale" value={editableCar.scale} className={editingFields.scale ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.scale} onChange={(e)=>{setEditableCar(prev=>({...prev, scale: e.target.value }))}} >
+                                <select 
+                                    name="scale" 
+                                    value={editableCar.scale} 
+                                    className={editingFields.scale ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.scale} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, scale: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"scale")}
+                                >
                                 <option value={""}></option>
                                     {
                                         scaleList.map((scaleItem)=>{
@@ -252,7 +306,17 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="manufacturer">Manufacturer</label>
                             <div className={editingFields.manufacturer ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='manufacturer' type="text" value={editableCar.manufacturer} className={editingFields.manufacturer ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.manufacturer} onChange={(e)=>{setEditableCar(prev=>({...prev, manufacturer: e.target.value }))}}/>
+                                <input 
+                                    name='manufacturer' 
+                                    type="text" 
+                                    value={editableCar.manufacturer} 
+                                    className={editingFields.manufacturer ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.manufacturer} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, manufacturer: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"manufacturer")}
+                                />
                                 {editingFields.manufacturer 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("manufacturer")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -265,7 +329,17 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="series">Series</label>
                             <div className={editingFields.series ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='series' type="text" value={editableCar.series} className={editingFields.series ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series} onChange={(e)=>{setEditableCar(prev=>({...prev, series: e.target.value }))}}/>
+                                <input 
+                                    name='series' 
+                                    type="text" 
+                                    value={editableCar.series} 
+                                    className={editingFields.series ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.series} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, series: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"series")}
+                                />
                                 {editingFields.series 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("series")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -278,7 +352,17 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="series_num">Series Number</label>
                             <div className={editingFields.series_num ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='series_num' type="text" value={editableCar.series_num} className={editingFields.series_num ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.series_num} onChange={(e)=>{setEditableCar(prev=>({...prev, series_num: e.target.value }))}}/>
+                                <input 
+                                    name='series_num' 
+                                    type="text" 
+                                    value={editableCar.series_num} 
+                                    className={editingFields.series_num ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.series_num} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, series_num: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"series_num")}
+                                />
                                 {editingFields.series_num 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("series_num")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -294,7 +378,16 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="collection">Collection</label>
                             <div className={editingFields.collectionId ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <select name="collection" value={editableCar.collectionId} className={editingFields.collectionId ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.collectionId} onChange={(e)=>{setEditableCar(prev=>({...prev, collectionId: e.target.value }))}}>
+                                <select 
+                                    name="collection" 
+                                    value={editableCar.collectionId} 
+                                    className={editingFields.collectionId ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.collectionId} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, collectionId: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"collectionId")}
+                                >
                                     <option value={null}></option>
                                     {
                                         userCollections?.length>0 ?
@@ -320,7 +413,18 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="price">Price</label>
                             <div className={editingFields.price ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <input name='price' type="number" min={0} value={editableCar.price} className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.price} onChange={(e)=>{setEditableCar(prev=>({...prev, price: e.target.value }))}}/>
+                                <input 
+                                    name='price' 
+                                    type="number" 
+                                    min={0} 
+                                    value={editableCar.price} 
+                                    className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.price} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, price: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"price")}
+                                />
                                 {editingFields.price 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("price")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
@@ -333,7 +437,16 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="opened">Package</label>
                             <div className={editingFields.opened ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <select name="opened" value={editableCar.opened} className={editingFields.opened ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} disabled={!editingFields.opened} onChange={(e)=>{setEditableCar(prev=>({...prev, opened: e.target.value }))}}>
+                                <select 
+                                    name="opened" 
+                                    value={editableCar.opened} 
+                                    className={editingFields.opened ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.opened} 
+                                    onChange={(e)=>{
+                                        setEditableCar(prev=>({...prev, opened: e.target.value }))}
+                                    } 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"opened")}
+                                >
                                     <option value={""}></option>
                                     <option value='opened'>Opened</option>
                                     <option value='sealed'>Closed</option>
@@ -350,7 +463,16 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="notes">Notes</label>
                             <div className={editingFields.notes ? `${styles.inputContainer} ${styles.notesContainer} ${styles.editingMode}`: `${styles.inputContainer} ${styles.notesContainer}`}>
-                                <textarea name='notes' type="textarea" maxLength={140} value={editableCar.notes} className={editingFields.notes ? `${styles.dataInput} ${styles.notesInput} ${styles.editingMode}` : `${styles.dataInput} ${styles.notesInput}`} disabled={!editingFields.notes} onChange={(e)=>{setEditableCar(prev=>({...prev, notes: e.target.value }))}}/>
+                                <textarea 
+                                    name='notes' 
+                                    type="textarea" 
+                                    maxLength={140} 
+                                    value={editableCar.notes} 
+                                    className={editingFields.notes ? `${styles.dataInput} ${styles.notesInput} ${styles.editingMode}` : `${styles.dataInput} ${styles.notesInput}`} 
+                                    disabled={!editingFields.notes} 
+                                    onChange={(e)=>{setEditableCar(prev=>({...prev, notes: e.target.value }))}} 
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"notes")}
+                                />
                                 {editingFields.notes 
                                 ? 
                                 <Save size={30} onClick={()=>handleSave("notes")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
