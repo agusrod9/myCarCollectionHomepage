@@ -12,6 +12,9 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
     function handleCarDetailClick(car){
         navigate('details', {state:{car}})
     }
+    function handleMyCollectionsBtnClick(){
+        navigate('myCollections')
+    }
     return(
         <section>
             <div className={styles.dashBoard}>
@@ -22,7 +25,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
                 </div>
                 <div className={styles.btns}>
                     <ActionBtn icon={<PlusCircle />} label="Add new car" extraClass={styles.specialBtn} onClick={handleAddCarBtnClick}/>
-                    <ActionBtn icon={<Car />} label="My collections" onClick={()=>toDo()}/>
+                    <ActionBtn icon={<Car />} label="My collections" onClick={handleMyCollectionsBtnClick}/>
                 </div>
                 <div className={styles.recentlyAddedCars}>
                     <div className={styles.recAddTitleContainer}>

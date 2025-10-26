@@ -9,17 +9,11 @@ import { FiltersPanel } from '../components/FiltersPanel'
 import { useNavigate } from 'react-router'
 
 export function MyGarageScreen(){
-    const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut, userCollectedCars, setUserCollectedCars} = useContext(AppContext)
+    const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut, userCollectedCars, setUserCollectedCars, selectedFilters, setSelectedFilters} = useContext(AppContext)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [filteredCars, setFilteredCars] = useState([])
-    const [selectedFilters, setSelectedFilters] = useState({
-        availableManufacturers : [],
-        availableCarMakes : [],
-        availableScales : [],
-        availablePrices : [],
-        query:""
-    })
+    
 
     const FILTER_KEYS = {
         availableManufacturers : 'manufacturer',

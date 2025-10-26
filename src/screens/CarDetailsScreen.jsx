@@ -138,17 +138,17 @@ export function CarDetailsScreen(){
             setTimeout(() => imgContainerRef.current.focus(), 100);
         }
         if(!loggedUserId) return
-            const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
-            async function getUserCollections(){
-                const usrCollections = await fetch(collectionsUrl)
-                const usrCollectionsData = await usrCollections.json()
-                if(usrCollections.status==200){
-                    setUserCollections(usrCollectionsData.data)
-                }
+        const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+        async function getUserCollections(){
+            const response = await fetch(collectionsUrl)
+            const responseData = await response.json()
+            if(response.status==200){
+                setUserCollections(responseData.data)
             }
-            if(!userCollections){
-                getUserCollections()
-            }
+        }
+        if(!userCollections){
+            getUserCollections()
+        }
     },[])
 
     return(

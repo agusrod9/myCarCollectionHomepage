@@ -16,6 +16,7 @@ import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
 import './main.css'
 import { MyGarageScreen } from './screens/MyGarageScreen.jsx'
 import { CarDetailsScreen } from './screens/CarDetailsScreen.jsx'
+import { MyCollectionsScreen } from './screens/MyCollectionsScreen.jsx'
 
 function Main(){
 
@@ -32,6 +33,7 @@ function Main(){
                     <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/profile' element={<ProtectedRoute Component={ProfileScreen} />}/>
                     <Route path='/myGarage' element={<ProtectedRoute Component={MyGarageScreen} />} />
+                    <Route path='/myCollections' element={<ProtectedRoute Component={MyCollectionsScreen} />} />
                     <Route path='/details' element={<ProtectedRoute Component={CarDetailsScreen}/>}/>
                     <Route path='*' element={<NotFoundScreen />}/>
                 </Routes>
