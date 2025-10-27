@@ -142,7 +142,13 @@ export function CarDetailsScreen(){
     useEffect(()=>{
         if(!car || !editableCar) return
         setChangesMade(Object.keys(editableCar).some((key)=>{
-            return editableCar[key] !== car[key]
+            if(editableCar[key]=="" && car[key]==null){
+                return false
+            }
+            if(editableCar[key] !== car[key]){
+                return true
+            }
+            return false
         }))
     },[editableCar])
 

@@ -1,0 +1,19 @@
+.collectionCardContainer{
+    background-color: sandybrown;
+    border: 1px solid red;
+    border-radius: 15px;
+    height: auto;
+    min-height: 500px;
+    width: 30%;
+    padding: 10px;
+}
+
+
+.colImg{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: 15px 15px 3px 3px ;
+}

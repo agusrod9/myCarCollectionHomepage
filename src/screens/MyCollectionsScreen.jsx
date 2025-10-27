@@ -24,15 +24,18 @@ export function MyCollectionsScreen(){
     },[])
 
     return(
-        <span>
+        <span className={styles.screenContainer}>
             <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={handleLogOut} />
+            <h1 className={styles.screenTitle}>myCollectionsScreen</h1>
             <div className={styles.mainContainer}>
-                <h1>myCollectionsScreen</h1>
-                {
-                    userCollections?.map((collection)=>{
-                        return <CollectionCard collection={collection} />
-                    })
-                }
+                <div className={styles.newColSection}></div>
+                <div className={styles.userCols}>
+                    {
+                        userCollections?.map((collection)=>{
+                            return <CollectionCard collection={collection} />
+                        })
+                    }
+                </div>
             </div>
         </span>
     )

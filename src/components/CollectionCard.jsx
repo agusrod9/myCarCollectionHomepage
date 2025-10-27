@@ -3,9 +3,10 @@ import styles from './CollectionCard.module.css'
 export function CollectionCard({collection}){
     return(
         <div className={styles.collectionCardContainer}>
-            <p>{collection.collectionName}</p>
-            <p>{collection.description}</p>
-            <p>{collection.dateAdded}</p>
+            <img src={collection.coverImg} alt="" className={styles.colImg} />
+            <p>{collection.colName}</p>
+            <p>{collection.colDescription}</p>
+            <p>{collection.colDateAdded}</p>
         </div>
     )
 }
