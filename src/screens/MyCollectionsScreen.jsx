@@ -17,7 +17,6 @@ export function MyCollectionsScreen(){
                 setUserCollections(responseData.data)
             }
         }
-        console.log({userCollections, loggedUserId})
         if(!userCollections){
             getUserCollections()
         }
@@ -32,7 +31,7 @@ export function MyCollectionsScreen(){
                 <div className={styles.userCols}>
                     {
                         userCollections?.map((collection)=>{
-                            return <CollectionCard collection={collection} />
+                            return <CollectionCard collection={collection} key={collection._id}/>
                         })
                     }
                 </div>
