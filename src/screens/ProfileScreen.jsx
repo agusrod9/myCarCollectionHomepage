@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import './ProfileScreen.css'
+import styles from './ProfileScreen.module.css'
 import { AppContext } from '../context/AppContext'
 import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
-import { Edit, Save, SquarePen } from 'lucide-react'
+import { BadgeAlert, BadgeCheck, Edit, Save, SquarePen } from 'lucide-react'
 import Loading from '../components/Loading'
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
@@ -46,11 +46,14 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             clearTimeout(typeTimeoutRef.current)
         }
 
-        typeTimeoutRef.current = setTimeout(() => {
+        typeTimeoutRef.current = setTimeout(async() => {
             if(e.target.value.length!=0){
-                setUserNameOKtoSave(true)
+                const response = await fetch(`https://mycarcollectionapi.onrender.com/api/users/checkNick?nick=${e.target.value}`)
+                const responseData = await response.json()
+                console.log(responseData.available)
+                setUserNameOKtoSave(responseData.available)
             }
-        }, 1000);
+        }, 400);
     }
 
     useEffect(()=>{
@@ -87,25 +90,28 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     }
     
     return(
-        <section className='ProfileScreenBody'>
+        <section className={styles.ProfileScreenBody}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut()}}/>
-            <div className='userBriefDataContainer'>
-                <div className='profilePictureOverlayContainer'>
-                    <div className='profilePictureOverlay'>
+            <div className={styles.userBriefDataContainer}>
+                <div className={styles.profilePictureOverlayContainer}>
+                    <div className={styles.profilePictureOverlay}>
                         <p>Change profile picture</p>
                     </div>
                 </div>
                 <img src={loggedUserProfilePicture || "https://avatar.iran.liara.run/public" } alt={`Profile picture of ${loggedUserName}`} />
-                <input type='text' name="" className={isEditingUserName ? "userNameInput editingMode" : "userNameInput"} value={userName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
-                {isEditingUserName ? <Save className='userNameIcon' onClick={handleSaveUserName}/> : <Edit className='userNameIcon'onClick={handleEditUserName}/>}
+                <div className={styles.userNameInputContainer}>
+                    <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={userName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
+                    {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
+                </div>
+                {isEditingUserName ? <Save className={styles.userNameIcon} onClick={handleSaveUserName}/> : <Edit className={styles.userNameIcon} onClick={handleEditUserName}/>}
             </div>
-            <div className='userDataContainer'>
+            <div className={styles.userDataContainer}>
                 <label>Name</label>
-                <input type="text" name="" className={isEditingData ? "formInput editingMode" : "formInput"} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(e.target.value)}/>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(e.target.value)}/>
                 <label>Last Name</label>
-                <input type="text" name="" className={isEditingData ? "formInput editingMode" : "formInput"}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(e.target.value)}/>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(e.target.value)}/>
                 <label>Contact E-Mail</label>
-                <input type="text" name="" className={isEditingData ? "formInput editingMode" : "formInput"}  value={contactEmail} disabled={!isEditingData} onChange={(e)=>setContactEmail(e.target.value)}/>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={contactEmail} disabled={!isEditingData} onChange={(e)=>setContactEmail(e.target.value)}/>
             </div>
             <ActionBtn id="saveOrEdit" icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData}/>
         </section>

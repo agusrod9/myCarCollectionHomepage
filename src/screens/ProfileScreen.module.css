@@ -52,6 +52,11 @@
     opacity: 1;
 }
 
+.userNameInputContainer{
+    display: flex;
+    align-items: center;
+}
+
 .userNameInput{
     font-weight: bold;
     color: #fafafa;
