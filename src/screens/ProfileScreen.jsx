@@ -3,8 +3,9 @@ import styles from './ProfileScreen.module.css'
 import { AppContext } from '../context/AppContext'
 import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
-import { BadgeAlert, BadgeCheck, Edit, Save, SquarePen } from 'lucide-react'
+import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen } from 'lucide-react'
 import Loading from '../components/Loading'
+import { toDo } from '../utils/toDo'
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
 
@@ -16,6 +17,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     const [lastName, setLastName] = useState("")
     const [contactEmail, setContactEmail] = useState("")
     const [userName, setUserName] = useState(loggedUserName)
+    const [editableUserName, setEditableUserName] = useState(userName)
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const typeTimeoutRef = useRef(null)
 
@@ -34,14 +36,35 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         setIsEditingUserName (!isEditingUserName)
     }
 
-    const handleSaveUserName = ()=>{
+    const handleCancelEditUserName = ()=>{
+        setEditableUserName(userName)
+        setIsEditingUserName(false)
+        setUserNameOKtoSave(false)
+    }
+
+    const handleSaveUserName = async()=>{
         setIsEditingUserName(!isEditingUserName)
+        setLoggedUserName(editableUserName)
+        setUserName(editableUserName)
+        const url = `https://mycarcollectionapi.onrender.com/api/users/${loggedUserId}`;
+        const opts = {
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify({nickName : editableUserName})
+        }
+        const response = await fetch(url, opts)
+        if(response.status==200){
+            toDo("Username updated!")
+        }
         
     }
 
     const handleUserNameChange = (e)=>{
-        setUserName(e.target.value)
-
+        setEditableUserName(e.target.value)
+        if(e.target.value===userName){
+            setUserNameOKtoSave(false)
+            return
+        }
         if(typeTimeoutRef.current){
             clearTimeout(typeTimeoutRef.current)
         }
@@ -53,7 +76,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 console.log(responseData.available)
                 setUserNameOKtoSave(responseData.available)
             }
-        }, 400);
+        }, 500);
     }
 
     useEffect(()=>{
@@ -100,10 +123,13 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 </div>
                 <img src={loggedUserProfilePicture || "https://avatar.iran.liara.run/public" } alt={`Profile picture of ${loggedUserName}`} />
                 <div className={styles.userNameInputContainer}>
-                    <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={userName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
+                    <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={editableUserName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
                     {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
                 </div>
-                {isEditingUserName ? <Save className={styles.userNameIcon} onClick={handleSaveUserName}/> : <Edit className={styles.userNameIcon} onClick={handleEditUserName}/>}
+                <div className={styles.userNameSaveAndCancelContainer}>
+                    {isEditingUserName ? <Save className={userNameOKtoSave ? `${styles.userNameIcon} ${styles.saveBtnActive}` : `${styles.userNameIcon} ${styles.saveBtnDisabled}`} onClick={handleSaveUserName}/> : <Edit className={styles.userNameIcon} onClick={handleEditUserName}/>}
+                    {isEditingUserName ? <CircleX className={styles.cancelBtn} onClick={handleCancelEditUserName}/> : null}
+                </div>
             </div>
             <div className={styles.userDataContainer}>
                 <label>Name</label>
@@ -113,7 +139,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 <label>Contact E-Mail</label>
                 <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={contactEmail} disabled={!isEditingData} onChange={(e)=>setContactEmail(e.target.value)}/>
             </div>
-            <ActionBtn id="saveOrEdit" icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData}/>
+            <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData}/>
         </section>
     )
 }
