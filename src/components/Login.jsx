@@ -15,8 +15,11 @@ export function Login ({onSuccess}){
         if(email=="" || password==""){
             setLoginError("Missing mandatory fields.")
         }else{
-            await loginToApi(email,password, navigate)
-            setEmail("")
+            const resp = await loginToApi(email,password, navigate)
+            console.log(resp)
+            if(resp.message == "USER LOGGED"){
+                setEmail("")
+            }
             setPassword("")
         }
         
