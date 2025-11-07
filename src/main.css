@@ -1,3 +1,5 @@
+@import './styles/variables.css';
+
 *{
   margin: 0;
   padding: 0;
@@ -13,8 +15,7 @@
   font-weight: 400;
   display: flex;
   justify-content: center;
-  /*color-scheme: light dark;*/
-  background: linear-gradient(to bottom, #1e1e2f, #121212);
+  background: var(--bgBottomGradient);
   color: #fafafa;
   background-color: rgba(66, 66, 66, 0.726);
   font-synthesis: none;

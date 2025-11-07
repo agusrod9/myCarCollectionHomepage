@@ -2,7 +2,7 @@
     width: 100vw;
     height: 65px;
     padding: 0px 10px;
-    background: linear-gradient(to left, #0d1b2a, #1e1e2f);
+    background: var(--bgLeftGradient);
     display: flex;
     align-items: center;
     justify-content: space-between

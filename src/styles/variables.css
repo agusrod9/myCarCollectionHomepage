@@ -1,0 +1,4 @@
+:root{
+    --bgBottomGradient : linear-gradient(to bottom, #1e1e2f, #121212);
+    --bgLeftGradient : linear-gradient(to left, #0d1b2a, #1e1e2f);
+}

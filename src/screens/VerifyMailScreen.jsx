@@ -12,7 +12,6 @@ export function VerifyMailScreen(){
     }
     return(
         <section className="verifyBody">
-            <Header />
             <div className='formContainer'>
                 <VerifyMail onSuccess={handleVerificationSuccess}/>
             </div>

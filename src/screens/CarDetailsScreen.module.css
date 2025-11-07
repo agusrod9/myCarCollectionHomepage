@@ -211,3 +211,11 @@
 .saveBtnActive:hover{
     opacity: 0.8;
 }
+
+.deleteIcon{
+    cursor: pointer;
+}
+
+.editIcon{
+    cursor: pointer;
+}

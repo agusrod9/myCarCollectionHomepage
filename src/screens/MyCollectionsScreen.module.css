@@ -26,6 +26,81 @@
 .newColSection{
     background-color: gainsboro;
     grid-area: newcol;
+    max-width: 300px;
+}
+
+.newColSectionTitle{
+    display: flex;
+    justify-self: center;
+    font-size: 1.5rem;
+}
+
+.newColSectionForm{
+    background-color: lightblue;
+}
+
+.newColSectionFormItem{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: peachpuff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.newColSectionFormInput{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-height: 20px;
+    padding: 10px 12px;
+}
+
+.newColDesc{
+    width: 100%;
+    min-height: 80px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: none;
+    font-family: inherit;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.newColCoverPreviewContainer{
+    margin: 10px 0 10px 0;
+    height: 250px;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: palegreen;
+    padding: 10px;
+}
+
+.newColCoverPreview{
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.newColCover{
+    display: none;
+}
+
+.newColCoverLabel{
+    border: 1px solid red;
+    border-radius: 8px;
+    width: 75%;
+    min-width: 180px;
+    background-color: pink;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
 }
 
 .userCols{

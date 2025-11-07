@@ -200,7 +200,7 @@ export function CarDetailsScreen(){
                 <div className={styles.infoContainer}>
                     <div className={styles.infoTitleContainer}>
                         <p className={styles.infoTitle}>{`${car.carMake} ${car.carModel}`}</p>
-                        <Trash2Icon onClick={handleCarDelete} size={30}/>
+                        <Trash2Icon onClick={handleCarDelete} size={30} className={styles.deleteIcon}/>
                     </div>
                     <fieldset className={styles.inputGroup}>
                         <legend className={styles.inputGroupName}>Vehicle</legend>
@@ -223,7 +223,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("carMake")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carMake:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carMake:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -246,7 +246,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("carModel")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carModel:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carModel:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -271,7 +271,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("carYear")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carYear:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, carYear:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -305,7 +305,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("scale")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, scale:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, scale:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -328,7 +328,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("manufacturer")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, manufacturer:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, manufacturer:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -351,7 +351,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("series")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -374,7 +374,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("series_num")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series_num:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, series_num:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -412,7 +412,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("collectionId")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, collectionId:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, collectionId:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -436,7 +436,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("price")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, price:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, price:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -462,7 +462,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("opened")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, opened:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, opened:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>
@@ -484,7 +484,7 @@ export function CarDetailsScreen(){
                                 <Save size={30} onClick={()=>handleSave("notes")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, notes:true}))}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, notes:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                             {

@@ -16,12 +16,11 @@
     padding: 20px;
 }
 
-.userBriefDataContainer img{
+.profilePicture{
     height: 300px;
     width: 300px;
     border: 4px solid #0d1b2a;
     border-radius: 50%;
-    
 }
 
 .profilePictureOverlayContainer{

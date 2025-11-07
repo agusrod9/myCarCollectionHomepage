@@ -43,8 +43,8 @@ export function ResetPassForm(){
 
     return(
         <section className="resetPass-section">
-            <h2>Reset email</h2>
-            <p>Ingrese su correo electrónico para recibir una nueva contraseña.</p>
+            <h2>Password Reset</h2>
+            <p>Type your E-mail to get a new password.</p>
             <form className="resetPass-form">
                 <label htmlFor="resetPass-email-inp">E-mail</label>
                 <input type="email" name="email" id="resetPass-email-inp" placeholder="Ingresa tu E-mail" value={email} onChange={handleEmailChange}/>

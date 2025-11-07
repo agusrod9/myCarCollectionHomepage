@@ -121,7 +121,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                         <p>Change profile picture</p>
                     </div>
                 </div>
-                <img src={loggedUserProfilePicture || "https://avatar.iran.liara.run/public" } alt={`Profile picture of ${loggedUserName}`} />
+                <img src={loggedUserProfilePicture} alt={`Profile picture of ${loggedUserName}`} className={styles.profilePicture}/>
                 <div className={styles.userNameInputContainer}>
                     <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={editableUserName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
                     {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
