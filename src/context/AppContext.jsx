@@ -18,7 +18,7 @@ export function AppContextProvider ({children}){
     const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
     const [loading, setLoading] = useState(true);
     const [scaleList, setScaleList] = useState(['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']) 
-    const [userCollections, setUserCollections] = useState(null)
+    const [userCollections, setUserCollections] = useState([])
     const [userCollectedCars, setUserCollectedCars] = useState(null)
     const [selectedFilters, setSelectedFilters] = useState({
         availableManufacturers : [],

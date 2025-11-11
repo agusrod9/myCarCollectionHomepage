@@ -18,6 +18,17 @@ export function MyCollectionsScreen(){
         userId: loggedUserId
     })
 
+    const resetNewCollectionState = ()=>{
+        setNewCollection({
+            description : "",
+            collectionName : "",
+            coverImg : "",
+            visibility : "public",
+            userId: loggedUserId});
+        setColCoverFile(null);
+        setColCoverPreview(null);
+    }
+    
     const handleColCoverSelect = (e)=>{
         const newFile = e.target.files[0];
         if(newFile){
@@ -36,7 +47,17 @@ export function MyCollectionsScreen(){
             body: JSON.stringify(newCollection)
         }
         const response = await fetch(url,opts)
-        console.log(response)
+        const responseData = await response.json();
+        if (response.status==201){
+            const addedCollection = responseData.data
+            console.log(`Se agregó la colección ${addedCollection.collectionName}`)
+            setUserCollections(prev=>([...prev, addedCollection]))
+            resetNewCollectionState();
+            
+        }else{
+            console.log(responseData.error)
+        }
+
     }
 
     useEffect(()=>{
@@ -49,7 +70,7 @@ export function MyCollectionsScreen(){
                 setUserCollections(responseData.data)
             }
         }
-        if(!userCollections){
+        if(userCollections.length==0){
             getUserCollections()
         }
     },[])

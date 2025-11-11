@@ -24,7 +24,7 @@ export function Header({loggedUserName, handleLogOut, loggedUserProfilePicture})
             {menuIsOpen ? 
                 <div className={styles.headerMenu}>
                     <MenuItem icon={<User />} text="Profile" onClick={()=>{navigate('/profile')}}/>
-                    <MenuItem icon={<Car />} text="My Collections"/>
+                    <MenuItem icon={<Car />} text="My Collections" onClick={()=>{navigate('/myCollections')}}/>
                     <MenuItem icon={<Cog />} text="Configuration"/>
                     <MenuItem icon={<LogOut />} text="Log out" onClick={()=>handleLogOut()}/>
                 </div> 
