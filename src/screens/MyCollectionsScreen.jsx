@@ -10,16 +10,33 @@ export function MyCollectionsScreen(){
     const {loggedUserId, userCollections, setUserCollections, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
     const [colCoverPreview, setColCoverPreview] = useState(null)
     const [colCoverFile, setColCoverFile] = useState(null)
+    const [newCollection, setNewCollection] = useState({
+        description : "",
+        collectionName : "",
+        coverImg : "",
+        visibility : "public",
+        userId: loggedUserId
+    })
 
     const handleColCoverSelect = (e)=>{
         const newFile = e.target.files[0];
         if(newFile){
             setColCoverFile(newFile);
-            setColCoverPreview(URL.createObjectURL(newFile))
+            const previewUrl = URL.createObjectURL(newFile);
+            setColCoverPreview(previewUrl)
+            setNewCollection(prev=>({...prev, coverImg : previewUrl}))
         }
     }
-    const handleColCoverSubmit = (e)=>{
-        e.preventDefault()
+    const handleSaveNewCollection = async()=>{
+        const url = 'https://mycarcollectionapi.onrender.com/api/carcollections'
+        const opts = {
+            method: 'POST',
+            headers : {'Content-Type' : 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify(newCollection)
+        }
+        const response = await fetch(url,opts)
+        console.log(response)
     }
 
     useEffect(()=>{
@@ -47,11 +64,26 @@ export function MyCollectionsScreen(){
                     <div className={styles.newColSectionForm}>
                         <div className={styles.newColSectionFormItem}>
                             <label htmlFor="newColName">Name</label>
-                            <input type="text" name='newColName' className={styles.newColSectionFormInput}/>
+                            <input 
+                                type="text" 
+                                value={newCollection.collectionName} 
+                                name='newColName' 
+                                className={styles.newColSectionFormInput} 
+                                onChange={(e)=>{
+                                    setNewCollection(prev=>({...prev, collectionName: e.target.value}))
+                                }}
+                            />
                         </div>
                         <div className={styles.newColSectionFormItem}>
                             <label htmlFor="newColDesc">Description</label>
-                            <textarea name="newColDesc" className={styles.newColDesc}></textarea>
+                            <textarea 
+                                name="newColDesc" 
+                                value={newCollection.description} 
+                                className={styles.newColDesc}
+                                onChange={(e)=>{
+                                    setNewCollection(prev=>({...prev, description: e.target.value}))
+                                }}
+                            />
                         </div>
                         <div className={styles.newColSectionFormItem}>
                             <label htmlFor="newColCover" className={styles.newColCoverLabel}>
@@ -74,13 +106,24 @@ export function MyCollectionsScreen(){
                         </div>
                         <div className={styles.newColSectionFormItem}>
                             <label htmlFor="newColVisibility">Visibility</label>
-                            <select name="newColVisibility" className={styles.newColSectionFormInput}>
+                            <select 
+                                name="newColVisibility" 
+                                value={newCollection.visibility} 
+                                className={styles.newColSectionFormInput}
+                                onChange={(e)=>{
+                                    setNewCollection(prev=>({...prev, visibility: e.target.value}))
+                                }}
+                            >
                                 <option value="public">Public</option>
                                 <option value="friendsOnly">Friends</option>
                                 <option value="private">Private</option>
                             </select>
                         </div>
-                        <ActionBtn label='Add collection' icon={<Save />} disabled={false}/>
+                        <ActionBtn 
+                            label='Add collection' 
+                            icon={<Save />} 
+                            disabled={false} 
+                            onClick={handleSaveNewCollection}/>
                     </div>
                 </div>
                 <div className={styles.userCols}>
