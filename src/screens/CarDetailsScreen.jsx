@@ -49,15 +49,25 @@ export function CarDetailsScreen(){
                 const url = `https://mycarcollectionapi.onrender.com/api/cars/${car._id}`
                 const opts = {
                     method : "DELETE",
+                }
+                const response = await fetch(url,opts)
+                if(response.status == 200){
+                    Swal.fire("Deleted!", "", "success");
+                    const deleteEveryImagePromise = car.img_urls.map((imgUrl)=>{
+                        const awsKey = imgUrl.split('.amazonaws.com/')[1]
+                        const url = `https://mycarcollectionapi.onrender.com/api/aws/?id=${awsKey}`
+                        const opts = {
+                            method : "DELETE",
+                        }
+                        return fetch(url,opts)
+                    })
+                    await Promise.all(deleteEveryImagePromise)
+                    Swal.fire("Deleted!", "", "success");
+                    toDo("Quitar auto del caché y navegar una pantalla para atrás.")
+                }else{
+                    Swal.fire("Please try again!", "", "error");
+                }
             }
-            const response = await fetch(url,opts)
-            if(response.status == 200){
-                Swal.fire("Deleted!", "", "success");
-                toDo("Quitar auto del caché y navegar una pantalla para atrás.")
-            }else{
-                Swal.fire("Please try again!", "", "error");
-            }
-        }
         });
     }
 

@@ -91,7 +91,11 @@ export function AddCarForm ({loggedUserId}){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
+        const start = Date.now();
         const urls = await uploadManyImages(loggedUserId,"carImages", images)
+        const end = Date.now();
+        const elapsedSeconds = ((end - start) / 1000).toFixed(2);
+        console.log(`Demoró ${elapsedSeconds} segundos en subir ${images.length} imágenes.`)
         const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
         if(added.error){
             alert(added.error)

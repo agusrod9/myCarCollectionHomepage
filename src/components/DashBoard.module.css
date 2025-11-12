@@ -52,6 +52,7 @@
 
 .recAddCardsContainer{
     width: 100%;
+    padding: 10px;
     display: flex;
     gap: 10px;
 }
@@ -112,14 +113,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 300px;
+    width: 300px;
     max-height: 300px;
     border-radius: 10px;
     overflow: hidden;   
     cursor: pointer;
 }
-
-
 
 .recentCardInfo{
     width: 100%;

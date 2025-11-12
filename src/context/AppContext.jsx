@@ -28,6 +28,28 @@ export function AppContextProvider ({children}){
         query:""
     })
 
+    const clearContext =()=>{
+        setLoggedUserId(null);
+        setLoggedUserName(null);
+        setLoggedUserFirstName(null);
+        setLoggedUserLastName(null);
+        setLoggedUserContactEmail(null);
+        setLoggedUserProfilePicture(null);
+        setLoggedUserRole(null);
+        setLoggedUserMustResetPass(null);
+        setUserCarCount(null);
+        setUserCarsValue(null);
+        setRecentlyAddedCars([]);
+        setUserCollections([]);
+        setUserCollectedCars(null);
+        setSelectedFilters({
+        availableManufacturers : [],
+        availableCarMakes : [],
+        availableScales : [],
+        availablePrices : [],
+        query:""
+    })
+    }
 
     const handleLogin = async()=>{
         const url = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
@@ -49,14 +71,11 @@ export function AppContextProvider ({children}){
     const handleLogOut = async ()=>{
             const url = 'https://mycarcollectionapi.onrender.com/api/sessions/logout'
             const opts = { method : 'POST', credentials: 'include'}
-            await fetch(url, opts)
-            setLoggedUserId(null)
-            setLoggedUserName(null)
-            setLoggedUserContactEmail(null)
-            setLoggedUserFirstName(null)
-            setLoggedUserLastName(null)
-            setLoggedUserProfilePicture(null)
-            navigate('/')
+            const response = await fetch(url, opts)
+            if(response.status==200){
+                clearContext()
+                navigate('/')
+            }
         }
 
     useEffect(()=>{
