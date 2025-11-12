@@ -1,8 +1,8 @@
 .screenContainer{
-    background-color: forestgreen;
+    background-color: var(--bgBottomGradient);
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100dvh;
 }
 
 .screenTitle{
@@ -11,32 +11,35 @@
 }
 
 .mainContainer{
-    background-color: #fff;
     display: grid;
     grid-template-areas: 
         "newcol usercols"
         "newcol usercols";
         grid-template-columns: 1fr 3fr;
-    padding: auto;
     gap: 20px;
-    padding: 20px;
-
+    align-items: start;
+    min-height: 100dvh;
 }
 
 .newColSection{
-    background-color: gainsboro;
+    background-color: #f9fafb;
     grid-area: newcol;
     max-width: 300px;
+    border-radius: 10px;
+    min-height: 100dvh;
+    max-width: 100vh;
 }
 
 .newColSectionTitle{
-    display: flex;
-    justify-self: center;
     font-size: 1.5rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .newColSectionForm{
-    background-color: lightblue;
+    border-radius: 10px;
 }
 
 .newColSectionFormItem{
@@ -45,9 +48,12 @@
     gap: 5px;
     padding: 5px;
     margin-bottom: 5px;
-    background-color: peachpuff;
-    border: 1px solid #ccc;
     border-radius: 8px;
+    color: #222;
+}
+
+.newColSectionFormItem label{
+    align-self: flex-start;
 }
 
 .newColSectionFormInput{
@@ -74,11 +80,10 @@
 .newColCoverPreviewContainer{
     margin: 10px 0 10px 0;
     height: 250px;
-    width: 250px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: palegreen;
     padding: 10px;
 }
 
@@ -93,11 +98,12 @@
 }
 
 .newColCoverLabel{
-    border: 1px solid red;
+    background-color: #024899;
+    border: 1px solid #222;
+    color: #fafafa;
     border-radius: 8px;
     width: 75%;
     min-width: 180px;
-    background-color: pink;
     padding: 10px;
     cursor: pointer;
     text-align: center;

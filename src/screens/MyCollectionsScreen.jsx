@@ -10,6 +10,7 @@ export function MyCollectionsScreen(){
     const {loggedUserId, userCollections, setUserCollections, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
     const [colCoverPreview, setColCoverPreview] = useState(null)
     const [colCoverFile, setColCoverFile] = useState(null)
+    const [okToSave, setOkToSave] = useState(false)
     const [newCollection, setNewCollection] = useState({
         description : "",
         collectionName : "",
@@ -28,23 +29,39 @@ export function MyCollectionsScreen(){
         setColCoverFile(null);
         setColCoverPreview(null);
     }
+
+    async function uploadImage(){
+        const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${loggedUserId}&folder=collectionCovers`
+        const opts = {
+            method : 'POST'
+        }
+        const formData = new FormData()
+        formData.append('image', colCoverFile)
+        opts.body = formData
+        const response = await fetch(url,opts)
+        const data = await response.json()
+        const imageUrl = data.url
+        return imageUrl 
+    }
     
-    const handleColCoverSelect = (e)=>{
+    const handleColCoverSelect = async(e)=>{
         const newFile = e.target.files[0];
         if(newFile){
             setColCoverFile(newFile);
             const previewUrl = URL.createObjectURL(newFile);
             setColCoverPreview(previewUrl)
-            setNewCollection(prev=>({...prev, coverImg : previewUrl}))
         }
     }
     const handleSaveNewCollection = async()=>{
+        const imageUrl = await uploadImage()
+        const collectionToAdd = {...newCollection, coverImg: imageUrl};
+        setNewCollection(prev=>({...prev, coverImg: imageUrl}))
         const url = 'https://mycarcollectionapi.onrender.com/api/carcollections'
         const opts = {
             method: 'POST',
             headers : {'Content-Type' : 'application/json'},
             credentials: 'include',
-            body: JSON.stringify(newCollection)
+            body: JSON.stringify(collectionToAdd)
         }
         const response = await fetch(url,opts)
         const responseData = await response.json();
@@ -53,6 +70,7 @@ export function MyCollectionsScreen(){
             console.log(`Se agregó la colección ${addedCollection.collectionName}`)
             setUserCollections(prev=>([...prev, addedCollection]))
             resetNewCollectionState();
+            setOkToSave(false)
             
         }else{
             console.log(responseData.error)
@@ -75,10 +93,17 @@ export function MyCollectionsScreen(){
         }
     },[])
 
+    useEffect(()=>{
+        setOkToSave(false)
+        if(newCollection.collectionName!= "" && newCollection.description!= ""){
+            setOkToSave(true)
+        }
+    }, [newCollection.collectionName, newCollection.description])
+
     return(
         <span className={styles.screenContainer}>
             <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={handleLogOut} />
-            <h1 className={styles.screenTitle}>myCollectionsScreen</h1>
+            <h1 className={styles.screenTitle}>My collections</h1>
             <div className={styles.mainContainer}>
                 <div className={styles.newColSection}>
                     <p className={styles.newColSectionTitle}>Add new collection</p>
@@ -143,7 +168,7 @@ export function MyCollectionsScreen(){
                         <ActionBtn 
                             label='Add collection' 
                             icon={<Save />} 
-                            disabled={false} 
+                            disabled={!okToSave} 
                             onClick={handleSaveNewCollection}/>
                     </div>
                 </div>

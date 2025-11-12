@@ -59,11 +59,11 @@ export function AddCarForm ({loggedUserId}){
     }
 
     async function uploadImages(){
-        const url = `https://mycarcollectionapi.onrender.com/api/aws?userId=${loggedUserId}`
+        const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${loggedUserId}&folder=carImages`
         const opts = {
             method : 'POST'
         }
-        const imagesUrls = await Promise.all( //hace que se espere a todos los fetch
+        const imagesUrls = await Promise.all( //waits for al the fetches
             Array.from(images).map(async(img)=>{
                 const formData = new FormData()
                 formData.append('image', img)
