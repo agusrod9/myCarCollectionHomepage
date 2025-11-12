@@ -5,6 +5,7 @@ import { Header } from '../components/Header'
 import { CollectionCard } from '../components/CollectionCard'
 import { ActionBtn } from '../components/ActionBtn'
 import { Save } from 'lucide-react'
+import { uploadSingleImage } from '../utils/images.utils'
 
 export function MyCollectionsScreen(){
     const {loggedUserId, userCollections, setUserCollections, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
@@ -29,20 +30,6 @@ export function MyCollectionsScreen(){
         setColCoverFile(null);
         setColCoverPreview(null);
     }
-
-    async function uploadImage(){
-        const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${loggedUserId}&folder=collectionCovers`
-        const opts = {
-            method : 'POST'
-        }
-        const formData = new FormData()
-        formData.append('image', colCoverFile)
-        opts.body = formData
-        const response = await fetch(url,opts)
-        const data = await response.json()
-        const imageUrl = data.url
-        return imageUrl 
-    }
     
     const handleColCoverSelect = async(e)=>{
         const newFile = e.target.files[0];
@@ -53,7 +40,7 @@ export function MyCollectionsScreen(){
         }
     }
     const handleSaveNewCollection = async()=>{
-        const imageUrl = await uploadImage()
+        const imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
         const url = 'https://mycarcollectionapi.onrender.com/api/carcollections'

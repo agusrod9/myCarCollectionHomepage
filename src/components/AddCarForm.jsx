@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
 import { AppContext } from '../context/AppContext';
 import { CirclePicker } from 'react-color';
+import { uploadManyImages } from '../utils/images.utils';
 
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
@@ -58,25 +59,6 @@ export function AddCarForm ({loggedUserId}){
             setDoneUploadingImages(true)
     }
 
-    async function uploadImages(){
-        const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${loggedUserId}&folder=carImages`
-        const opts = {
-            method : 'POST'
-        }
-        const imagesUrls = await Promise.all( //waits for al the fetches
-            Array.from(images).map(async(img)=>{
-                const formData = new FormData()
-                formData.append('image', img)
-                opts.body = formData
-                const response = await fetch(url,opts)
-                const data = await response.json()
-                const imageUrl = data.url
-                return imageUrl // Pushes the result to imagesUrls directly
-            })
-        )
-        return imagesUrls;
-    }
-
     async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price){
         const url ='https://mycarcollectionapi.onrender.com/api/cars'
         
@@ -109,7 +91,7 @@ export function AddCarForm ({loggedUserId}){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
-        const urls = await uploadImages()
+        const urls = await uploadManyImages(loggedUserId,"carImages", images)
         const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
         if(added.error){
             alert(added.error)
