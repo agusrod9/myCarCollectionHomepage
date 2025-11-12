@@ -6,6 +6,7 @@ import {ActionBtn} from '../components/ActionBtn'
 import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen } from 'lucide-react'
 import Loading from '../components/Loading'
 import { toDo } from '../utils/toDo'
+import { uploadSingleImage } from '../utils/images.utils'
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
 
@@ -20,6 +21,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     const [editableUserName, setEditableUserName] = useState(userName)
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const typeTimeoutRef = useRef(null)
+    const fileInputRef = useRef(null);
 
     const handleEditOrSaveUserData = ()=>{
         const isEditinigInitialValue = isEditingData
@@ -29,6 +31,30 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             
         }else{
             
+        }
+    }
+
+    const handleSelectProfilePicture = ()=>{
+        fileInputRef.current.click()
+    }
+
+    const handleFileChange = async(e)=>{
+        const file = e.target.files[0];
+        if (file){
+            const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", file)
+            if(profileImgUrl){
+                const url = `https://mycarcollectionapi.onrender.com/api/users/${loggedUserId}`;
+                const opts = {
+                    method : "PUT",
+                    headers : {'Content-Type' : 'application/json'},
+                    body : JSON.stringify({profilePicture : profileImgUrl})
+                }
+                const response = await fetch(url, opts)
+                if(response.status==200){
+                    setLoggedUserProfilePicture(profileImgUrl)
+                    toDo("image updated!")
+                }
+            }
         }
     }
 
@@ -68,7 +94,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         if(typeTimeoutRef.current){
             clearTimeout(typeTimeoutRef.current)
         }
-
         typeTimeoutRef.current = setTimeout(async() => {
             if(e.target.value.length!=0){
                 const response = await fetch(`https://mycarcollectionapi.onrender.com/api/users/checkNick?nick=${e.target.value}`)
@@ -116,8 +141,15 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         <section className={styles.ProfileScreenBody}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut()}}/>
             <div className={styles.userBriefDataContainer}>
-                <div className={styles.profilePictureOverlayContainer}>
+                <div className={styles.profilePictureOverlayContainer} onClick={handleSelectProfilePicture}>
                     <div className={styles.profilePictureOverlay}>
+                        <input 
+                            type="file"
+                            ref={fileInputRef}
+                            accept='image/*'
+                            onChange={handleFileChange}
+                            className={styles.fileInput} 
+                        />
                         <p>Change profile picture</p>
                     </div>
                 </div>

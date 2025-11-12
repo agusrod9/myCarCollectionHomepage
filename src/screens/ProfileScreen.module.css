@@ -23,6 +23,10 @@
     border-radius: 50%;
 }
 
+.fileInput{
+    display: none;
+}
+
 .profilePictureOverlayContainer{
     display: flex;
     justify-content: center;
