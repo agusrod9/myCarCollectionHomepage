@@ -59,6 +59,7 @@ export function AppContextProvider ({children}){
         setLoggedUserId(responseData.userId)
         setLoggedUserName(responseData.userName)
         setLoggedUserProfilePicture(responseData.userProfilePicture)
+        setLoggedUserRole(responseData.role)
         setUserCarCount(responseData.userCarCount)
         setUserCarsValue(responseData.userCarsTotalAmount)
         const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
@@ -91,6 +92,7 @@ export function AppContextProvider ({children}){
                     setLoggedUserId(responseData.userId)
                     setLoggedUserName(responseData.userName)
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
+                    setLoggedUserRole(responseData.role)
                     setUserCarCount(responseData.userCarCount)
                     setUserCarsValue(responseData.userCarsTotalAmount)
                     const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
@@ -119,6 +121,7 @@ export function AppContextProvider ({children}){
             loggedUserContactEmail, 
             loggedUserFirstName,
             loggedUserLastName,
+            loggedUserRole,
             setLoggedUserId, 
             setLoggedUserName, 
             setLoggedUserProfilePicture, 

@@ -98,7 +98,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             if(e.target.value.length!=0){
                 const response = await fetch(`https://mycarcollectionapi.onrender.com/api/users/checkNick?nick=${e.target.value}`)
                 const responseData = await response.json()
-                console.log(responseData.available)
                 setUserNameOKtoSave(responseData.available)
             }
         }, 500);

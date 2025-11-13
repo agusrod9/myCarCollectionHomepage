@@ -54,7 +54,6 @@ export function MyCollectionsScreen(){
         const responseData = await response.json();
         if (response.status==201){
             const addedCollection = responseData.data
-            console.log(`Se agregó la colección ${addedCollection.collectionName}`)
             setUserCollections(prev=>([...prev, addedCollection]))
             resetNewCollectionState();
             setOkToSave(false)

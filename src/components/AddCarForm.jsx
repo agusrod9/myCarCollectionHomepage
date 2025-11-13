@@ -31,8 +31,9 @@ export function AddCarForm ({loggedUserId}){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
 
-    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList} = useContext(AppContext);
-
+    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList, loggedUserRole} = useContext(AppContext);
+    console.log({loggedUserRole});
+    
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
             setRequiredFieldsSet(true)
@@ -131,6 +132,14 @@ export function AddCarForm ({loggedUserId}){
     const handleNewImg = async(e)=>{
         setDoneUploadingImages(!doneUploadingImages)
         const newImages = Array.from(e.target.files)
+        const role = loggedUserRole
+        const maxImagesAllowed =    role === "SUPER" ? 10
+                                    : role === "PREMIUM" ? 3
+                                    : 1
+        if(images.length + newImages.length > maxImagesAllowed){
+            alert(`Your ${loggedUserRole} account allows you to upload ${maxImagesAllowed} images per car.`)
+            return
+        } 
         setImages(prev => [...prev, ...newImages])        
     }
 
@@ -190,7 +199,13 @@ export function AddCarForm ({loggedUserId}){
                     <p>Drag & drop your pictures here</p>
                     <p>OR</p>
                     <p><span id='browseFileClick'>Click to browse</span> from your device</p>
-                    <input type="file" multiple id='filesUploadInput' accept='image/*' onChange={(e)=>handleNewImg(e)} />
+                    <input 
+                        type="file" 
+                        multiple={["PREMIUM", "SUPER"].includes(loggedUserRole)}
+                        id='filesUploadInput' 
+                        accept='image/*' 
+                        onChange={(e)=>handleNewImg(e)} 
+                    />
                 </label>
             </section>
             
