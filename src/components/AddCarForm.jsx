@@ -20,6 +20,7 @@ export function AddCarForm (){
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
+    const [currency, setCurrency] = useState("")
     const [price, setPrice] = useState("")
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [colorSelectDisplayed, setColorSelectDisplayed] = useState(false)
@@ -288,7 +289,7 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carOpenedSelectInput'>Package</label>
-                        <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={(e)=>setOpened(e.target.value)}  >
+                        <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={(e)=>setOpened(e.target.value)} >
                             <option value={""}></option>
                             <option value='opened'>Opened</option>
                             <option value='sealed'>Closed</option>
@@ -296,7 +297,21 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carPriceInput'>Price</label>
-                        <input type="number" name='carPrice' id='carPriceInput' value={price} min={0} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
+                        <div className={styles.currencyFieldContainer}>
+                            <select name="currency" className={styles.currencySelectInput} value={currency} onChange={(e)=>setCurrency(e.target.value)} > 
+                                {
+                                    currenciesList?.length>0 ?
+                                    currenciesList.map((currencyItem)=>{
+                                        return(
+                                            <option key={currencyItem._id} value={currencyItem._id}>{currencyItem.code} - {currencyItem.flag}</option>
+                                        )
+                                    })
+                                    :
+                                    null
+                                }
+                            </select>
+                            <input type="number" name='carPrice' id='carPriceInput' value={price} min={0} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
+                        </div>
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carNotesInput'>Notes</label>

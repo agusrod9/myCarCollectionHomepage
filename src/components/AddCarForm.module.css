@@ -199,3 +199,15 @@
     height: 40px;
     border-radius: 50%;
 }
+
+.currencyFieldContainer{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+}
+
+.currencyFieldContainer select,
+.currencyFieldContainer input {
+    width: 100%;
+    min-width: 0;
+}
