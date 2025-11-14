@@ -2,6 +2,8 @@ import './ChangePassForm.css';
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function ChangePassForm(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -33,7 +35,7 @@ export function ChangePassForm(){
     }
 
     async function requestChangePass(mail, pass){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/changePass`
+        const url = `${API_BASEURL}/api/sessions/changePass`
         const fetchData = {
             "email" : mail ,
             "password" : pass

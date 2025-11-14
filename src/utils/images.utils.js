@@ -1,5 +1,7 @@
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export async function uploadManyImages(userId, folder, imageFilesArray){
-    const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${userId}&folder=${folder}`
+    const url = `${API_BASEURL}/api/aws/?userId=${userId}&folder=${folder}`
     
     const imagesUrls = await Promise.all( //waits for al the fetches
         Array.from(imageFilesArray).map(async(img)=>{
@@ -19,7 +21,7 @@ export async function uploadManyImages(userId, folder, imageFilesArray){
 }
 
 export async function uploadSingleImage(userId, folder, imageFile){
-    const url = `https://mycarcollectionapi.onrender.com/api/aws/?userId=${userId}&folder=${folder}`
+    const url = `${API_BASEURL}/api/aws/?userId=${userId}&folder=${folder}`
     const opts = {
         method : 'POST'
     }

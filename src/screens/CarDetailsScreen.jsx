@@ -8,6 +8,8 @@ import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
 import { toDo } from '../utils/toDo'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function CarDetailsScreen(){
     const location = useLocation()
     const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections} = useContext(AppContext)
@@ -46,7 +48,7 @@ export function CarDetailsScreen(){
             denyButtonText: `Cancel`
         }).then(async(result) => {
             if (result.isConfirmed) {
-                const url = `https://mycarcollectionapi.onrender.com/api/cars/${car._id}`
+                const url = `${API_BASEURL}/api/cars/${car._id}`
                 const opts = {
                     method : "DELETE",
                 }
@@ -55,7 +57,7 @@ export function CarDetailsScreen(){
                     Swal.fire("Deleted!", "", "success");
                     const deleteEveryImagePromise = car.img_urls.map((imgUrl)=>{
                         const awsKey = imgUrl.split('.amazonaws.com/')[1]
-                        const url = `https://mycarcollectionapi.onrender.com/api/aws/?id=${awsKey}`
+                        const url = `${API_BASEURL}/api/aws/?id=${awsKey}`
                         const opts = {
                             method : "DELETE",
                         }
@@ -72,7 +74,7 @@ export function CarDetailsScreen(){
     }
 
     async function saveCar(key){
-        const url = `https://mycarcollectionapi.onrender.com/api/cars/${editableCar._id}`
+        const url = `${API_BASEURL}/api/cars/${editableCar._id}`
         const newValue = editableCar[key]==="" ? null : editableCar[key]
         if(editableCar[key]==car[key] || (editableCar[key]=="" && car[key]==null)){
             toDo("No changes to save")
@@ -105,7 +107,7 @@ export function CarDetailsScreen(){
             return
         }
 
-        const url = `https://mycarcollectionapi.onrender.com/api/cars/${editableCar._id}`
+        const url = `${API_BASEURL}/api/cars/${editableCar._id}`
         const opts = {
             method: "PUT",
             headers : {'Content-Type' : 'application/json'},
@@ -167,7 +169,7 @@ export function CarDetailsScreen(){
             setTimeout(() => imgContainerRef.current.focus(), 100);
         }
         if(!loggedUserId) return
-        const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+        const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const response = await fetch(collectionsUrl)
             const responseData = await response.json()

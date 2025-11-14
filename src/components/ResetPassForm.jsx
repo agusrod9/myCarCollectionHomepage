@@ -2,6 +2,8 @@ import './ResetPassForm.css'
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function ResetPassForm(){
     const [email, setEmail] = useState("")
     const navigate = useNavigate()
@@ -23,7 +25,7 @@ export function ResetPassForm(){
     }
 
     async function requestNewPass(mail){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/resetPass`
+        const url = `${API_BASEURL}/api/sessions/resetPass`
         const fetchData = {
             "email" : mail 
         }

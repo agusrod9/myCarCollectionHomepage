@@ -1,10 +1,11 @@
 import { createContext, useState, useEffect } from "react";
 import Loading from "../components/Loading";
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export const AppContext = createContext()
 
 export function AppContextProvider ({children}){
-
     const [loggedUserId, setLoggedUserId] = useState(null)
     const [loggedUserName, setLoggedUserName] = useState(null)
     const [loggedUserFirstName, setLoggedUserFirstName] = useState(null)
@@ -52,7 +53,7 @@ export function AppContextProvider ({children}){
     }
 
     const handleLogin = async()=>{
-        const url = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+        const url = `${API_BASEURL}/api/sessions/whoIsOnline`
         const opts = {method: 'POST', credentials: 'include'}
         const response = await fetch(url, opts)
         const responseData = await response.json()
@@ -62,7 +63,7 @@ export function AppContextProvider ({children}){
         setLoggedUserRole(responseData.role)
         setUserCarCount(responseData.userCarCount)
         setUserCarsValue(responseData.userCarsTotalAmount)
-        const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
+        const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
         
@@ -70,7 +71,7 @@ export function AppContextProvider ({children}){
     }
 
     const handleLogOut = async ()=>{
-            const url = 'https://mycarcollectionapi.onrender.com/api/sessions/logout'
+            const url = `${API_BASEURL}/api/sessions/logout`
             const opts = { method : 'POST', credentials: 'include'}
             const response = await fetch(url, opts)
             if(response.status==200){
@@ -82,9 +83,9 @@ export function AppContextProvider ({children}){
     useEffect(()=>{
             async function getLoggedUserId(){
             try {
-                const isonline = await fetch('https://mycarcollectionapi.onrender.com/api/sessions/online', {method: 'POST', credentials:'include'})
+                const isonline = await fetch(`${API_BASEURL}/api/sessions/online`, {method: 'POST', credentials:'include'})
                 if(isonline.status==200){
-                    const userIdUrl = 'https://mycarcollectionapi.onrender.com/api/sessions/whoIsOnline'
+                    const userIdUrl = `${API_BASEURL}/api/sessions/whoIsOnline`
                     const opts = {method: 'POST', credentials: 'include'}
                     const response = await fetch(userIdUrl, opts)
                     const responseData = await response.json()
@@ -95,7 +96,7 @@ export function AppContextProvider ({children}){
                     setLoggedUserRole(responseData.role)
                     setUserCarCount(responseData.userCarCount)
                     setUserCarsValue(responseData.userCarsTotalAmount)
-                    const recentCarsResponse = await fetch(`https://mycarcollectionapi.onrender.com/api/cars?userId=${responseData.userId}&onlyRecent=t`)
+                    const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
                     const recentCarsResponseData = await recentCarsResponse.json()
                     setRecentlyAddedCars(recentCarsResponseData.data)
                 }            

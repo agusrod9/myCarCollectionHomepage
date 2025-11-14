@@ -3,6 +3,7 @@ import './Login.css'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function Login ({onSuccess}){
     const [email, setEmail] = useState("")
@@ -27,12 +28,12 @@ export function Login ({onSuccess}){
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
         setLoginError("")
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/google`
+        const url = `${API_BASEURL}/api/sessions/google`
         window.location.assign(url);
     }
 
     async function loginToApi(email, password, navigate){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/login`
+        const url = `${API_BASEURL}/api/sessions/login`
         const data = {email , password}
         const opts = {
             method : 'POST',

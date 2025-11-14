@@ -4,6 +4,8 @@ import { AppContext } from '../context/AppContext'
 import {ActionBtn} from './ActionBtn'
 import { BrushCleaning } from 'lucide-react'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     const {loggedUserId} = useContext(AppContext)
     const [availableFilters, setAvailableFilters] = useState({})
@@ -27,7 +29,7 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     useEffect(()=>{
 
         let getFilters = async()=>{
-            let response = await fetch(`https://mycarcollectionapi.onrender.com/api/filters?userId=${loggedUserId}`)
+            let response = await fetch(`${API_BASEURL}/api/filters?userId=${loggedUserId}`)
             let responseData = await response.json()
             setAvailableFilters(responseData.data)
         } 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './VerifyMail.css'
 import { useNavigate } from 'react-router-dom'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function VerifyMail ({onSuccess}){
     const [email, setEmail] = useState("")
@@ -20,7 +21,7 @@ export function VerifyMail ({onSuccess}){
     }
 
         async function verifyCode(email, verificationCode, navigate){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/verify`
+        const url = `${API_BASEURL}/api/sessions/verify`
         const data = {email , verificationCode}
         const opts = {
             method : 'POST',

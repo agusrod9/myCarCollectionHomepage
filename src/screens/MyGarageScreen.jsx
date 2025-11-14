@@ -8,6 +8,8 @@ import { CarCard } from '../components/CarCard'
 import { FiltersPanel } from '../components/FiltersPanel'
 import { useNavigate } from 'react-router'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function MyGarageScreen(){
     const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut, userCollectedCars, setUserCollectedCars, selectedFilters, setSelectedFilters} = useContext(AppContext)
     const navigate = useNavigate()
@@ -35,7 +37,7 @@ export function MyGarageScreen(){
 
     useEffect(()=>{
         const getUsercollectedCars =async()=>{
-            const url = `https://mycarcollectionapi.onrender.com/api/cars?userId=${loggedUserId}`
+            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
             setUserCollectedCars(responseData.data)

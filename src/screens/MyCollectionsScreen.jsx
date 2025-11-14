@@ -6,12 +6,16 @@ import { CollectionCard } from '../components/CollectionCard'
 import { ActionBtn } from '../components/ActionBtn'
 import { Save } from 'lucide-react'
 import { uploadSingleImage } from '../utils/images.utils'
+import Loading from '../components/Loading'
+
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function MyCollectionsScreen(){
     const {loggedUserId, userCollections, setUserCollections, loggedUserName, loggedUserProfilePicture, handleLogOut} = useContext(AppContext)
     const [colCoverPreview, setColCoverPreview] = useState(null)
     const [colCoverFile, setColCoverFile] = useState(null)
     const [okToSave, setOkToSave] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [newCollection, setNewCollection] = useState({
         description : "",
         collectionName : "",
@@ -43,7 +47,7 @@ export function MyCollectionsScreen(){
         const imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
-        const url = 'https://mycarcollectionapi.onrender.com/api/carcollections'
+        const url = `${API_BASEURL}/api/carcollections`
         const opts = {
             method: 'POST',
             headers : {'Content-Type' : 'application/json'},
@@ -61,23 +65,33 @@ export function MyCollectionsScreen(){
         }else{
             console.log(responseData.error)
         }
-
     }
 
     useEffect(()=>{
         if(!loggedUserId) return
-        const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
-            const response = await fetch(collectionsUrl)
-            const responseData = await response.json()
-            if(response.status==200){
-                setUserCollections(responseData.data)
+            setLoading(true);
+            try {
+                const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
+                const response = await fetch(collectionsUrl)
+                const responseData = await response.json()
+                if(response.status==200){
+                    setUserCollections(responseData.data)
+                }
+            } catch (error) {
+                console.log(`Error getting collections: ${error}`)
+            } finally{
+                setLoading(false);
             }
+            
         }
         if(userCollections.length==0){
             getUserCollections()
+        }else{
+            setLoading(false);
         }
-    },[])
+        
+    },[loggedUserId])
 
     useEffect(()=>{
         setOkToSave(false)
@@ -86,6 +100,7 @@ export function MyCollectionsScreen(){
         }
     }, [newCollection.collectionName, newCollection.description])
 
+    if(loading) return <Loading />
     return(
         <span className={styles.screenContainer}>
             <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={handleLogOut} />

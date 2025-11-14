@@ -8,8 +8,9 @@ import Loading from '../components/Loading'
 import { toDo } from '../utils/toDo'
 import { uploadSingleImage } from '../utils/images.utils'
 
-export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
+export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
     const{loggedUserContactEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, setLoggedUserContactEmail, handleLogOut } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
@@ -43,7 +44,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         if (file){
             const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", file)
             if(profileImgUrl){
-                const url = `https://mycarcollectionapi.onrender.com/api/users/${loggedUserId}`;
+                const url = `${API_BASEURL}/api/users/${loggedUserId}`;
                 const opts = {
                     method : "PUT",
                     headers : {'Content-Type' : 'application/json'},
@@ -72,7 +73,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         setIsEditingUserName(!isEditingUserName)
         setLoggedUserName(editableUserName)
         setUserName(editableUserName)
-        const url = `https://mycarcollectionapi.onrender.com/api/users/${loggedUserId}`;
+        const url = `${API_BASEURL}/api/users/${loggedUserId}`;
         const opts = {
             method : "PUT",
             headers : {'Content-Type' : 'application/json'},
@@ -96,7 +97,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         }
         typeTimeoutRef.current = setTimeout(async() => {
             if(e.target.value.length!=0){
-                const response = await fetch(`https://mycarcollectionapi.onrender.com/api/users/checkNick?nick=${e.target.value}`)
+                const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
                 const responseData = await response.json()
                 setUserNameOKtoSave(responseData.available)
             }
@@ -105,7 +106,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
     useEffect(()=>{
         async function getLoggedUserInfo(){
-            const url = 'https://mycarcollectionapi.onrender.com/api/sessions/onlineUserData'
+            const url = `${API_BASEURL}/api/sessions/onlineUserData`
             const opts = {
                     method : "POST",
                     credentials : 'include'

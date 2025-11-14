@@ -7,6 +7,8 @@ import { AppContext } from '../context/AppContext';
 import { CirclePicker } from 'react-color';
 import { uploadManyImages } from '../utils/images.utils';
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function AddCarForm ({loggedUserId}){
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
@@ -61,7 +63,7 @@ export function AddCarForm ({loggedUserId}){
     }
 
     async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price){
-        const url ='https://mycarcollectionapi.onrender.com/api/cars'
+        const url =`${API_BASEURL}/api/cars`
         
         const data = {
             carMake : make,
@@ -145,7 +147,7 @@ export function AddCarForm ({loggedUserId}){
 
     useEffect(()=>{
         if(!loggedUserId) return
-        const collectionsUrl= `https://mycarcollectionapi.onrender.com/api/carcollections?userId=${loggedUserId}`
+        const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const usrCollections = await fetch(collectionsUrl)
             const usrCollectionsData = await usrCollections.json()

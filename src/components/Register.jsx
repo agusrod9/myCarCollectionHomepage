@@ -3,6 +3,8 @@ import { useState } from "react"
 import { Link } from 'react-router'
 import validator from 'validator'
 
+const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+
 export function Register(){
     const [email, setEmail] = useState("")
     const [name, setName] = useState("")
@@ -34,12 +36,12 @@ export function Register(){
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
         setRegisterError("")
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/google`
+        const url = `${API_BASEURL}/api/sessions/google`
         window.location.assign(url);
     }
 
     async function registerToApi(name, lastName, mail, pass){
-        const url = `https://mycarcollectionapi.onrender.com/api/sessions/register`
+        const url = `${API_BASEURL}/api/sessions/register`
         const fetchData = {
             "firstName" : name,
             "lastName" : lastName,
