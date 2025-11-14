@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import './AddCarForm.css'
+import styles from'./AddCarForm.module.css'
 import Swal from 'sweetalert2';
 import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
@@ -8,8 +8,7 @@ import { CirclePicker } from 'react-color';
 import { uploadManyImages } from '../utils/images.utils';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-
-export function AddCarForm ({loggedUserId}){
+export function AddCarForm (){
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [year, setYear] = useState("")
@@ -22,7 +21,6 @@ export function AddCarForm ({loggedUserId}){
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
     const [price, setPrice] = useState("")
-    const [userCollections, setUserCollections] = useState([])
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [colorSelectDisplayed, setColorSelectDisplayed] = useState(false)
     const [moreInfoBtnText, setMoreInfoBtnText] = useState("More...")
@@ -33,8 +31,7 @@ export function AddCarForm ({loggedUserId}){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
 
-    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList, loggedUserRole} = useContext(AppContext);
-    console.log({loggedUserRole});
+    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId} = useContext(AppContext);
     
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -149,13 +146,27 @@ export function AddCarForm ({loggedUserId}){
         if(!loggedUserId) return
         const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
-            const usrCollections = await fetch(collectionsUrl)
-            const usrCollectionsData = await usrCollections.json()
-            if(usrCollections.status==200){
-                setUserCollections(usrCollectionsData.data)
+            const response = await fetch(collectionsUrl)
+            const responseData = await response.json()
+            if(response.status==200){
+                setUserCollections(responseData.data)
             }
         }
-        getUserCollections()
+        async function getCurrencies(){
+            const response = await fetch(`${API_BASEURL}/api/currencies`);
+            const responseData = await response.json();
+            if(response.status==200){
+                setCurrenciesList(responseData.data);
+            }
+        }
+
+        if(userCollections.length===0){
+            getUserCollections()
+        }
+        if(!currenciesList){
+            getCurrencies()
+        }
+        
     }, [])
     
     useEffect(()=>{
@@ -167,17 +178,17 @@ export function AddCarForm ({loggedUserId}){
     },[images])
 
     return(
-        <section className='addCarForm-section'>
-            <div className='addCarForm-basicFields'>
-                <div className='fieldContainer'> 
+        <section className={styles.addCarFormSection}>
+            <div className={styles.addCarFormBasicFields}>
+                <div className={styles.fieldContainer}> 
                     <label htmlFor='carMakeInput'>Make</label>
                     <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(e.target.value)} placeholder='e: Ford' />
                 </div>
-                <div className='fieldContainer'>
+                <div className={styles.fieldContainer}>
                     <label htmlFor='carModelInput'>Model</label>
                     <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(e.target.value)} placeholder='e: Fiesta' />
                 </div>
-                <div className='fieldContainer'>
+                <div className={styles.fieldContainer}>
                     <label htmlFor='carScaleSelectInput'>Scale</label>
                     <select name="carScale" id="carScaleSelectInput" value={scale} onChange={(e)=>setScale(e.target.value)} >
                         <option value={""}></option>
@@ -190,13 +201,13 @@ export function AddCarForm ({loggedUserId}){
                         }
                     </select>
                 </div>
-                <div className='fieldContainer'>
-                    <ActionBtn id='AddCarFormMoreInfoButton' label={moreInfoBtnText} icon={moreInfoDisplayed ? <ChevronUp /> : <ChevronDown />} onClick={handleMoreInfoClick}>  </ActionBtn>
+                <div className={styles.fieldContainer}>
+                    <ActionBtn className={styles.AddCarFormMoreInfoButton} label={moreInfoBtnText} icon={moreInfoDisplayed ? <ChevronUp /> : <ChevronDown />} onClick={handleMoreInfoClick}>  </ActionBtn>
                 </div>
                 
             </div>
-            <section className='dropArea'>
-                <label id='dropaAreaWrapper' htmlFor="browseFileClick">
+            <section className={styles.dropArea}>
+                <label className={styles.dropaAreaWrapper} htmlFor="browseFileClick">
                     <CloudUpload size={300}/>
                     <p>Drag & drop your pictures here</p>
                     <p>OR</p>
@@ -204,31 +215,31 @@ export function AddCarForm ({loggedUserId}){
                     <input 
                         type="file" 
                         multiple={["PREMIUM", "SUPER"].includes(loggedUserRole)}
-                        id='filesUploadInput' 
+                        className={styles.filesUploadInput} 
                         accept='image/*' 
                         onChange={(e)=>handleNewImg(e)} 
                     />
                 </label>
             </section>
             
-            <section className={images.length>0 ? 'AddCarForm-imgSection' : 'AddCarForm-imgSection imgSectionHidden' }>
-                <section className='AddCarForm-imgSection-preview'>
+            <section className={images.length>0 ? `${styles.AddCarFormImgSection}` : `${styles.AddCarFormImgSection} ${styles.imgSectionHidden}`} >
+                <section className={styles.AddCarFormImgSectionPreview}>
                     {
                     Array.from(images).map((img)=>{
                         return(
-                                <img key={img.name} className='imgPreview' src={URL.createObjectURL(img)} />
+                                <img key={img.name} className={styles.imgPreview} src={URL.createObjectURL(img)} />
                             )
                         })
                     }
                 </section>
-                <section className='AddCarForm-imgSection-message'>
+                <section className={styles.AddCarFormImgSectionMessage}>
                     <p hidden={doneUploadingImages}>Se están cargando las imágenes.</p>
 
                 </section>
             </section>
             
-            <section className={moreInfoDisplayed ? 'AddCarForm-moreDataSection': 'moreDataSectionHidden'}  >
-                <div className='addCarForm-moreInfoFields'>
+            <section className={moreInfoDisplayed ? `${styles.AddCarFormMoreDataSection}` : `${styles.moreDataSectionHidden}`}  >
+                <div className={styles.addCarFormMoreInfoFields}>
                     <div className='fieldContainer'>
                         <label htmlFor='carCollectionSelectInput'>Add to collection</label>
                         <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={(e)=>setCollection(e.target.value)}>
@@ -246,27 +257,27 @@ export function AddCarForm ({loggedUserId}){
                             
                         </select>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carManufacturerInput'>Manufacturer</label>
                         <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(e.target.value)} placeholder='e: Hotwheels'/>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carSeriesInput'>Series</label>
                         <input type="text" name='carSeries' id='carSeriesInput' value={series} onChange={(e)=>setSeries(e.target.value)} placeholder='e: Hotwheels´s MUSCLE MANIA'  />
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carSeriesNumberInput'>Series Number</label>
                         <input type="text" name='carSeriesNumber' id='carSeriesNumberInput' value={seriesNum} onChange={(e)=>setSeriesNum(e.target.value)} placeholder='e: 44/100'/>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carYearSelectInput'>Year</label>
                         <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={(e)=>setYear(e.target.value)} placeholder='e: 2019'></input>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carColorInput'>Main Color</label>
-                        <div id='carColorInput' style={{backgroundColor:color}} onClick={()=>setColorSelectDisplayed(!colorSelectDisplayed)} ></div>
+                        <div className={styles.carColorInput} style={{backgroundColor:color}} onClick={()=>setColorSelectDisplayed(!colorSelectDisplayed)} ></div>
                         {colorSelectDisplayed ?
-                            <CirclePicker className='colorPicker' onChangeComplete={(color)=>{
+                            <CirclePicker className={styles.colorPicker} onChangeComplete={(color)=>{
                                 setColor(color.hex)
                                 setColorSelectDisplayed(!colorSelectDisplayed)
                             }}/>
@@ -275,7 +286,7 @@ export function AddCarForm ({loggedUserId}){
                         }
                         
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carOpenedSelectInput'>Package</label>
                         <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={(e)=>setOpened(e.target.value)}  >
                             <option value={""}></option>
@@ -283,22 +294,22 @@ export function AddCarForm ({loggedUserId}){
                             <option value='sealed'>Closed</option>
                         </select>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carPriceInput'>Price</label>
                         <input type="number" name='carPrice' id='carPriceInput' value={price} min={0} onChange={(e)=>setPrice(e.target.value)} placeholder='e: 4.99'/>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                         <label htmlFor='carNotesInput'>Notes</label>
-                        <textarea type="text" name='carNotes' id='carNotesInput' value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
+                        <textarea type="text" name='carNotes' className={styles.carNotesInput} value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
                     </div>
-                    <div className='fieldContainer'>
+                    <div className={styles.fieldContainer}>
                             
                     </div>
                     
                 </div>
             </section>
-            <div className='saveBtnContainer'>
-                <ActionBtn id='addCarFormSaveButton' icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
+            <div className={styles.saveBtnContainer}>
+                <ActionBtn className={styles.addCarFormSaveButton} icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
                 </ActionBtn>
             </div>
         </section>
