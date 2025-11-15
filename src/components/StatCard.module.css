@@ -19,6 +19,7 @@
 
 .statIcon{
     grid-area: statIcon;
+    font-size: 25px;
 }
 
 .statLabel{

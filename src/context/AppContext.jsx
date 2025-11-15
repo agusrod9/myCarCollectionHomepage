@@ -96,7 +96,7 @@ export function AppContextProvider ({children}){
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
                     setLoggedUserRole(responseData.role)
                     setUserCarCount(responseData.userCarCount)
-                    setUserCarsValue(responseData.userCarsTotalAmount)
+                    setUserCarsValue(responseData.amountByCurrency)
                     const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
                     const recentCarsResponseData = await recentCarsResponse.json()
                     setRecentlyAddedCars(recentCarsResponseData.data)
