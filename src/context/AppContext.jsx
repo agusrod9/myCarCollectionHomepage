@@ -6,7 +6,7 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export const AppContext = createContext()
 
 export function AppContextProvider ({children}){
-    const [currenciesList, setCurrenciesList] = useState(null)
+    const [currenciesList, setCurrenciesList] = useState([])
     const [scaleList, setScaleList] = useState(['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']) 
     const [loggedUserId, setLoggedUserId] = useState(null)
     const [loggedUserName, setLoggedUserName] = useState(null)
@@ -16,17 +16,16 @@ export function AppContextProvider ({children}){
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
-    const [userCarCount, setUserCarCount] = useState(null)
-    const [userCarsValue, setUserCarsValue] = useState(null)
+    const [userCarCount, setUserCarCount] = useState(0)
+    const [userCarsValue, setUserCarsValue] = useState([])
     const [userCollections, setUserCollections] = useState([])
     const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
     const [loading, setLoading] = useState(true);
-    const [userCollectedCars, setUserCollectedCars] = useState(null)
+    const [userCollectedCars, setUserCollectedCars] = useState([])
     const [selectedFilters, setSelectedFilters] = useState({
         availableManufacturers : [],
         availableCarMakes : [],
         availableScales : [],
-        availablePrices : [],
         query:""
     })
 
@@ -39,18 +38,17 @@ export function AppContextProvider ({children}){
         setLoggedUserProfilePicture(null);
         setLoggedUserRole(null);
         setLoggedUserMustResetPass(null);
-        setUserCarCount(null);
-        setUserCarsValue(null);
+        setUserCarCount(0);
+        setUserCarsValue([]);
         setRecentlyAddedCars([]);
         setUserCollections([]);
-        setUserCollectedCars(null);
+        setUserCollectedCars([]);
         setSelectedFilters({
-        availableManufacturers : [],
-        availableCarMakes : [],
-        availableScales : [],
-        availablePrices : [],
-        query:""
-    })
+            availableManufacturers : [],
+            availableCarMakes : [],
+            availableScales : [],
+            query:""
+        })
     }
 
     const handleLogin = async()=>{
@@ -63,7 +61,7 @@ export function AppContextProvider ({children}){
         setLoggedUserProfilePicture(responseData.userProfilePicture)
         setLoggedUserRole(responseData.role)
         setUserCarCount(responseData.userCarCount)
-        setUserCarsValue(responseData.userCarsTotalAmount)
+        setUserCarsValue(responseData.amountByCurrency)
         const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
@@ -98,8 +96,8 @@ export function AppContextProvider ({children}){
                     const opts = {method: 'POST', credentials: 'include'}
                     const response = await fetch(userIdUrl, opts)
                     const responseData = await response.json()
-                    setLoggedUserMustResetPass(responseData.mustResetPass)
                     setLoggedUserId(responseData.userId)
+                    setLoggedUserMustResetPass(responseData.mustResetPass)
                     setLoggedUserName(responseData.userName)
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
                     setLoggedUserRole(responseData.role)

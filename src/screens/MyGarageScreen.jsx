@@ -42,7 +42,7 @@ export function MyGarageScreen(){
             setUserCollectedCars(responseData.data)
             setFilteredCars(responseData.data)
         }
-        if(!userCollectedCars){
+        if(userCollectedCars.length==0){
             getUsercollectedCars()
         }
         setLoading(!loading)

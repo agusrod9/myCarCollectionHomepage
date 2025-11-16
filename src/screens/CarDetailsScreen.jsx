@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router'
 import { toDo } from '../utils/toDo'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
@@ -19,11 +18,11 @@ export function CarDetailsScreen(){
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
     const [changesMade, setChangesMade] = useState(false)
+    const [viewingImageIndex, setViewingImageIndex] = useState(0)
     const today = new Date()
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
     const carImgCount = editableCar.img_urls.length
-    const [viewingImageIndex, setViewingImageIndex] = useState(0)
     const imgContainerRef = useRef(null);
     const getClassByLength = (length) => {
         if (length < 70) return styles.green;
@@ -66,9 +65,7 @@ export function CarDetailsScreen(){
                     })
                     await Promise.all(deleteEveryImagePromise)
                     Swal.fire("Deleted!", "", "success");
-                    setUserCollectedCars(prev=>{
-                        prev.filter(c=>c._id != car._id)
-                    })
+                    setUserCollectedCars(prev => prev?.filter(c => c._id !== car._id) ?? []);
                     setUserCarCount(prev => prev -1)
                     setUserCarsValue(prev => {
                         return prev.map(entry=>{
@@ -89,10 +86,29 @@ export function CarDetailsScreen(){
 
     async function saveCar(key){
         const url = `${API_BASEURL}/api/cars/${editableCar._id}`
-        const newValue = editableCar[key]==="" ? null : editableCar[key]
-        if(editableCar[key]==car[key] || (editableCar[key]=="" && car[key]==null)){
-            toDo("No changes to save")
-            return
+        let newValue;
+        let isDifferent = false
+        if(key==="price"){
+            const newAmount = Number(editableCar.price?.amount) || 0;
+            const newCurrency = editableCar.price?.currency ?? editableCar.price?.currencyId ?? null;
+            const oldAmount = Number(car.price?.amount) || 0;
+            const oldCurrency = car.price?.currency ?? car.price?.currencyId ?? null;
+            newValue = { amount : newAmount, currency : newCurrency };
+
+            if (newAmount !== oldAmount || newCurrency !== oldCurrency) {
+                isDifferent = true;
+            }
+        }else{
+            newValue = editableCar[key] === "" ? null : editableCar[key];
+            const oldValue = car[key];
+
+            if (newValue !== oldValue) {
+                isDifferent = true;
+            }
+        }
+        if (!isDifferent) {
+            toDo("No changes to save");
+            return;
         }
         const opts = {
             method: "PUT",
@@ -101,19 +117,33 @@ export function CarDetailsScreen(){
         }
         const response = await fetch(url,opts)
         if(response.status==200){
-            const updatedCar = {...car}
-            Object.keys(editingFields).forEach(key=>{
-                updatedCar[key] = editableCar[key] == "" ? null : editableCar[key]
-            })
-            setCar(updatedCar)
+            setCar(prev => ({
+            ...prev,
+            [key]: newValue
+        }));
         }
     }
 
     async function saveAllCar(){
         const updatedFields = {}
         Object.keys(editingFields).forEach(key=>{
-            if(editableCar[key] !== car[key]){
-                updatedFields[key] = editableCar[key] == "" ? null : editableCar[key]
+            if(key==="price"){
+                const newAmount = Number(editableCar.price?.amount) || 0;
+                const newCurrency = editableCar.price?.currency ?? editableCar.price?.currencyId ?? null;
+                const carPrice = car?.price ?? {};
+                const carAmount = Number(carPrice.amount) || 0;
+                const carCurrency = carPrice.currency ?? carPrice.currencyId ?? null;
+
+                if (newAmount !== carAmount || newCurrency !== carCurrency) {
+                    updatedFields.price = { amount: newAmount, currency: newCurrency };
+                }
+            }else {
+                const newVal = editableCar[key] === "" ? null : editableCar[key];
+                const oldVal = car[key];
+
+                if (newVal !== oldVal) {
+                    updatedFields[key] = newVal;
+                }
             }
         })
 
@@ -130,9 +160,9 @@ export function CarDetailsScreen(){
         const response = await fetch(url,opts)
         if(response.status==200){
             const updatedCar = {...car}
-            Object.keys(editingFields).forEach(key=>{
-                updatedCar[key] = editableCar[key] == "" ? null : editableCar[key]
-            })
+            Object.keys(updatedFields).forEach((key) => {
+                updatedCar[key] = updatedFields[key];
+            });
             setCar(updatedCar)
         }
     }
@@ -199,11 +229,11 @@ export function CarDetailsScreen(){
             setUserCollectedCars(responseData.data)
         }
 
-        if(!userCollections){
+        if(userCollections.length==0){
             getUserCollections()
         }
 
-        if(!userCollectedCars){
+        if(userCollectedCars?.length==0){
             getUsercollectedCars()
         }
 
@@ -466,8 +496,14 @@ export function CarDetailsScreen(){
                                     className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
                                     disabled={!editingFields.price} 
                                     onChange={(e)=>{
-                                        setEditableCar(prev=>({...prev, price: e.target.value }))}
-                                    } 
+                                        setEditableCar(prev=>({
+                                            ...prev,
+                                            price: {
+                                                ...prev.price,
+                                                amount: Number(e.target.value)
+                                            }
+                                        }))
+                                    }}
                                     onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"price")}
                                 />
                                 {editingFields.price 

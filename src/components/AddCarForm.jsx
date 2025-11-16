@@ -41,7 +41,6 @@ export function AddCarForm (){
     }else if(requiredFieldsSet){
         setRequiredFieldsSet(false)
     }
-
     const resetStates = ()=>{
         setMake("")
             setModel("")
@@ -108,7 +107,6 @@ export function AddCarForm (){
         const elapsedSeconds = ((end - start) / 1000).toFixed(2);
         console.log(`Demoró ${elapsedSeconds} segundos en subir ${images.length} imágenes.`)
         const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
-        
         if(added.error){
             alert(added.error)
         }else{
@@ -172,8 +170,9 @@ export function AddCarForm (){
         setDoneUploadingImages(!doneUploadingImages)
         const newImages = Array.from(e.target.files)
         const role = loggedUserRole
-        const maxImagesAllowed =    role === "SUPER" ? 10
-                                    : role === "PREMIUM" ? 3
+        const maxImagesAllowed =    role === "PRO" ? 10 :
+                                    role === "PREMIUM" ? 5 :
+                                    role === "BASIC" ? 2
                                     : 1
         if(images.length + newImages.length > maxImagesAllowed){
             alert(`Your ${loggedUserRole} account allows you to upload ${maxImagesAllowed} images per car.`)
@@ -192,6 +191,7 @@ export function AddCarForm (){
                 setUserCollections(responseData.data)
             }
         }
+
         async function getCurrencies(){
             const response = await fetch(`${API_BASEURL}/api/currencies`);
             const responseData = await response.json();
@@ -204,16 +204,17 @@ export function AddCarForm (){
             const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
+            
             setUserCollectedCars(responseData.data)
         }
 
-        if(userCollections.length===0){
+        if(userCollections?.length===0){
             getUserCollections()
         }
-        if(!currenciesList){
+        if(currenciesList?.length===0){
             getCurrencies()
         }
-        if(!userCollectedCars){
+        if(userCollectedCars?.length===0){
             getUsercollectedCars()
         }
         
@@ -261,10 +262,11 @@ export function AddCarForm (){
                     <CloudUpload size={300}/>
                     <p>Drag & drop your pictures here</p>
                     <p>OR</p>
-                    <p><span id='browseFileClick'>Click to browse</span> from your device</p>
+                    <p><span>Click to browse</span> from your device</p>
                     <input 
                         type="file" 
-                        multiple={["PREMIUM", "SUPER"].includes(loggedUserRole)}
+                        id="browseFileClick"
+                        multiple={["BASIC", "PREMIUM", "PRO"].includes(loggedUserRole)}
                         className={styles.filesUploadInput} 
                         accept='image/*' 
                         onChange={(e)=>handleNewImg(e)} 

@@ -81,7 +81,6 @@
     border: 2px dashed #fafafa;
     border-radius: 20px;
     position: relative;
-    
 }
 
 .filesUploadInput{
@@ -90,7 +89,6 @@
     opacity: 0;
     position: absolute;
     top: 0;
-    cursor: pointer;
 }
 
 .addCarFormSection input{
@@ -150,6 +148,10 @@
 
 .dropArea{
     grid-area: droparea;
+}
+
+.dropArea *{
+    cursor: pointer;
 }
 
 .dropArea label{
