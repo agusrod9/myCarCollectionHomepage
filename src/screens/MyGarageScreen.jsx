@@ -21,7 +21,6 @@ export function MyGarageScreen(){
         availableManufacturers : 'manufacturer',
         availableCarMakes : 'carMake',
         availableScales : 'scale',
-        availablePrices : 'price'
     }
 
     function handleSearch(q){

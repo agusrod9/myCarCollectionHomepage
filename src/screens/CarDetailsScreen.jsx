@@ -14,7 +14,7 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
@@ -78,6 +78,7 @@ export function CarDetailsScreen(){
                             return entry;
                         }).filter(entry=>entry.totalAmount>0)
                     })
+                    updateRecentlyAddedCars()
                     navigate(-1)
                 }else{
                     Swal.fire("Please try again!", "", "error");

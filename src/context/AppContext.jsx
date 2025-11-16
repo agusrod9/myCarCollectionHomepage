@@ -71,6 +71,14 @@ export function AppContextProvider ({children}){
         navigate('/')
     }
 
+    const updateRecentlyAddedCars=async()=>{
+        if(loggedUserId){
+            const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${loggedUserId}&onlyRecent=t`)
+            const recentCarsResponseData = await recentCarsResponse.json()
+            setRecentlyAddedCars(recentCarsResponseData.data)
+        }
+    }
+
     const handleLogOut = async ()=>{
             const url = `${API_BASEURL}/api/sessions/logout`
             const opts = { method : 'POST', credentials: 'include'}
@@ -97,9 +105,6 @@ export function AppContextProvider ({children}){
                     setLoggedUserRole(responseData.role)
                     setUserCarCount(responseData.userCarCount)
                     setUserCarsValue(responseData.amountByCurrency)
-                    const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
-                    const recentCarsResponseData = await recentCarsResponse.json()
-                    setRecentlyAddedCars(recentCarsResponseData.data)
                 }            
             }
             catch (error) {
@@ -110,6 +115,10 @@ export function AppContextProvider ({children}){
             }
             getLoggedUserId()
         },[])
+        
+        useEffect(()=>{
+            updateRecentlyAddedCars()
+        },[loggedUserId])
 
         if(loading){
             return <Loading />
@@ -146,7 +155,8 @@ export function AppContextProvider ({children}){
             selectedFilters,
             setSelectedFilters,
             currenciesList,
-            setCurrenciesList
+            setCurrenciesList,
+            updateRecentlyAddedCars
         }}
         >
             {children}

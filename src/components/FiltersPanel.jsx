@@ -13,16 +13,14 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     const FILTER_LABELS = {
         availableManufacturers : 'Manufacturer',
         availableCarMakes : 'Make',
-        availableScales : 'Scale',
-        availablePrices : 'Price'
+        availableScales : 'Scale'
     }
 
     const clearAllFilters = ()=>{
         setSelectedFilters({
             availableManufacturers : [],
             availableCarMakes : [],
-            availableScales : [],
-            availablePrices : []
+            availableScales : []
         })
     }
 
