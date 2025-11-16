@@ -6,13 +6,15 @@ import { AppContext } from '../context/AppContext'
 import { Ban, ChevronLeftCircle, ChevronRightCircle, Edit, Save, Trash2Icon } from 'lucide-react'
 import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router'
 import { toDo } from '../utils/toDo'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function CarDetailsScreen(){
+    const navigate = useNavigate()
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
@@ -54,7 +56,6 @@ export function CarDetailsScreen(){
                 }
                 const response = await fetch(url,opts)
                 if(response.status == 200){
-                    Swal.fire("Deleted!", "", "success");
                     const deleteEveryImagePromise = car.img_urls.map((imgUrl)=>{
                         const awsKey = imgUrl.split('.amazonaws.com/')[1]
                         const url = `${API_BASEURL}/api/aws/?id=${awsKey}`
@@ -65,7 +66,19 @@ export function CarDetailsScreen(){
                     })
                     await Promise.all(deleteEveryImagePromise)
                     Swal.fire("Deleted!", "", "success");
-                    toDo("Quitar auto del caché y navegar una pantalla para atrás.")
+                    setUserCollectedCars(prev=>{
+                        prev.filter(c=>c._id != car._id)
+                    })
+                    setUserCarCount(prev => prev -1)
+                    setUserCarsValue(prev => {
+                        return prev.map(entry=>{
+                            if(entry.currencyId === car.price.currency){
+                                return{...entry, totalAmount: entry.totalAmount - car.price.amount};
+                            }
+                            return entry;
+                        }).filter(entry=>entry.totalAmount>0)
+                    })
+                    navigate(-1)
                 }else{
                     Swal.fire("Please try again!", "", "error");
                 }
@@ -177,9 +190,22 @@ export function CarDetailsScreen(){
                 setUserCollections(responseData.data)
             }
         }
+
+        async function getUsercollectedCars(){
+            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
+            const response = await fetch(url)
+            const responseData = await response.json()
+            setUserCollectedCars(responseData.data)
+        }
+
         if(!userCollections){
             getUserCollections()
         }
+
+        if(!userCollectedCars){
+            getUsercollectedCars()
+        }
+
     },[])
 
     return(
@@ -435,7 +461,7 @@ export function CarDetailsScreen(){
                                     name='price' 
                                     type="number" 
                                     min={0} 
-                                    value={editableCar.price} 
+                                    value={editableCar.price.amount} 
                                     className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
                                     disabled={!editingFields.price} 
                                     onChange={(e)=>{

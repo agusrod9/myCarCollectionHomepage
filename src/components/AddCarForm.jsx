@@ -32,7 +32,7 @@ export function AddCarForm (){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
 
-    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId} = useContext(AppContext);
+    const{setUserCarCount, setRecentlyAddedCars, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId, setUserCollectedCars, userCollectedCars} = useContext(AppContext);
     
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -108,6 +108,8 @@ export function AddCarForm (){
         const elapsedSeconds = ((end - start) / 1000).toFixed(2);
         console.log(`Demoró ${elapsedSeconds} segundos en subir ${images.length} imágenes.`)
         const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
+        console.log({added});
+        
         if(added.error){
             alert(added.error)
         }else{
@@ -121,11 +123,36 @@ export function AddCarForm (){
                 toast: true,
                 width : '300px'
             });
-            
+            setUserCollectedCars(prev=>[...prev, added.data])
             setUserCarCount(prev => prev +1)
-            setUserCarsValue(prev => prev + added.data.price)
-            setRecentlyAddedCars(prev => [added.data, ...prev].slice(0,3))
+            setUserCarsValue(prev => {
+                const currencyExists = prev.find(entry=> entry.currencyId === added.data.price.currency);
 
+                if(currencyExists){
+                    return prev.map(entry=>{
+                        if(entry.currencyId=== added.data.price.currency){
+                            return{...entry, totalAmount : entry.totalAmount + added.data.price.amount};
+                        }
+                        return entry;
+                    })
+                }
+
+                return [
+                    ...prev,
+                    {
+                        totalAmount: added.data.price.amount,
+                        currencyId: added.data.price.currency,
+                        currencyCode: added.data.currencyInfo.code,
+                        currencyName: added.data.currencyInfo.name,
+                        currencySymbol: added.data.currencyInfo.symbol,
+                        currencyFlag: added.data.currencyInfo.flag,
+                        currencyCountry: added.data.currencyInfo.country
+                    }
+
+
+                ]
+            })
+            setRecentlyAddedCars(prev => [added.data, ...prev].slice(0,3))
             resetStates()
         }
     }
@@ -171,11 +198,21 @@ export function AddCarForm (){
             }
         }
 
+        async function getUsercollectedCars(){
+            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
+            const response = await fetch(url)
+            const responseData = await response.json()
+            setUserCollectedCars(responseData.data)
+        }
+
         if(userCollections.length===0){
             getUserCollections()
         }
         if(!currenciesList){
             getCurrencies()
+        }
+        if(!userCollectedCars){
+            getUsercollectedCars()
         }
         
     }, [])
