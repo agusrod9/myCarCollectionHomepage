@@ -20,7 +20,7 @@ export function AddCarForm (){
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
-    const [currency, setCurrency] = useState("69174146f697c6fef89dffad")
+    const [currency, setCurrency] = useState("")
     const [price, setPrice] = useState({currency, amount: 0})
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [colorSelectDisplayed, setColorSelectDisplayed] = useState(false)
@@ -77,9 +77,10 @@ export function AddCarForm (){
         if(seriesNum!=""){data.series_num = seriesNum}
         if(collection!=""){data.collectionId = collection}
         if(urls.length>0){data.img_urls = urls}
-        if(price.amount!=0){
+        if(price.amount!=0 && price.currency!=""){
             data.price = price
         }else{
+            setCurrency("")
             data.price= null;
         }
 
@@ -122,7 +123,7 @@ export function AddCarForm (){
             });
             setUserCollectedCars(prev=>[...prev, added.data])
             setUserCarCount(prev => prev +1)
-            if(added.price){
+            if(added.data.price){
                 setUserCarsValue(prev => {
                     const currencyExists = prev.find(entry=> entry.currencyId === added.data.price.currency);
 
@@ -350,6 +351,7 @@ export function AddCarForm (){
                         <label htmlFor='carPriceInput'>Price</label>
                         <div className={styles.currencyFieldContainer}>
                             <select name="currency" className={styles.currencySelectInput} value={currency} onChange={handleCurrencyChange} > 
+                                <option key={"noCurrency"} value={""}>Select</option>
                                 {
                                     currenciesList?.length>0 ?
                                     currenciesList.map((currencyItem)=>{

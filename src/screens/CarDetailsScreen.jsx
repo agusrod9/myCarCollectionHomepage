@@ -104,7 +104,8 @@ export function CarDetailsScreen(){
     async function saveCar(key){
         const url = `${API_BASEURL}/api/cars/${editableCar._id}`
         let newValue;
-        let isDifferent = false
+        let isDifferent = false;
+        let priceEditedFlag = false
         if(key==="price"){
             const newAmount = Number(editableCar.price?.amount) || 0;
             const newCurrency = editableCar.price?.currency ?? editableCar.price?.currencyId ?? null;
@@ -115,10 +116,12 @@ export function CarDetailsScreen(){
             if (newAmount !== oldAmount || newCurrency !== oldCurrency) {
                 isDifferent = true;
             }
-            if(newAmount === 0 || !newCurrency){
+            if(newAmount === 0 || newCurrency===""){
                 toDo("You need to type a valid price to be set.");
-                setEditableCar(prev=>({...prev, price: ""}))
+                setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
                 return;
+            }else{
+                priceEditedFlag=true
             }
         }else{
             newValue = editableCar[key] === "" ? null : editableCar[key];
@@ -144,12 +147,19 @@ export function CarDetailsScreen(){
                 [key]: newValue
             }));
             const responseData = await response.json();
-            updateCarInContext(responseData.data)
+            const updatedCarFromBD = responseData.data;
+            updateCarInContext(updatedCarFromBD)
+            if(priceEditedFlag){
+                const response = await fetch(`${API_BASEURL}/api/users/${loggedUserId}/carsValue`);
+                const responseData = await response.json();
+                setUserCarsValue(responseData.data)
+            }
         }
     }
 
     async function saveAllCar(){
         const updatedFields = {}
+        let priceEditedFlag = false
         Object.keys(editingFields).forEach(key=>{
             if(key==="price"){
                 const newAmount = Number(editableCar.price?.amount) || 0;
@@ -158,8 +168,13 @@ export function CarDetailsScreen(){
                 const carAmount = Number(carPrice.amount) || 0;
                 const carCurrency = carPrice.currency ?? carPrice.currencyId ?? null;
 
+                if(newAmount === 0 || newCurrency ===""){
+                    setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                    return;
+                }
                 if (newAmount !== carAmount || newCurrency !== carCurrency) {
                     updatedFields.price = { amount: newAmount, currency: newCurrency };
+                    priceEditedFlag = true;
                 }
             }else {
                 const newVal = editableCar[key] === "" ? null : editableCar[key];
@@ -190,6 +205,11 @@ export function CarDetailsScreen(){
             setCar(updatedCar)
             const responseData = await response.json();
             updateCarInContext(responseData.data)
+            if(priceEditedFlag){
+                const response = await fetch(`${API_BASEURL}/api/users/${loggedUserId}/carsValue`);
+                const responseData = await response.json();
+                setUserCarsValue(responseData.data)
+            }
         }
     }
 
@@ -528,6 +548,7 @@ export function CarDetailsScreen(){
                             <label htmlFor="price">Price</label>
                             <div className={editingFields.price ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
                                 <select name="currency" className={styles.currencySelectInput} value={editableCar.price.currency} onChange={handleCurrencyChange} disabled={!editingFields.price}> 
+                                    <option key={"noCurrency"} value={""}>Select</option>
                                     {
                                         currenciesList?.length>0 ?
                                         currenciesList.map((currencyItem)=>{
