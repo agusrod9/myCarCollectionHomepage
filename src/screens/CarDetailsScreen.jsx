@@ -86,7 +86,7 @@ export function CarDetailsScreen(){
                     setUserCarCount(prev => prev -1)
                     setUserCarsValue(prev => {
                         return prev.map(entry=>{
-                            if(entry.currencyId === car.price.currency){
+                            if(entry.currencyId === car.price?.currency){
                                 return{...entry, totalAmount: entry.totalAmount - car.price.amount};
                             }
                             return entry;
@@ -118,7 +118,11 @@ export function CarDetailsScreen(){
             }
             if(newAmount === 0 || newCurrency===""){
                 toDo("You need to type a valid price to be set.");
-                setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                if(oldAmount!== 0 && oldCurrency!==""){
+                    setEditableCar(prev=>({...prev, price:{currency: oldCurrency, amount: oldAmount}}))
+                }else{
+                    setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                }
                 return;
             }else{
                 priceEditedFlag=true
@@ -169,7 +173,11 @@ export function CarDetailsScreen(){
                 const carCurrency = carPrice.currency ?? carPrice.currencyId ?? null;
 
                 if(newAmount === 0 || newCurrency ===""){
-                    setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                    if(carAmount!== 0 && carCurrency!==""){
+                        setEditableCar(prev=>({...prev, price:{currency: carCurrency, amount: carAmount}}))
+                    }else{
+                        setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                    }
                     return;
                 }
                 if (newAmount !== carAmount || newCurrency !== carCurrency) {
