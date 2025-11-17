@@ -13,10 +13,18 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars, currenciesList, setCurrenciesList} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
-    const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([Key,value])=>[Key, value?? ""])))
+    const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([key,value])=>{
+                                                                                                                if(key === "price"){
+                                                                                                                    if(value!=null){
+                                                                                                                        return [key, value]
+                                                                                                                    }
+                                                                                                                    return [key, {currency: "", amount: 0}];
+                                                                                                                }
+                                                                                                                return [key, value?? ""]
+                                                                                                            })))
     const [changesMade, setChangesMade] = useState(false)
     const [viewingImageIndex, setViewingImageIndex] = useState(0)
     const today = new Date()
@@ -29,6 +37,7 @@ export function CarDetailsScreen(){
         if (length < 140) return styles.yellow;
         return styles.red;
     };
+    console.log({carprice: editableCar.price})
     const nextImageIndex = ()=>{
         if(viewingImageIndex+1<carImgCount){
             setViewingImageIndex(viewingImageIndex+1)
@@ -38,6 +47,14 @@ export function CarDetailsScreen(){
         if(viewingImageIndex>0){
             setViewingImageIndex(viewingImageIndex-1)
         }
+    }
+
+    const handleCurrencyChange = (e)=>{
+        setEditableCar(prev => ({...prev, price : {...prev.price, currency : e.target.value}}))
+    }
+
+    const updateCarInContext=(updatedCar)=>{
+        setUserCollectedCars(prev=> prev.map(car=> car._id === updatedCar._id ? updatedCar : car))
     }
 
     const handleCarDelete = async()=>{
@@ -98,6 +115,11 @@ export function CarDetailsScreen(){
             if (newAmount !== oldAmount || newCurrency !== oldCurrency) {
                 isDifferent = true;
             }
+            if(newAmount === 0 || !newCurrency){
+                toDo("You need to type a valid price to be set.");
+                setEditableCar(prev=>({...prev, price: ""}))
+                return;
+            }
         }else{
             newValue = editableCar[key] === "" ? null : editableCar[key];
             const oldValue = car[key];
@@ -115,12 +137,14 @@ export function CarDetailsScreen(){
             headers : {'Content-Type' : 'application/json'},
             body: JSON.stringify({[key]:newValue})
         }
-        const response = await fetch(url,opts)
+        const response = await fetch(url,opts);
         if(response.status==200){
             setCar(prev => ({
-            ...prev,
-            [key]: newValue
-        }));
+                ...prev,
+                [key]: newValue
+            }));
+            const responseData = await response.json();
+            updateCarInContext(responseData.data)
         }
     }
 
@@ -164,6 +188,8 @@ export function CarDetailsScreen(){
                 updatedCar[key] = updatedFields[key];
             });
             setCar(updatedCar)
+            const responseData = await response.json();
+            updateCarInContext(responseData.data)
         }
     }
 
@@ -213,6 +239,15 @@ export function CarDetailsScreen(){
             setTimeout(() => imgContainerRef.current.focus(), 100);
         }
         if(!loggedUserId) return
+
+        async function getCurrencies(){
+            const response = await fetch(`${API_BASEURL}/api/currencies`);
+            const responseData = await response.json();
+            if(response.status==200){
+                setCurrenciesList(responseData.data);
+            }
+        }
+
         const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const response = await fetch(collectionsUrl)
@@ -227,6 +262,10 @@ export function CarDetailsScreen(){
             const response = await fetch(url)
             const responseData = await response.json()
             setUserCollectedCars(responseData.data)
+        }
+
+        if(currenciesList?.length===0){
+            getCurrencies()
         }
 
         if(userCollections.length==0){
@@ -488,6 +527,18 @@ export function CarDetailsScreen(){
                         <div className={styles.inputSubGroup}>
                             <label htmlFor="price">Price</label>
                             <div className={editingFields.price ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
+                                <select name="currency" className={styles.currencySelectInput} value={editableCar.price.currency} onChange={handleCurrencyChange} disabled={!editingFields.price}> 
+                                    {
+                                        currenciesList?.length>0 ?
+                                        currenciesList.map((currencyItem)=>{
+                                            return(
+                                                <option key={currencyItem._id} value={currencyItem._id}>{currencyItem.code} {currencyItem.flag}</option>
+                                            )
+                                        })
+                                        :
+                                        null
+                                    }
+                                </select>
                                 <input 
                                     name='price' 
                                     type="number" 

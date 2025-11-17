@@ -116,7 +116,7 @@ export function AppContextProvider ({children}){
         
         useEffect(()=>{
             updateRecentlyAddedCars()
-        },[loggedUserId])
+        },[loggedUserId, userCollectedCars])
 
         if(loading){
             return <Loading />
