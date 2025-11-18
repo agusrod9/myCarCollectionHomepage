@@ -13,9 +13,10 @@ export function ResetPassForm(){
             return alert("Faltan datos")
         }
         
-        let response = await requestNewPass(email)
+        const response = await requestNewPass(email)
+        const responseData = await response.json()
         if(response.status != 200){
-            alert(response.message)
+            alert(responseData.message)
         }else{
             alert("Nueva contraseña enviada al correo electrónico.")
             setEmail("")
