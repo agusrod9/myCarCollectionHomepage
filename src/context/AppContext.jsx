@@ -9,6 +9,7 @@ export function AppContextProvider ({children}){
     const [currenciesList, setCurrenciesList] = useState([])
     const [scaleList, setScaleList] = useState(['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']) 
     const [loggedUserId, setLoggedUserId] = useState(null)
+    const [loggedUserEmail, setLoggedUserEmail] = useState(null)
     const [loggedUserName, setLoggedUserName] = useState(null)
     const [loggedUserFirstName, setLoggedUserFirstName] = useState(null)
     const [loggedUserLastName, setLoggedUserLastName] = useState(null)
@@ -150,7 +151,9 @@ export function AppContextProvider ({children}){
             setSelectedFilters,
             currenciesList,
             setCurrenciesList,
-            updateRecentlyAddedCars
+            updateRecentlyAddedCars,
+            loggedUserEmail,
+            setLoggedUserEmail
         }}
         >
             {children}

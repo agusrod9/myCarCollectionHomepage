@@ -11,13 +11,13 @@ import { uploadSingleImage } from '../utils/images.utils'
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const{loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut } = useContext(AppContext)
+    const{loggedUserEmail, setLoggedUserEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
     const [isEditingUserName, setIsEditingUserName] = useState(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
-    const [email, setEmail] = useState("")
+    const [email, setEmail] = useState(loggedUserEmail)
     const [userName, setUserName] = useState(loggedUserName)
     const [editableUserName, setEditableUserName] = useState(userName)
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
@@ -113,20 +113,22 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             }
             const response = await fetch(url,opts)
             const responseData = await response.json()
-            const loggedUser = responseData.userData
+            const loggedUser = responseData.data
             
             setLoggedUserFirstName(loggedUser.firstName)
             setLoggedUserLastName(loggedUser.lastName)
+            setLoggedUserEmail(loggedUser.email)
             setFirstName(loggedUser.firstName)
             setLastName(loggedUser.lastName)
             setEmail(loggedUser.email)
             setLoading(!loading)
         }
-        if(!loggedUserFirstName && !loggedUserLastName){
+        if(!loggedUserFirstName || !loggedUserLastName || !loggedUserEmail){
             getLoggedUserInfo()
         }else{
             setFirstName(loggedUserFirstName)
             setLastName(loggedUserLastName)
+            setEmail(loggedUserEmail)
             setLoading(!loading)
         }
     },[])

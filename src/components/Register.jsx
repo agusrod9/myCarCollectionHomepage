@@ -1,9 +1,10 @@
 import './Register.css'
 import { useState } from "react"
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import validator from 'validator'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+const navigate = useNavigate()
 
 export function Register(){
     const [email, setEmail] = useState("")
@@ -46,7 +47,6 @@ export function Register(){
             "firstName" : name,
             "lastName" : lastName,
             "email" : mail ,
-            "profilePicture" : "imgProfile",
             "password" : pass
         }
         const opts = {
@@ -58,7 +58,7 @@ export function Register(){
         const response = await fetch(url,opts)
         const responseData = await response.json()
 
-        if(response.status != 200){
+        if(response.status != 201){
             setRegisterError(responseData.message)
         }else{
             alert(responseData.message)
@@ -68,6 +68,7 @@ export function Register(){
             setPassword("")
             setPassword2("")
             setRegisterError("")
+            navigate("/")
         }
 
         return responseData
