@@ -7,6 +7,7 @@ import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen } from 'lucide-r
 import Loading from '../components/Loading'
 import { toDo } from '../utils/toDo'
 import { uploadSingleImage } from '../utils/images.utils'
+import { validateNickFormat } from '../utils/nicknames.util'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -21,6 +22,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     const [userName, setUserName] = useState(loggedUserName)
     const [editableUserName, setEditableUserName] = useState(userName)
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
+    const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
     const typeTimeoutRef = useRef(null)
     const fileInputRef = useRef(null);
 
@@ -96,10 +98,16 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             clearTimeout(typeTimeoutRef.current)
         }
         typeTimeoutRef.current = setTimeout(async() => {
+            setDisplayUserNameCorrectFormat(false)
             if(e.target.value.length!=0){
-                const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
-                const responseData = await response.json()
-                setUserNameOKtoSave(responseData.available)
+                if(validateNickFormat(e.target.value)){
+                    const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
+                    const responseData = await response.json()
+                    setUserNameOKtoSave(responseData.available)
+                }else{
+                    setDisplayUserNameCorrectFormat(true)
+                    setUserNameOKtoSave(false)
+                }
             }
         }, 500);
     }
@@ -161,6 +169,9 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 <div className={styles.userNameSaveAndCancelContainer}>
                     {isEditingUserName ? <Save className={userNameOKtoSave ? `${styles.userNameIcon} ${styles.saveBtnActive}` : `${styles.userNameIcon} ${styles.saveBtnDisabled}`} onClick={handleSaveUserName}/> : <Edit className={styles.userNameIcon} onClick={handleEditUserName}/>}
                     {isEditingUserName ? <CircleX className={styles.cancelBtn} onClick={handleCancelEditUserName}/> : null}
+                </div>
+                <div className={styles.correctUserNameFormatContainer}>
+                    {displayUserNameCorrectFormat ? <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> : null}
                 </div>
             </div>
             <div className={styles.userDataContainer}>

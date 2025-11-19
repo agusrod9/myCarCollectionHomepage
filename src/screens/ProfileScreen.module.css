@@ -76,6 +76,20 @@
     cursor: pointer;
 }
 
+.correctUserNameFormatContainer{
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5px;
+}
+
+.correctUserNameFormatInfo{
+    color: red;
+    font-weight: 500;
+}
+
 .userDataContainer{
     display: flex;
     flex-direction: column;

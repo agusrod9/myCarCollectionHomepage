@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router'
 import validator from 'validator'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-const navigate = useNavigate()
 
 export function Register(){
+    const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [name, setName] = useState("")
     const [lastName, setLastName] = useState("")
