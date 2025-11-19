@@ -69,6 +69,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         setEditableUserName(userName)
         setIsEditingUserName(false)
         setUserNameOKtoSave(false)
+        setDisplayUserNameCorrectFormat(false)
     }
 
     const handleSaveUserName = async()=>{
@@ -90,6 +91,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
     const handleUserNameChange = (e)=>{
         setEditableUserName(e.target.value)
+        setDisplayUserNameCorrectFormat(false)
         if(e.target.value===userName){
             setUserNameOKtoSave(false)
             return
@@ -97,8 +99,9 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         if(typeTimeoutRef.current){
             clearTimeout(typeTimeoutRef.current)
         }
+        
+        
         typeTimeoutRef.current = setTimeout(async() => {
-            setDisplayUserNameCorrectFormat(false)
             if(e.target.value.length!=0){
                 if(validateNickFormat(e.target.value)){
                     const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
@@ -171,7 +174,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                     {isEditingUserName ? <CircleX className={styles.cancelBtn} onClick={handleCancelEditUserName}/> : null}
                 </div>
                 <div className={styles.correctUserNameFormatContainer}>
-                    {displayUserNameCorrectFormat ? <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> : null}
+                    {isEditingUserName ? displayUserNameCorrectFormat ? <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> : null : null}
                 </div>
             </div>
             <div className={styles.userDataContainer}>
