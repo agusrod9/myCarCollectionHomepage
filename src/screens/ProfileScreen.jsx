@@ -11,13 +11,13 @@ import { uploadSingleImage } from '../utils/images.utils'
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const{loggedUserContactEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, setLoggedUserContactEmail, handleLogOut } = useContext(AppContext)
+    const{loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
     const [isEditingUserName, setIsEditingUserName] = useState(false)
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
-    const [contactEmail, setContactEmail] = useState("")
+    const [email, setEmail] = useState("")
     const [userName, setUserName] = useState(loggedUserName)
     const [editableUserName, setEditableUserName] = useState(userName)
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
@@ -117,18 +117,16 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             
             setLoggedUserFirstName(loggedUser.firstName)
             setLoggedUserLastName(loggedUser.lastName)
-            setLoggedUserContactEmail(loggedUser.contactEmail)
             setFirstName(loggedUser.firstName)
             setLastName(loggedUser.lastName)
-            setContactEmail(loggedUser.contactEmail)
+            setEmail(loggedUser.email)
             setLoading(!loading)
         }
-        if(!loggedUserFirstName && !loggedUserLastName && !loggedUserContactEmail){
+        if(!loggedUserFirstName && !loggedUserLastName){
             getLoggedUserInfo()
         }else{
             setFirstName(loggedUserFirstName)
             setLastName(loggedUserLastName)
-            setContactEmail(loggedUserContactEmail)
             setLoading(!loading)
         }
     },[])
@@ -168,8 +166,8 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(e.target.value)}/>
                 <label>Last Name</label>
                 <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(e.target.value)}/>
-                <label>Contact E-Mail</label>
-                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={contactEmail} disabled={!isEditingData} onChange={(e)=>setContactEmail(e.target.value)}/>
+                <label>E-Mail</label>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={email} disabled={!isEditingData} onChange={(e)=>setEmail(e.target.value)}/>
             </div>
             <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData}/>
         </section>

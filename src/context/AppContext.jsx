@@ -12,7 +12,6 @@ export function AppContextProvider ({children}){
     const [loggedUserName, setLoggedUserName] = useState(null)
     const [loggedUserFirstName, setLoggedUserFirstName] = useState(null)
     const [loggedUserLastName, setLoggedUserLastName] = useState(null)
-    const [loggedUserContactEmail, setLoggedUserContactEmail] = useState(null)
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
@@ -34,7 +33,6 @@ export function AppContextProvider ({children}){
         setLoggedUserName(null);
         setLoggedUserFirstName(null);
         setLoggedUserLastName(null);
-        setLoggedUserContactEmail(null);
         setLoggedUserProfilePicture(null);
         setLoggedUserRole(null);
         setLoggedUserMustResetPass(null);
@@ -126,8 +124,7 @@ export function AppContextProvider ({children}){
         <AppContext.Provider value={{
             loggedUserId,
             loggedUserName, 
-            loggedUserProfilePicture, 
-            loggedUserContactEmail, 
+            loggedUserProfilePicture,
             loggedUserFirstName,
             loggedUserLastName,
             loggedUserRole,
@@ -135,8 +132,7 @@ export function AppContextProvider ({children}){
             setLoggedUserName, 
             setLoggedUserProfilePicture, 
             setLoggedUserFirstName, 
-            setLoggedUserLastName, 
-            setLoggedUserContactEmail,
+            setLoggedUserLastName,
             handleLogin, 
             handleLogOut,
             setUserCarCount,

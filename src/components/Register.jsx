@@ -46,7 +46,6 @@ export function Register(){
             "firstName" : name,
             "lastName" : lastName,
             "email" : mail ,
-            "contactEmail" : mail,
             "profilePicture" : "imgProfile",
             "password" : pass
         }
