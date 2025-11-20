@@ -7,6 +7,7 @@ import { ActionBtn } from '../components/ActionBtn'
 import { Save } from 'lucide-react'
 import { uploadSingleImage } from '../utils/images.utils'
 import Loading from '../components/Loading'
+import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -44,6 +45,7 @@ export function MyCollectionsScreen(){
         }
     }
     const handleSaveNewCollection = async()=>{
+        const t= toast.loading("Creating new collection...");
         const imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
@@ -61,7 +63,7 @@ export function MyCollectionsScreen(){
             setUserCollections(prev=>([...prev, addedCollection]))
             resetNewCollectionState();
             setOkToSave(false)
-            
+            toast.success("Collection created!", {id: t})
         }else{
             console.log(responseData.error)
         }

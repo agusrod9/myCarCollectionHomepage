@@ -8,6 +8,7 @@ import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router'
 import { toDo } from '../utils/toDo'
+import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function CarDetailsScreen(){
@@ -66,6 +67,7 @@ export function CarDetailsScreen(){
             denyButtonText: `Cancel`
         }).then(async(result) => {
             if (result.isConfirmed) {
+                const t = toast.loading("Deleting car...");
                 const url = `${API_BASEURL}/api/cars/${car._id}`
                 const opts = {
                     method : "DELETE",
@@ -82,6 +84,7 @@ export function CarDetailsScreen(){
                     })
                     await Promise.all(deleteEveryImagePromise)
                     Swal.fire("Deleted!", "", "success");
+                    toast.success("Car deleted!", {id: t})
                     setUserCollectedCars(prev => prev?.filter(c => c._id !== car._id) ?? []);
                     setUserCarCount(prev => prev -1)
                     setUserCarsValue(prev => {

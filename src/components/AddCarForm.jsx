@@ -6,6 +6,7 @@ import { ActionBtn } from './ActionBtn';
 import { AppContext } from '../context/AppContext';
 import { CirclePicker } from 'react-color';
 import { uploadManyImages } from '../utils/images.utils';
+import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function AddCarForm (){
@@ -102,6 +103,7 @@ export function AddCarForm (){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
+        const t = toast.loading("Creating new car...", {duration: 10000});
         const start = Date.now();
         const urls = await uploadManyImages(loggedUserId,"carImages", images)
         const end = Date.now();
@@ -111,6 +113,7 @@ export function AddCarForm (){
         if(added.error){
             alert(added.error)
         }else{
+            toast.success("Car created!", { id: t , duration : 2500});
             Swal.fire({
                 position: "center",
                 icon: "success",

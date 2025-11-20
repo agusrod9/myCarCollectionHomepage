@@ -5,9 +5,9 @@ import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
 import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen } from 'lucide-react'
 import Loading from '../components/Loading'
-import { toDo } from '../utils/toDo'
 import { uploadSingleImage } from '../utils/images.utils'
 import { validateNickFormat } from '../utils/nicknames.util'
+import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -42,6 +42,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     }
 
     const handleFileChange = async(e)=>{
+        const t = toast.loading("Uploading profile picture...", {duration: 10000})
         const file = e.target.files[0];
         if (file){
             const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", file)
@@ -55,7 +56,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 const response = await fetch(url, opts)
                 if(response.status==200){
                     setLoggedUserProfilePicture(profileImgUrl)
-                    toDo("image updated!")
+                    toast.success("Profile picture uploaded!", {id : t, duration: 2000})
                 }
             }
         }
@@ -73,6 +74,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     }
 
     const handleSaveUserName = async()=>{
+        const t = toast.loading("Updating username...", {duration: 10000})
         setIsEditingUserName(!isEditingUserName)
         setLoggedUserName(editableUserName)
         setUserName(editableUserName)
@@ -84,7 +86,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         }
         const response = await fetch(url, opts)
         if(response.status==200){
-            toDo("Username updated!")
+            toast.success("Username updated!", {id: t, duration : 2000})
         }
         
     }
