@@ -17,7 +17,6 @@ export function Header({loggedUserName, handleLogOut, loggedUserProfilePicture})
                     </div>
                     <div className={styles.headerProfileContainer} onClick={()=>setMenuIsOpen(!menuIsOpen)}>
                         <img src={ loggedUserProfilePicture || "https://avatar.iran.liara.run/public"} alt={`Profile picture of ${loggedUserName}`} className={styles.headerProfilePic}/>
-                        <span className={styles.headerProfileUserName}>{loggedUserName}</span>
                         {menuIsOpen ? <ChevronUp /> : <ChevronDown />}
                     </div>   
             </div>
