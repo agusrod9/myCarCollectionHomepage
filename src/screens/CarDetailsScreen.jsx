@@ -137,7 +137,7 @@ export function CarDetailsScreen(){
             }
         }
         if (!isDifferent) {
-            const t = toast("No changes to save", {icon: "⚠️"})
+            toast("No changes to save", {icon: "⚠️"})
             return;
         }
         const opts = {

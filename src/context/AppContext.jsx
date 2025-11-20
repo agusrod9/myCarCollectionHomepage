@@ -22,6 +22,7 @@ export function AppContextProvider ({children}){
     const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
     const [loading, setLoading] = useState(true);
     const [userCollectedCars, setUserCollectedCars] = useState([])
+    const [loggedUserGoogleId, setLoggedUserGoogleId] = useState(null)
     const [selectedFilters, setSelectedFilters] = useState({
         availableManufacturers : [],
         availableCarMakes : [],
@@ -42,6 +43,7 @@ export function AppContextProvider ({children}){
         setRecentlyAddedCars([]);
         setUserCollections([]);
         setUserCollectedCars([]);
+        setLoggedUserGoogleId(null);
         setSelectedFilters({
             availableManufacturers : [],
             availableCarMakes : [],
@@ -59,6 +61,7 @@ export function AppContextProvider ({children}){
         setLoggedUserName(responseData.userName)
         setLoggedUserProfilePicture(responseData.userProfilePicture)
         setLoggedUserRole(responseData.role)
+        setLoggedUserGoogleId(responseData.userGoogleId)
         setUserCarCount(responseData.userCarCount)
         setUserCarsValue(responseData.amountByCurrency)
         const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
@@ -100,6 +103,7 @@ export function AppContextProvider ({children}){
                     setLoggedUserName(responseData.userName)
                     setLoggedUserProfilePicture(responseData.userProfilePicture)
                     setLoggedUserRole(responseData.role)
+                    setLoggedUserGoogleId(responseData.userGoogleId)
                     setUserCarCount(responseData.userCarCount)
                     setUserCarsValue(responseData.amountByCurrency)
                 }            
@@ -153,7 +157,8 @@ export function AppContextProvider ({children}){
             setCurrenciesList,
             updateRecentlyAddedCars,
             loggedUserEmail,
-            setLoggedUserEmail
+            setLoggedUserEmail,
+            loggedUserGoogleId
         }}
         >
             {children}

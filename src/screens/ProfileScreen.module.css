@@ -104,6 +104,13 @@
     font-size: 20px;
 }
 
+.userDataContainer p{
+    color: red;
+    font-weight: 500;
+    text-align: end;
+    font-size: 0.8rem;
+}
+
 .formInput{
     color: #fafafa;
     font-size: 18px;
