@@ -48,6 +48,7 @@ function Main(){
                         style: {
                             background: "#333",
                             color: "#fff",
+                            textAlign: 'center'
                         },
                     }}
                 />

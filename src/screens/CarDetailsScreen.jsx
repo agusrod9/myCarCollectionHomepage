@@ -7,7 +7,6 @@ import { Ban, ChevronLeftCircle, ChevronRightCircle, Edit, Save, Trash2Icon } fr
 import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router'
-import { toDo } from '../utils/toDo'
 import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
@@ -83,7 +82,6 @@ export function CarDetailsScreen(){
                         return fetch(url,opts)
                     })
                     await Promise.all(deleteEveryImagePromise)
-                    Swal.fire("Deleted!", "", "success");
                     toast.success("Car deleted!", {id: t})
                     setUserCollectedCars(prev => prev?.filter(c => c._id !== car._id) ?? []);
                     setUserCarCount(prev => prev -1)
@@ -120,7 +118,7 @@ export function CarDetailsScreen(){
                 isDifferent = true;
             }
             if(newAmount === 0 || newCurrency===""){
-                toDo("You need to type a valid price to be set.");
+                toast("Please enter an amount and select a currency.", {icon: "⚠️", duration: 2500});
                 if(oldAmount!== 0 && oldCurrency!==""){
                     setEditableCar(prev=>({...prev, price:{currency: oldCurrency, amount: oldAmount}}))
                 }else{
@@ -139,7 +137,7 @@ export function CarDetailsScreen(){
             }
         }
         if (!isDifferent) {
-            toDo("No changes to save");
+            const t = toast("No changes to save", {icon: "⚠️"})
             return;
         }
         const opts = {

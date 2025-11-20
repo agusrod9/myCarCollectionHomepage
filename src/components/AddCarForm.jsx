@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import styles from'./AddCarForm.module.css'
-import Swal from 'sweetalert2';
 import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
 import { AppContext } from '../context/AppContext';
@@ -113,17 +112,7 @@ export function AddCarForm (){
         if(added.error){
             alert(added.error)
         }else{
-            toast.success("Car created!", { id: t , duration : 2500});
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                titleText: `New: ${make} ${model}.`,
-                showConfirmButton: false,
-                timer: 1500,
-                timerProgressBar: true,
-                toast: true,
-                width : '300px'
-            });
+            toast.success(`${added.data.carMake} ${added.data.carModel} created!`, { id: t , duration : 2500});
             setUserCollectedCars(prev=>[...prev, added.data])
             setUserCarCount(prev => prev +1)
             if(added.data.price){
