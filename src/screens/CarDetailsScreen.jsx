@@ -611,6 +611,7 @@ export function CarDetailsScreen(){
                                     <option value={""}></option>
                                     <option value='opened'>Opened</option>
                                     <option value='sealed'>Closed</option>
+                                    <option value='damaged'>Damaged</option>
                                 </select>
                                 {editingFields.opened 
                                 ? 

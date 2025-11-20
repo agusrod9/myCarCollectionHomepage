@@ -9,7 +9,7 @@ export function AddCarScreen(){
     return(
         <section className="AddCarBody">
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
-            <h1>Add New Car</h1>
+            <h1>New Car</h1>
             <div className='AddCar-formContainer'>
                 <AddCarForm />
             </div>

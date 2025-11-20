@@ -293,8 +293,8 @@ export function AddCarForm (){
             
             <section className={moreInfoDisplayed ? `${styles.AddCarFormMoreDataSection}` : `${styles.moreDataSectionHidden}`}  >
                 <div className={styles.addCarFormMoreInfoFields}>
-                    <div className='fieldContainer'>
-                        <label htmlFor='carCollectionSelectInput'>Add to collection</label>
+                    <div className={styles.fieldContainer}>
+                        <label htmlFor='carCollectionSelectInput'>Collection</label>
                         <select name="carCollection" id="carCollectionSelectInput" value={collection} onChange={(e)=>setCollection(e.target.value)}>
                             <option value={""}></option>
                             {
@@ -345,6 +345,7 @@ export function AddCarForm (){
                             <option value={""}></option>
                             <option value='opened'>Opened</option>
                             <option value='sealed'>Closed</option>
+                            <option value='damaged'>Damaged</option>
                         </select>
                     </div>
                     <div className={styles.fieldContainer}>
