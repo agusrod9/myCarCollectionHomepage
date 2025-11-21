@@ -45,7 +45,7 @@ export function MyCollectionsScreen(){
         }
     }
     const handleSaveNewCollection = async()=>{
-        const t= toast.loading("Creating new collection...");
+        const t= toast.loading("Creating new collection...", {duration:5000});
         const imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
@@ -63,7 +63,7 @@ export function MyCollectionsScreen(){
             setUserCollections(prev=>([...prev, addedCollection]))
             resetNewCollectionState();
             setOkToSave(false)
-            toast.success("Collection created!", {id: t})
+            toast.success("Collection created!", {id: t, duration:2000})
         }else{
             console.log(responseData.error)
         }

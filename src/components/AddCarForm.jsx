@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp, CloudUpload, Save } from 'lucide-react';
 import { ActionBtn } from './ActionBtn';
 import { AppContext } from '../context/AppContext';
 import { CirclePicker } from 'react-color';
-import { uploadManyImages } from '../utils/images.utils';
+import { uploadManyImages, convertToWebp } from '../utils/images.utils';
 import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
@@ -102,7 +102,7 @@ export function AddCarForm (){
 
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
-        const t = toast.loading("Creating new car...", {duration: 10000});
+        const t = toast.loading("Creating new car...", {duration: 90000});
         const start = Date.now();
         const urls = await uploadManyImages(loggedUserId,"carImages", images)
         const end = Date.now();
@@ -160,18 +160,27 @@ export function AddCarForm (){
     }
 
     const handleNewImg = async(e)=>{
+        const t = toast.loading("Uploading images...", {duration:5000})
         setDoneUploadingImages(!doneUploadingImages)
-        const newImages = Array.from(e.target.files)
+        const incomingFiles = Array.from(e.target.files)
         const role = loggedUserRole
         const maxImagesAllowed =    role === "PRO" ? 10 :
                                     role === "PREMIUM" ? 5 :
                                     role === "BASIC" ? 2
                                     : 1
-        if(images.length + newImages.length > maxImagesAllowed){
+        if(images.length + incomingFiles.length > maxImagesAllowed){
             alert(`Your ${loggedUserRole} account allows you to upload ${maxImagesAllowed} images per car.`)
             return
-        } 
-        setImages(prev => [...prev, ...newImages])        
+        }
+
+        const processedImages = await Promise.all(
+            incomingFiles.map(async (file) => {
+                return await convertToWebp(file);
+            })
+        );
+
+        setImages(prev => [...prev, ...processedImages])
+        toast.success("Images uploaded!", {duration:2000, id:t})
     }
 
     useEffect(()=>{

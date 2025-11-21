@@ -37,7 +37,6 @@ export function CarDetailsScreen(){
         if (length < 140) return styles.yellow;
         return styles.red;
     };
-    console.log({carprice: editableCar.price})
     const nextImageIndex = ()=>{
         if(viewingImageIndex+1<carImgCount){
             setViewingImageIndex(viewingImageIndex+1)
