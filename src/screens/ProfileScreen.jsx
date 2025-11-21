@@ -5,7 +5,7 @@ import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
 import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen, Ban } from 'lucide-react'
 import Loading from '../components/Loading'
-import { uploadSingleImage } from '../utils/images.utils'
+import { uploadSingleImage, convertToWebp } from '../utils/images.utils'
 import { validateNickFormat } from '../utils/nicknames.util'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
@@ -155,7 +155,8 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         const t = toast.loading("Uploading profile picture...", {duration: 10000})
         const file = e.target.files[0];
         if (file){
-            const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", file)
+            const convertedFile = await convertToWebp(file)
+            const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", convertedFile)
             if(profileImgUrl){
                 const url = `${API_BASEURL}/api/users/${loggedUserId}`;
                 const opts = {
@@ -165,7 +166,15 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 }
                 const response = await fetch(url, opts)
                 if(response.status==200){
-                    setLoggedUserProfilePicture(profileImgUrl)
+                    setLoggedUserProfilePicture(prev=>{
+                        const imgToDelete = prev.split("https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/")[1];
+                        const url = `${API_BASEURL}/api/aws/?id=${imgToDelete}`
+                        const opts = {
+                            method : 'DELETE'
+                        }
+                        fetch(url,opts)
+                        return profileImgUrl
+                })
                     toast.success("Profile picture uploaded!", {id : t, duration: 2000})
                 }
             }
