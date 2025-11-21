@@ -58,7 +58,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
             <div className={styles.dashBoard}>
                 <div className={styles.stats}>
                     <StatCard icon={<CarFront size={40}/>} label="My Garage" value={userCarCount} onClick={()=>navigate('/myGarage')} pointerCursor/>
-                    <StatCard icon={<Star size={40}/>} label="???" value={3} onClick={()=>toDo("Ver que modulo agregar acá, POSIBLEMENTE CANTIDAD DE COLECCIONES")}/>
+                    <StatCard icon={<Star size={40}/>} label="???" value={3} onClick={()=>toDo("AUTOS FAVORITOS")}/>
                     <StatCard icon={currencyIconForCard} label="Total Value" value={amountForCard} onClick={()=>toDo("Etapa 2: Ver si se puede agregar pantalla con datos económicos, tablas, reportes por mes")}/>
                 </div>
                 <div className={styles.btns}>

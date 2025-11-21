@@ -3,7 +3,7 @@ import styles from './ProfileScreen.module.css'
 import { AppContext } from '../context/AppContext'
 import { Header } from '../components/Header'
 import {ActionBtn} from '../components/ActionBtn'
-import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen } from 'lucide-react'
+import { BadgeAlert, BadgeCheck, CircleX, Edit, Save, SquarePen, Ban } from 'lucide-react'
 import Loading from '../components/Loading'
 import { uploadSingleImage } from '../utils/images.utils'
 import { validateNickFormat } from '../utils/nicknames.util'
@@ -26,6 +26,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
     const [updateDataError, setUpdateDataError] = useState({})
+    const [okToSave, setOkToSave] = useState(false)
     const typeTimeoutRef = useRef(null)
     const fileInputRef = useRef(null);
     const initialValuesRef = useRef({
@@ -91,6 +92,14 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         }else{
             toast.error("Error saving data", {id: t, duration : 2000})
         }
+    }
+
+    const handleCancelEditing = ()=>{
+        setUpdateDataError({})
+        setFirstName(initialValuesRef.current.firstName)
+        setLastName(initialValuesRef.current.lastName)
+        setEmail(initialValuesRef.current.email)
+        setIsEditingData(!isEditingData)
     }
 
     const handleSelectProfilePicture = ()=>{
@@ -207,8 +216,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         if(!firstName || !lastName || !email){
             return
         }
-
-        
         //\p{L} → cualquier letra de cualquier idioma (á, ñ, ç, ü, etc.)
         //\p{M} → marcas de acentos combinados
         //'     → apóstrofos (como O'Neill)
@@ -260,23 +267,38 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             <div className={styles.userDataContainer}>
                 <label>Name</label>
                 <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(e.target.value)}/>
-                {updateDataError.firstName ? firstName.length<3 ? <p>Name is too short</p> : firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : null}
+                <div className={styles.formInputError}>
+                    {updateDataError.firstName ? firstName.length<3 ? <p>Name is too short</p> : firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : null}
+                </div>
                 <label>Last Name</label>
                 <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(e.target.value)}/>
-                {updateDataError.lastName ? lastName.length<3 ? <p>Last name is too short</p> : lastName.length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : null}
+                <div className={styles.formInputError}>
+                    {updateDataError.lastName ? lastName.length<3 ? <p>Last name is too short</p> : lastName.length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : null}
+                </div>
                 {
                     !loggedUserGoogleId
                     ?
                     <>
                         <label>E-Mail</label>
                         <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={email} disabled={!isEditingData} onChange={(e)=>setEmail(e.target.value)}/>
-                        {updateDataError.email ? <p>E-Mail is invalid</p> : null}
+                        <div className={styles.formInputError}>
+                            {updateDataError.email ? <p>E-Mail is invalid</p> : null}
+                        </div>
                     </>
                     :
                     null
                 }
             </div>
-            <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData}/>
+            <div className={styles.saveAndCancelContainer}>
+                {
+                    isEditingData
+                    ?
+                    <ActionBtn extraClass={styles.cancelEditing} icon={<Ban />} label={"Cancel"} onClick={handleCancelEditing} />
+                    :
+                    null
+                }
+                <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData} disabled={updateDataError.firstName || updateDataError.lastName || updateDataError.email}/>
+            </div>
         </section>
     )
 }
