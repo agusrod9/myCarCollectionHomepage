@@ -5,7 +5,7 @@ import { Header } from '../components/Header'
 import { CollectionCard } from '../components/CollectionCard'
 import { ActionBtn } from '../components/ActionBtn'
 import { Save } from 'lucide-react'
-import { uploadSingleImage } from '../utils/images.utils'
+import { convertToWebp, uploadSingleImage } from '../utils/images.utils'
 import Loading from '../components/Loading'
 import toast from "react-hot-toast";
 
@@ -39,8 +39,9 @@ export function MyCollectionsScreen(){
     const handleColCoverSelect = async(e)=>{
         const newFile = e.target.files[0];
         if(newFile){
-            setColCoverFile(newFile);
-            const previewUrl = URL.createObjectURL(newFile);
+            const convertedFile = await convertToWebp(newFile);
+            setColCoverFile(convertedFile);
+            const previewUrl = URL.createObjectURL(convertedFile);
             setColCoverPreview(previewUrl)
         }
     }
