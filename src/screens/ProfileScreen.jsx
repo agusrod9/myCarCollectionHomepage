@@ -37,6 +37,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
     const handleEditOrSaveUserData = async()=>{
         const initialIsEditing = isEditingData;
+        let changedEmailFlag = false;
         setIsEditingData(!isEditingData)
         if (!initialIsEditing) {
             initialValuesRef.current = {
@@ -69,6 +70,20 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
             if(!result.isConfirmed){
                 delete updatedValues.email;
+            }else{
+                const result2 = await Swal.fire({
+                    title: "Confirm new E-Mail address",
+                    html: `Is <b>${email}</b> correct?`,
+                    showDenyButton: true,
+                    showCancelButton: false,
+                    confirmButtonText: "Yes",
+                    denyButtonText: `Cancel`
+                })
+                if(result2.isConfirmed){
+                    changedEmailFlag = true;
+                }else{
+                    delete updatedValues.email;
+                }
             }
         }
         if(Object.keys(updatedValues).length===0){
@@ -84,10 +99,40 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         const opts = {
             method : "PUT",
             headers : {'Content-Type' : 'application/json'},
-            body : JSON.stringify(updatedValues)
+            body : JSON.stringify({...updatedValues, previousEmail : initialValuesRef.current.email})
         }
         const response = await fetch(url, opts)
         if(response.status==200){
+            if(changedEmailFlag){
+                const url = `${API_BASEURL}/api/sessions/getVerificationCode?userId=${loggedUserId}`
+                const opts = {
+                    method : "POST"
+                }
+                const response = await fetch(url,opts)
+                const responseData = await response.json()
+                if(response.status!=200){
+                    //ROLLBACK de los cambios anteriores?
+                    toast.error(responseData.message)
+                    return
+                }
+                toast(`Check ${email} for verification code`, {id: t, duration : 6000, icon: "⚠️"})
+                let counter = 6;
+                    const countdownToast = toast(`You are being logged out in (${counter})`, {
+                        duration: 1000*10, position: "top-right", icon: "⏳"
+                    });
+
+                    const interval = setInterval(() => {
+                        counter--;
+                        if (counter <= 0) {
+                            clearInterval(interval);
+                            toast.dismiss(countdownToast);
+                            handleLogOut();
+                        } else {
+                            toast(`You are being logged out in (${counter})`, {id: countdownToast},);
+                        }
+                    }, 1000);
+                return;
+            }
             toast.success("User data updated!", {id: t, duration : 2000})
         }else{
             toast.error("Error saving data", {id: t, duration : 2000})
