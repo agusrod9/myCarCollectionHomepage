@@ -73,7 +73,7 @@ export function DashBoard({handleAddCarBtnClick, userCarCount, userCarsValue, re
                         {
                             recentlyAddedCars.length>0 ?
                             recentlyAddedCars.map(car=>(
-                                <DashBoardCard car={car} containerClass = {styles.recentCardContainer} infoClass={styles.recentCardInfo} key={car._id} onClick={()=>handleCarDetailClick(car)}/>
+                                <DashBoardCard car={car} containerClass = {styles.recentCardContainer} infoClass={styles.recentCardInfo} key={car._id} onClick={()=>handleCarDetailClick(car)} includeManuf={true}/>
                             ))
                             :
                             <div className={styles.noRecentCars}>

@@ -26,7 +26,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
     const [updateDataError, setUpdateDataError] = useState({})
-    const [okToSave, setOkToSave] = useState(false)
     const typeTimeoutRef = useRef(null)
     const fileInputRef = useRef(null);
     const initialValuesRef = useRef({
@@ -351,7 +350,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                     :
                     null
                 }
-                <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData} disabled={updateDataError.firstName || updateDataError.lastName || updateDataError.email}/>
+                <ActionBtn extraClass={styles.saveOrEdit} icon={isEditingData ? <Save /> : <SquarePen />} label={isEditingData ? "Save" : "Edit"} onClick={handleEditOrSaveUserData} disabled={isEditingData && (updateDataError.firstName || updateDataError.lastName || updateDataError.email || (firstName === loggedUserFirstName && lastName === loggedUserLastName && email === loggedUserEmail))}/>
             </div>
         </section>
     )
