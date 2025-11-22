@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+const placeholder = "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/placeholder.webp"
+
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
@@ -17,14 +19,14 @@ export function CarDetailsScreen(){
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([key,value])=>{
-                                                                                                                if(key === "price"){
-                                                                                                                    if(value!=null){
-                                                                                                                        return [key, value]
-                                                                                                                    }
-                                                                                                                    return [key, {currency: "", amount: 0}];
-                                                                                                                }
-                                                                                                                return [key, value?? ""]
-                                                                                                            })))
+        if(key === "price"){
+            if(value!=null){
+                return [key, value]
+            }
+            return [key, {currency: "", amount: 0}];
+        }
+        return [key, value?? ""]
+    })))
     const [changesMade, setChangesMade] = useState(false)
     const [viewingImageIndex, setViewingImageIndex] = useState(0)
     const today = new Date()
@@ -317,7 +319,7 @@ export function CarDetailsScreen(){
                     }
                 }>
                     <div className={styles.imageContainer}>
-                        <img src={car.img_urls[viewingImageIndex]} alt="" className={styles.imgDisplayed} />
+                        <img src={car.img_urls.length!=0 ? car.img_urls[viewingImageIndex] : placeholder} alt="" className={styles.imgDisplayed} />
                     </div>
                     {carImgCount>1 && viewingImageIndex>0 ?
                     <div className={styles.navLeft}>

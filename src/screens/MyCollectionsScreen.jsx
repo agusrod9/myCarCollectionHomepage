@@ -45,9 +45,13 @@ export function MyCollectionsScreen(){
             setColCoverPreview(previewUrl)
         }
     }
+
     const handleSaveNewCollection = async()=>{
         const t= toast.loading("Creating new collection...", {duration:5000});
-        const imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
+        let imageUrl=""
+        if(colCoverFile){
+            imageUrl = await uploadSingleImage(loggedUserId,"collectionCovers",colCoverFile)
+        }
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
         const url = `${API_BASEURL}/api/carcollections`
@@ -98,10 +102,10 @@ export function MyCollectionsScreen(){
 
     useEffect(()=>{
         setOkToSave(false)
-        if(newCollection.collectionName!= "" && newCollection.description!= ""){
+        if(newCollection.collectionName!= ""){
             setOkToSave(true)
         }
-    }, [newCollection.collectionName, newCollection.description])
+    }, [newCollection.collectionName])
 
     if(loading) return <Loading />
     return(
