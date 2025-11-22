@@ -25,7 +25,7 @@ export function Header({loggedUserName, handleLogOut, loggedUserProfilePicture})
                     <MenuItem icon={<User />} text="Profile" onClick={()=>{navigate('/profile')}}/>
                     <MenuItem icon={<Car />} text="My Collections" onClick={()=>{navigate('/myCollections')}}/>
                     <MenuItem icon={<Cog />} text="Configuration"/>
-                    <MenuItem icon={<LogOut />} text="Log out" onClick={()=>handleLogOut()}/>
+                    <MenuItem icon={<LogOut />} text="Log out" onClick={()=>handleLogOut(true)}/>
                 </div> 
                 : null
             }

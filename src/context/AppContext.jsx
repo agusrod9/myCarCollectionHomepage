@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import Loading from "../components/Loading";
+import Swal from "sweetalert2";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -79,15 +80,29 @@ export function AppContextProvider ({children}){
         }
     }
 
-    const handleLogOut = async ()=>{
-            const url = `${API_BASEURL}/api/sessions/logout`
-            const opts = { method : 'POST', credentials: 'include'}
-            const response = await fetch(url, opts)
-            if(response.status==200){
-                clearContext()
-                navigate('/')
+    const handleLogOut = async(askFirst=false)=>{
+        const url = `${API_BASEURL}/api/sessions/logout`
+        const opts = { method : 'POST', credentials: 'include'}
+        let result;
+        let response;
+        if(askFirst===true){
+            result = await Swal.fire({
+                title: "Are you sure you want to logout?",
+                showDenyButton: true,
+                showCancelButton: false,
+                confirmButtonText: "Logout",
+                denyButtonText: `Cancel`
+            })
+            if(!result.isConfirmed){
+                return
             }
         }
+        response = await fetch(url, opts)
+        if(response.status==200){
+            clearContext()
+            navigate('/')
+        }
+    }
 
     useEffect(()=>{
             async function getLoggedUserId(){
