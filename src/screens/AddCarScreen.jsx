@@ -8,7 +8,7 @@ export function AddCarScreen(){
     const {handleLogOut, loggedUserId, loggedUserName, loggedUserProfilePicture} = useContext(AppContext)
     return(
         <section className="AddCarBody">
-            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
+            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <h1>New Car</h1>
             <div className='AddCar-formContainer'>
                 <AddCarForm />

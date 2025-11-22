@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -54,6 +55,7 @@ export function AppContextProvider ({children}){
     }
 
     const handleLogin = async()=>{
+        const t = toast.loading("Logging in...", {duration : 15000})
         const url = `${API_BASEURL}/api/sessions/whoIsOnline`
         const opts = {method: 'POST', credentials: 'include'}
         const response = await fetch(url, opts)
@@ -68,7 +70,7 @@ export function AppContextProvider ({children}){
         const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
-        
+        toast.success(`Welcome back ${loggedUserFirstName}!`, {duration: 2000, id: t})
         navigate('/')
     }
 

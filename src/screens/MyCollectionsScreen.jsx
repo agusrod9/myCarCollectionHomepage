@@ -110,7 +110,7 @@ export function MyCollectionsScreen(){
     if(loading) return <Loading />
     return(
         <span className={styles.screenContainer}>
-            <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={handleLogOut} />
+            <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <h1 className={styles.screenTitle}>My collections</h1>
             <div className={styles.mainContainer}>
                 <div className={styles.newColSection}>

@@ -2,6 +2,7 @@ import './Register.css'
 import { useState } from "react"
 import { Link, useNavigate } from 'react-router'
 import validator from 'validator'
+import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -28,10 +29,7 @@ export function Register(){
         if(password!=password2){
             return setRegisterError("Passwords don´t match.")
         }
-
         await registerToApi(name, lastName, email, password)
-        
-        
     }
 
     const handleGoogleLoginBtnClick = async(e)=>{
@@ -42,6 +40,7 @@ export function Register(){
     }
 
     async function registerToApi(name, lastName, mail, pass){
+        const t = toast.loading("Creating your account...", {duration : 20000})
         const url = `${API_BASEURL}/api/sessions/register`
         const fetchData = {
             "firstName" : name,
@@ -60,7 +59,9 @@ export function Register(){
 
         if(response.status != 201){
             setRegisterError(responseData.message)
+            toast.error(`Couldn't create your account`, {duration : 2000, id:t})
         }else{
+            toast.success(`Welcome aboard, ${name}`, {duration : 2000, id:t})
             alert(responseData.message)
             setName("")
             setLastName("")

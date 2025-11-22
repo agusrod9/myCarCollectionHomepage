@@ -80,7 +80,7 @@ export function MyGarageScreen(){
     if(loading){return <Loading/>}
     return(
         <section className={styles.root}>
-            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
+            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <div className={styles.myGarageContainer}>
                 <FiltersPanel className={styles.myGFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
                 <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>

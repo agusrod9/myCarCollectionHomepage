@@ -1,26 +1,26 @@
 import { useState } from 'react'
 import './VerifyMail.css'
-import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function VerifyMail ({onSuccess}){
     const [email, setEmail] = useState("")
     const [verificationCode, setVerificationCode] = useState("")
-    const navigate = useNavigate()
     const handleVerifyCodeBtnClick =async (e)=>{
         e.preventDefault()
         if(email=="" || verificationCode==""){
-            alert("Faltan datos")
+            toast.error("Missing mandatory fields", {duration : 2500})
         }else{
-            await verifyCode(email,verificationCode, navigate)
+            await verifyCode(email,verificationCode)
             setEmail("")
             setVerificationCode("")
         }
         
     }
 
-        async function verifyCode(email, verificationCode, navigate){
+        async function verifyCode(email, verificationCode){
+        const t = toast.loading("Verifying your account...", {duration : 20000})
         const url = `${API_BASEURL}/api/sessions/verify`
         const data = {email , verificationCode}
         const opts = {
@@ -33,10 +33,11 @@ export function VerifyMail ({onSuccess}){
         const responseData = await response.json()
         if(response.status==200){
             if(onSuccess){
+                toast.success("Your account is now verified!", {duration: 2000, id:t})
                 onSuccess()
             }
         }else{
-            alert("No se pudo verificar")
+            toast.error("Couldn't verify your account", {duration: 2000, id:t})
         }
         return responseData
         

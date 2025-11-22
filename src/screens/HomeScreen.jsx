@@ -14,7 +14,7 @@ export function HomeScreen(){
 
     return(
         <section className='homeBody'>
-            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={handleLogOut}/>
+            <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
                 <h2>Welcome <span className='usrInTitle'>{loggedUserName}</span>!</h2>
             <div className='main'>
                 <DashBoard userCarCount={userCarCount} userCarsValue={userCarsValue} handleAddCarBtnClick= {handleAddCarBtnClick} recentlyAddedCars={recentlyAddedCars}/>

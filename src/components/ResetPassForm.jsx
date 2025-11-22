@@ -1,6 +1,7 @@
 import './ResetPassForm.css'
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -10,15 +11,16 @@ export function ResetPassForm(){
     const handleResetBtnClick =async (e)=>{
         e.preventDefault()
         if(email==""){
-            return alert("Faltan datos")
+            toast.error("Missing mandatory fields", {duration : 2500})
+            return 
         }
-        
+        const t = toast.loading("Sending reset instructions...", {duration : 20000})
         const response = await requestNewPass(email)
         const responseData = await response.json()
         if(response.status != 200){
-            alert(responseData.message)
+            toast.error("Something went wrong. Try again", {duration: 2000, id:t})
         }else{
-            alert("Nueva contraseña enviada al correo electrónico.")
+            toast.success("Password reset email sent!", {duration: 2000, id:t})
             setEmail("")
             navigate('/login')
         }
