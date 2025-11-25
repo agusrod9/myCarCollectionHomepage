@@ -14,7 +14,7 @@ import validator from 'validator'
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
 export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const{loggedUserEmail, setLoggedUserEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut, loggedUserGoogleId } = useContext(AppContext)
+    const{loggedUserEmail, setLoggedUserEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut, loggedUserGoogleId, profilePlaceholder } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
     const [isEditingUserName, setIsEditingUserName] = useState(false)
@@ -227,7 +227,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 if(validateNickFormat(e.target.value)){
                     const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
                     const responseData = await response.json()
-                    setUserNameOKtoSave(responseData.available)
+                    setUserNameOKtoSave(responseData.data)
                 }else{
                     setDisplayUserNameCorrectFormat(true)
                     setUserNameOKtoSave(false)
@@ -304,7 +304,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                         <p>Change profile picture</p>
                     </div>
                 </div>
-                <img src={loggedUserProfilePicture} alt={`Profile picture of ${loggedUserName}`} className={styles.profilePicture}/>
+                <img src={loggedUserProfilePicture || profilePlaceholder} alt={`Profile picture of ${loggedUserName}`} className={styles.profilePicture}/>
                 <div className={styles.userNameInputContainer}>
                     <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={editableUserName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
                     {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}

@@ -8,6 +8,8 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export const AppContext = createContext()
 
 export function AppContextProvider ({children}){
+    const placeholder = "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/placeholder.webp"
+    const profilePlaceholder = "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/user.webp"
     const [currenciesList, setCurrenciesList] = useState([])
     const [scaleList, setScaleList] = useState(['1/4', '1/5', '1/6', '1/8', '1/10', '1/12', '1/18', '1/24', '1/32', '1/36', '1/43', '1/48', '1/50', '1/55', '1/60', '1/61', '1/64', '1/70', '1/72', '1/76', '1/87', '1/100', '1/120', '1/148', '1/160', '1/200']) 
     const [loggedUserId, setLoggedUserId] = useState(null)
@@ -67,7 +69,7 @@ export function AppContextProvider ({children}){
         setLoggedUserGoogleId(responseData.userGoogleId)
         setUserCarCount(responseData.userCarCount)
         setUserCarsValue(responseData.amountByCurrency)
-        const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=t`)
+        const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=true`)
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
         toast.success(`Welcome back ${loggedUserFirstName}!`, {duration: 2000, id: t})
@@ -76,7 +78,7 @@ export function AppContextProvider ({children}){
 
     const updateRecentlyAddedCars=async()=>{
         if(loggedUserId){
-            const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${loggedUserId}&onlyRecent=t`)
+            const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${loggedUserId}&onlyRecent=true`)
             const recentCarsResponseData = await recentCarsResponse.json()
             setRecentlyAddedCars(recentCarsResponseData.data)
         }
@@ -175,7 +177,9 @@ export function AppContextProvider ({children}){
             updateRecentlyAddedCars,
             loggedUserEmail,
             setLoggedUserEmail,
-            loggedUserGoogleId
+            loggedUserGoogleId,
+            placeholder,
+            profilePlaceholder
         }}
         >
             {children}

@@ -10,12 +10,11 @@ import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-const placeholder = "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/placeholder.webp"
 
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars, currenciesList, setCurrenciesList} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars, currenciesList, setCurrenciesList, placeholder} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([key,value])=>{

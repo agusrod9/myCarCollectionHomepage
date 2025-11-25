@@ -1,9 +1,11 @@
 import styles from './CollectionCard.module.css'
 import { formatDate } from '../utils/dates.util'
 import { Globe, UsersRound, Lock } from 'lucide-react'
+import { useContext } from 'react'
+import { AppContext } from '../context/AppContext'
 
 export function CollectionCard({collection}){
-    const placeholder = "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/placeholder.webp"
+    const {placeholder} = useContext(AppContext)
     return(
         <div className={styles.colCardContainer}>
             <img src={collection.coverImg!= "" ? collection.coverImg : placeholder} alt="" className={styles.colImg} />
