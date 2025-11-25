@@ -14,6 +14,7 @@ export function Register(){
     const [password, setPassword] = useState("")
     const [password2, setPassword2] = useState("")
     const [registerError, setRegisterError] = useState("")
+    const lang = navigator.language.split('-')[0]
 
     const handleRegisterBtnClick =async (e)=>{
         e.preventDefault()
@@ -43,10 +44,13 @@ export function Register(){
         const t = toast.loading("Creating your account...", {duration : 20000})
         const url = `${API_BASEURL}/api/sessions/register`
         const fetchData = {
-            "firstName" : name,
-            "lastName" : lastName,
-            "email" : mail ,
-            "password" : pass
+            firstName : name,
+            lastName : lastName,
+            email : mail ,
+            password : pass,
+            settings : {
+                language : lang
+            }
         }
         const opts = {
             method : "POST",

@@ -20,6 +20,8 @@ export function AppContextProvider ({children}){
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
+    const [loggedUserLanguage, setLoggedUserLanguage] = useState (null)
+    const [loggedUserCurrency, setLoggedUserCurrency] = useState (null)
     const [userCarCount, setUserCarCount] = useState(0)
     const [userCarsValue, setUserCarsValue] = useState([])
     const [userCollections, setUserCollections] = useState([])
@@ -27,6 +29,7 @@ export function AppContextProvider ({children}){
     const [loading, setLoading] = useState(true);
     const [userCollectedCars, setUserCollectedCars] = useState([])
     const [loggedUserGoogleId, setLoggedUserGoogleId] = useState(null)
+    const lang = navigator.language.split('-')[0]
     const [selectedFilters, setSelectedFilters] = useState({
         availableManufacturers : [],
         availableCarMakes : [],
@@ -62,6 +65,20 @@ export function AppContextProvider ({children}){
         const opts = {method: 'POST', credentials: 'include'}
         const response = await fetch(url, opts)
         const responseData = await response.json()
+        if(responseData.userId && !responseData.language){
+            const update = {
+                language : lang
+            }
+            const url = `${API_BASEURL}/api/users/${responseData.userId}/settings/language`
+            const opts = {
+                method: 'PUT',
+                headers: { "Content-Type": "application/json" },
+                body : JSON.stringify(update)
+            }
+            await fetch(url, opts)
+        }
+        setLoggedUserLanguage(responseData.language || lang)
+        setLoggedUserCurrency(responseData.mainCurrency)
         setLoggedUserId(responseData.userId)
         setLoggedUserName(responseData.userName)
         setLoggedUserProfilePicture(responseData.userProfilePicture)
@@ -117,6 +134,20 @@ export function AppContextProvider ({children}){
                     const opts = {method: 'POST', credentials: 'include'}
                     const response = await fetch(userIdUrl, opts)
                     const responseData = await response.json()
+                    if(responseData.userId && !responseData.language){
+                        const update = {
+                            language : lang
+                        }
+                        const url = `${API_BASEURL}/api/users/${responseData.userId}/settings/language`
+                        const opts = {
+                            method: 'PUT',
+                            headers: { "Content-Type": "application/json" },
+                            body : JSON.stringify(update)
+                        }
+                        await fetch(url, opts)
+                    }
+                    setLoggedUserLanguage(responseData.language || lang)
+                    setLoggedUserCurrency(responseData.mainCurrency)
                     setLoggedUserId(responseData.userId)
                     setLoggedUserMustResetPass(responseData.mustResetPass)
                     setLoggedUserName(responseData.userName)
@@ -151,12 +182,16 @@ export function AppContextProvider ({children}){
             loggedUserProfilePicture,
             loggedUserFirstName,
             loggedUserLastName,
+            loggedUserLanguage,
             loggedUserRole,
             setLoggedUserId, 
-            setLoggedUserName, 
+            setLoggedUserName,
+            loggedUserCurrency,
             setLoggedUserProfilePicture, 
             setLoggedUserFirstName, 
             setLoggedUserLastName,
+            setLoggedUserLanguage,
+            setLoggedUserCurrency,
             handleLogin, 
             handleLogOut,
             setUserCarCount,

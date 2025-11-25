@@ -15,8 +15,6 @@ export function MyGarageScreen(){
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
     const [filteredCars, setFilteredCars] = useState([])
-    
-
     const FILTER_KEYS = {
         availableManufacturers : 'manufacturer',
         availableCarMakes : 'carMake',

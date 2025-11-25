@@ -32,7 +32,7 @@ export function AddCarForm (){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
 
-    const{setUserCarCount, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId, setUserCollectedCars, userCollectedCars, updateRecentlyAddedCars } = useContext(AppContext);
+    const{setUserCarCount, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId, setUserCollectedCars, userCollectedCars, updateRecentlyAddedCars, loggedUserCurrency } = useContext(AppContext);
     
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -218,6 +218,10 @@ export function AddCarForm (){
         }
         if(userCollectedCars?.length===0){
             getUsercollectedCars()
+        }
+
+        if(currency==""){
+            setCurrency(loggedUserCurrency)
         }
         
     }, [])
