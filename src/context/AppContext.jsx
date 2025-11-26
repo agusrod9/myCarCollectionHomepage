@@ -75,8 +75,18 @@ export function AppContextProvider ({children}){
                 headers: { "Content-Type": "application/json" },
                 body : JSON.stringify(update)
             }
-            await fetch(url, opts)
+            fetch(url, opts)
         }
+        const languageUpdate = {
+                language : lang
+            }
+        const languageUpdateUrl = `${API_BASEURL}/api/globalStats/updateLanguageStats`;
+        const languageUpdateOpts = {
+            method: 'PUT',
+            headers: { "Content-Type": "application/json" },
+            body : JSON.stringify(languageUpdate)
+        }
+        fetch(languageUpdateUrl, languageUpdateOpts)
         setLoggedUserLanguage(responseData.language || lang)
         setLoggedUserCurrency(responseData.mainCurrency)
         setLoggedUserId(responseData.userId)
@@ -144,8 +154,18 @@ export function AppContextProvider ({children}){
                             headers: { "Content-Type": "application/json" },
                             body : JSON.stringify(update)
                         }
-                        await fetch(url, opts)
+                        fetch(url, opts)
                     }
+                    const languageUpdate = {
+                        language : lang
+                    }
+                    const languageUpdateUrl = `${API_BASEURL}/api/globalStats/updateLanguageStats`;
+                    const languageUpdateOpts = {
+                        method: 'PUT',
+                        headers: { "Content-Type": "application/json" },
+                        body : JSON.stringify(languageUpdate)
+                    }
+                    fetch(languageUpdateUrl, languageUpdateOpts)
                     setLoggedUserLanguage(responseData.language || lang)
                     setLoggedUserCurrency(responseData.mainCurrency)
                     setLoggedUserId(responseData.userId)
