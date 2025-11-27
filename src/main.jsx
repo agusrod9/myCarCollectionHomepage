@@ -18,11 +18,12 @@ import { MyGarageScreen } from './screens/MyGarageScreen.jsx'
 import { CarDetailsScreen } from './screens/CarDetailsScreen.jsx'
 import { MyCollectionsScreen } from './screens/MyCollectionsScreen.jsx'
 import { Toaster } from 'react-hot-toast'
+import useActivityPing from './hooks/useActivityPing.js'
 
 function Main(){
 
     const {loggedUserId, handleLogin} = useContext(AppContext)
-
+    useActivityPing(5000)
     return <>
                 <BrowserRouter>
                     <Routes>

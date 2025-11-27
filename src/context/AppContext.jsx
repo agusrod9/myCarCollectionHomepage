@@ -99,7 +99,7 @@ export function AppContextProvider ({children}){
         const recentCarsResponse = await fetch(`${API_BASEURL}/api/cars?userId=${responseData.userId}&onlyRecent=true`)
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
-        toast.success(`Welcome back ${loggedUserFirstName}!`, {duration: 2000, id: t})
+        toast.success(`Welcome back ${responseData.userName}!`, {duration: 2000, id: t})
         navigate('/')
     }
 
