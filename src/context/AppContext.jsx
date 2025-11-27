@@ -100,6 +100,10 @@ export function AppContextProvider ({children}){
         const recentCarsResponseData = await recentCarsResponse.json()
         setRecentlyAddedCars(recentCarsResponseData.data)
         toast.success(`Welcome back ${responseData.userName}!`, {duration: 2000, id: t})
+        fetch(`${API_BASEURL}/api/users/activity/ping`, {
+            method: "POST",
+            credentials: "include"
+        })
         navigate('/')
     }
 
@@ -136,56 +140,68 @@ export function AppContextProvider ({children}){
     }
 
     useEffect(()=>{
-            async function getLoggedUserId(){
-            try {
-                const isonline = await fetch(`${API_BASEURL}/api/sessions/online`, {method: 'POST', credentials:'include'})
-                if(isonline.status==200){
-                    const userIdUrl = `${API_BASEURL}/api/sessions/whoIsOnline`
-                    const opts = {method: 'POST', credentials: 'include'}
-                    const response = await fetch(userIdUrl, opts)
-                    const responseData = await response.json()
-                    if(responseData.userId && !responseData.language){
-                        const update = {
-                            language : lang
-                        }
-                        const url = `${API_BASEURL}/api/users/${responseData.userId}/settings/language`
-                        const opts = {
-                            method: 'PUT',
-                            headers: { "Content-Type": "application/json" },
-                            body : JSON.stringify(update)
-                        }
-                        fetch(url, opts)
-                    }
-                    const languageUpdate = {
+        async function getLoggedUserId(){
+        try {
+            const isonline = await fetch(`${API_BASEURL}/api/sessions/online`, {method: 'POST', credentials:'include'})
+            if(isonline.status==200){
+                const userIdUrl = `${API_BASEURL}/api/sessions/whoIsOnline`
+                const opts = {method: 'POST', credentials: 'include'}
+                const response = await fetch(userIdUrl, opts)
+                const responseData = await response.json()
+                if(responseData.userId && !responseData.language){
+                    const update = {
                         language : lang
                     }
-                    const languageUpdateUrl = `${API_BASEURL}/api/globalStats/updateLanguageStats`;
-                    const languageUpdateOpts = {
+                    const url = `${API_BASEURL}/api/users/${responseData.userId}/settings/language`
+                    const opts = {
                         method: 'PUT',
                         headers: { "Content-Type": "application/json" },
-                        body : JSON.stringify(languageUpdate)
+                        body : JSON.stringify(update)
                     }
-                    fetch(languageUpdateUrl, languageUpdateOpts)
-                    setLoggedUserLanguage(responseData.language || lang)
-                    setLoggedUserCurrency(responseData.mainCurrency)
-                    setLoggedUserId(responseData.userId)
-                    setLoggedUserMustResetPass(responseData.mustResetPass)
-                    setLoggedUserName(responseData.userName)
-                    setLoggedUserProfilePicture(responseData.userProfilePicture)
-                    setLoggedUserRole(responseData.role)
-                    setLoggedUserGoogleId(responseData.userGoogleId)
-                    setUserCarCount(responseData.userCarCount)
-                    setUserCarsValue(responseData.amountByCurrency)
-                }            
-            }
-            catch (error) {
-                setLoggedUserId(null)
-            } finally{
-                setLoading(false)
-            }
-            }
-            getLoggedUserId()
-        },[])
+                    fetch(url, opts)
+                }
+                const languageUpdate = {
+                    language : lang
+                }
+                const languageUpdateUrl = `${API_BASEURL}/api/globalStats/updateLanguageStats`;
+                const languageUpdateOpts = {
+                    method: 'PUT',
+                    headers: { "Content-Type": "application/json" },
+                    body : JSON.stringify(languageUpdate)
+                }
+                fetch(languageUpdateUrl, languageUpdateOpts)
+                setLoggedUserLanguage(responseData.language || lang)
+                setLoggedUserCurrency(responseData.mainCurrency)
+                setLoggedUserId(responseData.userId)
+                setLoggedUserMustResetPass(responseData.mustResetPass)
+                setLoggedUserName(responseData.userName)
+                setLoggedUserProfilePicture(responseData.userProfilePicture)
+                setLoggedUserRole(responseData.role)
+                setLoggedUserGoogleId(responseData.userGoogleId)
+                setUserCarCount(responseData.userCarCount)
+                setUserCarsValue(responseData.amountByCurrency)
+            }            
+        }
+        catch (error) {
+            setLoggedUserId(null)
+        } finally{
+            setLoading(false)
+        }
+        }
+        getLoggedUserId()
+        //Google login/register 
+        const params = new URLSearchParams(window.location.search);
+        const loggedByGoogle = params.get("loggedBy") === "google";
+
+        if (loggedByGoogle) {
+            fetch(`${API_BASEURL}/api/users/activity/ping`, {
+                method: "POST",
+                credentials: "include"
+            });
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, '', newUrl);
+        }
+    },[])
         
         useEffect(()=>{
             updateRecentlyAddedCars()

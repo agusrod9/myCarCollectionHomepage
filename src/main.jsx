@@ -22,7 +22,7 @@ import useActivityPing from './hooks/useActivityPing.js'
 
 function Main(){
 
-    const {loggedUserId, handleLogin} = useContext(AppContext)
+    const {loggedUserId} = useContext(AppContext)
     useActivityPing()
     return <>
                 <BrowserRouter>

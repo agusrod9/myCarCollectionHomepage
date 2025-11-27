@@ -66,7 +66,6 @@ export function Register(){
             toast.error(`Couldn't create your account`, {duration : 2000, id:t})
         }else{
             toast.success(`Welcome aboard, ${name}`, {duration : 2000, id:t})
-            alert(responseData.message)
             setName("")
             setLastName("")
             setEmail("")
