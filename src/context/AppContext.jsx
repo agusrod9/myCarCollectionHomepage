@@ -201,6 +201,13 @@ export function AppContextProvider ({children}){
             const newUrl = window.location.origin + window.location.pathname;
             window.history.replaceState({}, '', newUrl);
         }
+
+        if(loggedUserId){
+            fetch(`${API_BASEURL}/api/users/activity/ping`, {
+                method: "POST",
+                credentials: "include"
+            })
+        }
     },[])
         
         useEffect(()=>{
@@ -250,7 +257,7 @@ export function AppContextProvider ({children}){
             setLoggedUserEmail,
             loggedUserGoogleId,
             placeholder,
-            profilePlaceholder
+            profilePlaceholder,
         }}
         >
             {children}
