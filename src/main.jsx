@@ -19,9 +19,13 @@ import { CarDetailsScreen } from './screens/CarDetailsScreen.jsx'
 import { MyCollectionsScreen } from './screens/MyCollectionsScreen.jsx'
 import { Toaster } from 'react-hot-toast'
 import useActivityPing from './hooks/useActivityPing.js'
+import { TermsAndConditions } from './screens/TermsAndConditions.jsx'
 
 function Main(){
-
+    /*
+    const host = window.location.hostname;
+    console.log(host)
+    */
     const {loggedUserId} = useContext(AppContext)
     useActivityPing()
     return <>
@@ -38,6 +42,7 @@ function Main(){
                         <Route path='/myGarage' element={<ProtectedRoute Component={MyGarageScreen} />} />
                         <Route path='/myCollections' element={<ProtectedRoute Component={MyCollectionsScreen} />} />
                         <Route path='/details' element={<ProtectedRoute Component={CarDetailsScreen}/>}/>
+                        <Route path='/terms-and-conditions' element={<TermsAndConditions />}/>
                         <Route path='*' element={<NotFoundScreen />}/>
                     </Routes>
                 </BrowserRouter>

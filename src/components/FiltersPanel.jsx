@@ -25,14 +25,16 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     }
 
     useEffect(()=>{
-
-        let getFilters = async()=>{
+        const getFilters = async()=>{
             let response = await fetch(`${API_BASEURL}/api/filters?userId=${loggedUserId}`)
             let responseData = await response.json()
             setAvailableFilters(responseData.data)
         } 
         getFilters()
     },[])
+
+    const hasFilters = Object.values(availableFilters).some((value) => Array.isArray(value) && value.length > 0);
+
     return(
         <span className={className}>
             {
@@ -70,7 +72,12 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
                     </div>
                 ))
             }
-            <ActionBtn label={'Clear All'} icon={<BrushCleaning/>} onClick={clearAllFilters}/>
+            {
+                hasFilters
+                ?
+                <ActionBtn label={'Clear All'} icon={<BrushCleaning/>} onClick={clearAllFilters}/>
+                : null
+            }
         </span>
     )
 }
