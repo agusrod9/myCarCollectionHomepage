@@ -2,7 +2,7 @@ import styles from './TermsAndConditions.module.css'
 
 export function TermsAndConditions(){
     return (
-        <section className='TCBody'>
+        <section className={styles.TCBody}>
             <h1>Terms and Conditions — The DieCaster</h1>
             <p><strong>Last updated:</strong> 11/28/2025</p>
 
