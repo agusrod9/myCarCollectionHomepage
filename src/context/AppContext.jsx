@@ -59,7 +59,7 @@ export function AppContextProvider ({children}){
             query:""
         })
     }
-
+    
     const handleLogin = async()=>{
         const t = toast.loading("Logging in...", {duration : 15000})
         const url = `${API_BASEURL}/api/sessions/whoIsOnline`

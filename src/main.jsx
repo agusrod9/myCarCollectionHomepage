@@ -25,10 +25,18 @@ import { LandingScreen } from './screens/LandingScreen.jsx'
 function Main(){
     
     const host = window.location.host;
+    const isLandingDomain =
+        host === "thediecaster.com" ||
+        host === "www.thediecaster.com" ||
+        host === "dev.thediecaster.com:5173";
+
+    const isAppDomain =
+        host === "app.thediecaster.com" ||
+        host === "app.dev.thediecaster.com:5173";
     const {loggedUserId} = useContext(AppContext)
     useActivityPing()
 
-    if(host === "thediecaster.com" || host === "www.thediecaster.com" || host === "localhost:5173"){
+    if(isLandingDomain){
         return <>
             <BrowserRouter>
                 <Routes> //ver como hacer para detectar cookie de login y ya n otengo que preguntar por loggeduser sino que redirijo a app.thediecaster
@@ -55,7 +63,7 @@ function Main(){
                 }}
             />
         </>
-    }else{
+    }else if(isAppDomain){
         return <>
             <BrowserRouter>
                 <Routes>
@@ -69,6 +77,26 @@ function Main(){
                 </Routes>
             </BrowserRouter>
 
+            <Toaster 
+                position="top-center"
+                toastOptions={{
+                    duration: 2500,
+                    style: {
+                        background: "#333",
+                        color: "#fff",
+                        textAlign: 'center'
+                    },
+                }}
+            />
+        </>
+    }else{
+        return <>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="*" element={<NotFoundScreen />} />
+                </Routes>
+            </BrowserRouter>
+            
             <Toaster 
                 position="top-center"
                 toastOptions={{
