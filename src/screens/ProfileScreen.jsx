@@ -94,7 +94,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         }
         
         const t = toast.loading("Saving user data...", {duration:10000})
-        const url = `${API_BASEURL}/api/users/${loggedUserId}`;
+        const url = `${API_BASEURL}users/${loggedUserId}`;
         const opts = {
             method : "PUT",
             headers : {'Content-Type' : 'application/json'},
@@ -103,7 +103,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         const response = await fetch(url, opts)
         if(response.status==200){
             if(changedEmailFlag){
-                const url = `${API_BASEURL}/api/sessions/getVerificationCode?userId=${loggedUserId}`
+                const url = `${API_BASEURL}sessions/getVerificationCode?userId=${loggedUserId}`
                 const opts = {
                     method : "POST"
                 }
@@ -157,7 +157,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             const convertedFile = await convertToWebp(file)
             const profileImgUrl = await uploadSingleImage(loggedUserId, "profilePicture", convertedFile)
             if(profileImgUrl){
-                const url = `${API_BASEURL}/api/users/${loggedUserId}`;
+                const url = `${API_BASEURL}users/${loggedUserId}`;
                 const opts = {
                     method : "PUT",
                     headers : {'Content-Type' : 'application/json'},
@@ -167,7 +167,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 if(response.status==200){
                     setLoggedUserProfilePicture(prev=>{
                         const imgToDelete = prev.split("https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/")[1];
-                        const url = `${API_BASEURL}/api/aws/?id=${imgToDelete}`
+                        const url = `${API_BASEURL}aws/?id=${imgToDelete}`
                         const opts = {
                             method : 'DELETE'
                         }
@@ -196,7 +196,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         setIsEditingUserName(!isEditingUserName)
         setLoggedUserName(editableUserName)
         setUserName(editableUserName)
-        const url = `${API_BASEURL}/api/users/${loggedUserId}`;
+        const url = `${API_BASEURL}users/${loggedUserId}`;
         const opts = {
             method : "PUT",
             headers : {'Content-Type' : 'application/json'},
@@ -225,7 +225,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         typeTimeoutRef.current = setTimeout(async() => {
             if(e.target.value.length!=0){
                 if(validateNickFormat(e.target.value)){
-                    const response = await fetch(`${API_BASEURL}/api/users/checkNick?nick=${e.target.value}`)
+                    const response = await fetch(`${API_BASEURL}users/checkNick?nick=${e.target.value}`)
                     const responseData = await response.json()
                     setUserNameOKtoSave(responseData.data)
                 }else{
@@ -238,7 +238,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
 
     useEffect(()=>{
         async function getLoggedUserInfo(){
-            const url = `${API_BASEURL}/api/sessions/onlineUserData`
+            const url = `${API_BASEURL}sessions/onlineUserData`
             const opts = {
                     method : "POST",
                     credentials : 'include'

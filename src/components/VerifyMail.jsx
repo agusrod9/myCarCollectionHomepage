@@ -21,7 +21,7 @@ export function VerifyMail ({onSuccess}){
 
         async function verifyCode(email, verificationCode){
         const t = toast.loading("Verifying your account...", {duration : 20000})
-        const url = `${API_BASEURL}/api/sessions/verify`
+        const url = `${API_BASEURL}sessions/verify`
         const data = {email , verificationCode}
         const opts = {
             method : 'POST',

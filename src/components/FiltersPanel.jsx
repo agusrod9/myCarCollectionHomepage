@@ -26,7 +26,7 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
 
     useEffect(()=>{
         const getFilters = async()=>{
-            let response = await fetch(`${API_BASEURL}/api/filters?userId=${loggedUserId}`)
+            let response = await fetch(`${API_BASEURL}filters?userId=${loggedUserId}`)
             let responseData = await response.json()
             setAvailableFilters(responseData.data)
         } 

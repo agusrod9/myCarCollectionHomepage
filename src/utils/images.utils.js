@@ -2,7 +2,7 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 import heic2any from 'heic2any';
 
 export async function uploadManyImages(userId, folder, imageFilesArray){
-    const url = `${API_BASEURL}/api/aws/?userId=${userId}&folder=${folder}`
+    const url = `${API_BASEURL}aws/?userId=${userId}&folder=${folder}`
     const imagesUrls = await Promise.all( //waits for al the fetches
         Array.from(imageFilesArray).map(async(img)=>{
             const formData = new FormData()
@@ -21,7 +21,7 @@ export async function uploadManyImages(userId, folder, imageFilesArray){
 }
 
 export async function uploadSingleImage(userId, folder, imageFile){
-    const url = `${API_BASEURL}/api/aws/?userId=${userId}&folder=${folder}`
+    const url = `${API_BASEURL}aws/?userId=${userId}&folder=${folder}`
     const opts = {
         method : 'POST'
     }

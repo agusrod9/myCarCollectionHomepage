@@ -54,7 +54,7 @@ export function MyCollectionsScreen(){
         }
         const collectionToAdd = {...newCollection, coverImg: imageUrl};
         setNewCollection(prev=>({...prev, coverImg: imageUrl}))
-        const url = `${API_BASEURL}/api/carcollections`
+        const url = `${API_BASEURL}carcollections`
         const opts = {
             method: 'POST',
             headers : {'Content-Type' : 'application/json'},
@@ -79,7 +79,7 @@ export function MyCollectionsScreen(){
         async function getUserCollections(){
             setLoading(true);
             try {
-                const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
+                const collectionsUrl= `${API_BASEURL}carcollections?userId=${loggedUserId}`
                 const response = await fetch(collectionsUrl)
                 const responseData = await response.json()
                 if(response.status==200){

@@ -8,7 +8,7 @@ export default function useOnlineUsersCount(intervalMs = 60000) {
     useEffect(() => {
         async function fetchCount() {
             try {
-                const res = await fetch(`${API_BASEURL}/api/users/onlineUserCount`);
+                const res = await fetch(`${API_BASEURL}users/onlineUserCount`);
                 const data = await res.json();
                 setOnlineCount(data.data || 0);
             } catch (err) {

@@ -35,7 +35,7 @@ export function ChangePassForm(){
     }
 
     async function requestChangePass(mail, pass){
-        const url = `${API_BASEURL}/api/sessions/changePass`
+        const url = `${API_BASEURL}sessions/changePass`
         const fetchData = {
             "email" : mail ,
             "password" : pass

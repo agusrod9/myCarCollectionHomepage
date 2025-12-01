@@ -28,12 +28,12 @@ export function Login ({onSuccess}){
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
         setLoginError("")
-        const url = `${API_BASEURL}/api/sessions/google`
+        const url = `${API_BASEURL}sessions/google`
         window.location.assign(url);
     }
 
     async function loginToApi(email, password, navigate){
-        const url = `${API_BASEURL}/api/sessions/login`
+        const url = `${API_BASEURL}sessions/login`
         const data = {email , password}
         const opts = {
             method : 'POST',

@@ -36,13 +36,13 @@ export function Register(){
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()
         setRegisterError("")
-        const url = `${API_BASEURL}/api/sessions/google`
+        const url = `${API_BASEURL}sessions/google`
         window.location.assign(url);
     }
 
     async function registerToApi(name, lastName, mail, pass){
         const t = toast.loading("Creating your account...", {duration : 20000})
-        const url = `${API_BASEURL}/api/sessions/register`
+        const url = `${API_BASEURL}sessions/register`
         const fetchData = {
             firstName : name,
             lastName : lastName,

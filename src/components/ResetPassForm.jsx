@@ -28,7 +28,7 @@ export function ResetPassForm(){
     }
 
     async function requestNewPass(mail){
-        const url = `${API_BASEURL}/api/sessions/resetPass`
+        const url = `${API_BASEURL}sessions/resetPass`
         const fetchData = {
             "email" : mail 
         }

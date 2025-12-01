@@ -67,7 +67,7 @@ export function CarDetailsScreen(){
         }).then(async(result) => {
             if (result.isConfirmed) {
                 const t = toast.loading("Deleting car...");
-                const url = `${API_BASEURL}/api/cars/${car._id}`
+                const url = `${API_BASEURL}cars/${car._id}`
                 const opts = {
                     method : "DELETE",
                 }
@@ -75,7 +75,7 @@ export function CarDetailsScreen(){
                 if(response.status == 200){
                     const deleteEveryImagePromise = car.img_urls.map((imgUrl)=>{
                         const awsKey = imgUrl.split('.amazonaws.com/')[1]
-                        const url = `${API_BASEURL}/api/aws/?id=${awsKey}`
+                        const url = `${API_BASEURL}aws/?id=${awsKey}`
                         const opts = {
                             method : "DELETE",
                         }
@@ -103,7 +103,7 @@ export function CarDetailsScreen(){
     }
 
     async function saveCar(key){
-        const url = `${API_BASEURL}/api/cars/${editableCar._id}`
+        const url = `${API_BASEURL}cars/${editableCar._id}`
         let newValue;
         let isDifferent = false;
         let priceEditedFlag = false
@@ -155,7 +155,7 @@ export function CarDetailsScreen(){
             const updatedCarFromBD = responseData.data;
             updateCarInContext(updatedCarFromBD)
             if(priceEditedFlag){
-                const response = await fetch(`${API_BASEURL}/api/users/${loggedUserId}/carsValue`);
+                const response = await fetch(`${API_BASEURL}users/${loggedUserId}/carsValue`);
                 const responseData = await response.json();
                 setUserCarsValue(responseData.data)
             }
@@ -199,7 +199,7 @@ export function CarDetailsScreen(){
             return
         }
 
-        const url = `${API_BASEURL}/api/cars/${editableCar._id}`
+        const url = `${API_BASEURL}cars/${editableCar._id}`
         const opts = {
             method: "PUT",
             headers : {'Content-Type' : 'application/json'},
@@ -215,7 +215,7 @@ export function CarDetailsScreen(){
             const responseData = await response.json();
             updateCarInContext(responseData.data)
             if(priceEditedFlag){
-                const response = await fetch(`${API_BASEURL}/api/users/${loggedUserId}/carsValue`);
+                const response = await fetch(`${API_BASEURL}users/${loggedUserId}/carsValue`);
                 const responseData = await response.json();
                 setUserCarsValue(responseData.data)
             }
@@ -270,14 +270,14 @@ export function CarDetailsScreen(){
         if(!loggedUserId) return
 
         async function getCurrencies(){
-            const response = await fetch(`${API_BASEURL}/api/currencies`);
+            const response = await fetch(`${API_BASEURL}currencies`);
             const responseData = await response.json();
             if(response.status==200){
                 setCurrenciesList(responseData.data);
             }
         }
 
-        const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
+        const collectionsUrl= `${API_BASEURL}carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const response = await fetch(collectionsUrl)
             const responseData = await response.json()
@@ -287,7 +287,7 @@ export function CarDetailsScreen(){
         }
 
         async function getUsercollectedCars(){
-            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
+            const url = `${API_BASEURL}cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
             setUserCollectedCars(responseData.data)

@@ -6,7 +6,7 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export default function useActivityPing(intervalMs = 119000){
     useEffect(()=>{
         const interval = setInterval(() => {
-            fetch(`${API_BASEURL}/api/users/activity/ping`, {
+            fetch(`${API_BASEURL}users/activity/ping`, {
                 method: "POST",
                 credentials: "include"
             }).then((res)=>{

@@ -60,7 +60,7 @@ export function AddCarForm (){
     }
 
     async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price){
-        const url =`${API_BASEURL}/api/cars`
+        const url =`${API_BASEURL}cars`
         
         const data = {
             carMake : make,
@@ -185,7 +185,7 @@ export function AddCarForm (){
 
     useEffect(()=>{
         if(!loggedUserId) return
-        const collectionsUrl= `${API_BASEURL}/api/carcollections?userId=${loggedUserId}`
+        const collectionsUrl= `${API_BASEURL}carcollections?userId=${loggedUserId}`
         async function getUserCollections(){
             const response = await fetch(collectionsUrl)
             const responseData = await response.json()
@@ -195,7 +195,7 @@ export function AddCarForm (){
         }
 
         async function getCurrencies(){
-            const response = await fetch(`${API_BASEURL}/api/currencies`);
+            const response = await fetch(`${API_BASEURL}currencies`);
             const responseData = await response.json();
             if(response.status==200){
                 setCurrenciesList(responseData.data);
@@ -203,7 +203,7 @@ export function AddCarForm (){
         }
 
         async function getUsercollectedCars(){
-            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
+            const url = `${API_BASEURL}cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
             

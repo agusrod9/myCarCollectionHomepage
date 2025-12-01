@@ -34,7 +34,7 @@ export function MyGarageScreen(){
 
     useEffect(()=>{
         const getUsercollectedCars =async()=>{
-            const url = `${API_BASEURL}/api/cars?userId=${loggedUserId}`
+            const url = `${API_BASEURL}cars?userId=${loggedUserId}`
             const response = await fetch(url)
             const responseData = await response.json()
             setUserCollectedCars(responseData.data)
