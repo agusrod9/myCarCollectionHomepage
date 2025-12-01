@@ -31,7 +31,7 @@ function Main(){
     if(host === "thediecaster.com" || host === "www.thediecaster.com" || host === "localhost:5173"){
         return <>
             <BrowserRouter>
-                <Routes> //ver como hacer para detectar cookie de login y ya n otengo que preguntar por loggeduser sino que redirijo a api.thediecaster
+                <Routes> //ver como hacer para detectar cookie de login y ya n otengo que preguntar por loggeduser sino que redirijo a app.thediecaster
                     <Route path='/' element={<LandingScreen />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen/>} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
