@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+const APP_FRONT_URL = import.meta.env.VITE_APP_FRONT_URL
 
 export const AppContext = createContext()
 
@@ -104,7 +105,7 @@ export function AppContextProvider ({children}){
             method: "POST",
             credentials: "include"
         })
-        navigate('/')
+        window.location.href=APP_FRONT_URL;
     }
 
     const updateRecentlyAddedCars=async()=>{
