@@ -4,6 +4,7 @@ import { DashBoard } from '../components/DashBoard.jsx'
 import { useContext} from 'react'
 import { AppContext } from '../context/AppContext.jsx'
 import { useNavigate } from 'react-router-dom'
+import usePageTitle from '../hooks/usePageTitle.js'
 
 export function HomeScreen(){
     const {handleLogOut, userCarCount, userFavoritesCount, userCarsValue,recentlyAddedCars, loggedUserId, loggedUserName, loggedUserProfilePicture} = useContext(AppContext)
@@ -11,7 +12,7 @@ export function HomeScreen(){
     const handleAddCarBtnClick = ()=>{
         navigate('/newCar')
     }
-
+    usePageTitle(`${loggedUserName}´s Home`)
     return(
         <section className='homeBody'>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>

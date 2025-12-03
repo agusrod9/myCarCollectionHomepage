@@ -8,6 +8,7 @@ import { Save } from 'lucide-react'
 import { convertToWebp, uploadSingleImage } from '../utils/images.utils'
 import Loading from '../components/Loading'
 import toast from "react-hot-toast";
+import usePageTitle from '../hooks/usePageTitle'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -24,6 +25,7 @@ export function MyCollectionsScreen(){
         visibility : "public",
         userId: loggedUserId
     })
+    usePageTitle(`${loggedUserName}´s Collections`)
 
     const resetNewCollectionState = ()=>{
         setNewCollection({

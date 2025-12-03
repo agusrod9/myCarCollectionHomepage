@@ -8,6 +8,7 @@ import { ActionBtn } from '../components/ActionBtn'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router'
 import toast from 'react-hot-toast'
+import usePageTitle from '../hooks/usePageTitle'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -33,6 +34,8 @@ export function CarDetailsScreen(){
     const anioMinimo = 1885
     const carImgCount = editableCar.img_urls.length
     const imgContainerRef = useRef(null);
+    usePageTitle(`${car.carMake} ${car.carModel} ${car.scale}`)
+
     const getClassByLength = (length) => {
         if (length < 70) return styles.green;
         if (length < 140) return styles.yellow;

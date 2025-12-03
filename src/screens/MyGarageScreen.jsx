@@ -7,6 +7,7 @@ import { SearchBar } from '../components/SearchBar'
 import { CarCard } from '../components/CarCard'
 import { FiltersPanel } from '../components/FiltersPanel'
 import { useNavigate } from 'react-router'
+import usePageTitle from '../hooks/usePageTitle'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -20,6 +21,7 @@ export function MyGarageScreen(){
         availableCarMakes : 'carMake',
         availableScales : 'scale',
     }
+    usePageTitle(`${loggedUserName}´s Garage`)
 
     function handleSearch(q){
         setSelectedFilters(prev=>({

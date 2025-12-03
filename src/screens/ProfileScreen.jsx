@@ -10,6 +10,7 @@ import { validateNickFormat } from '../utils/nicknames.util'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
 import validator from 'validator'
+import usePageTitle from '../hooks/usePageTitle'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -33,6 +34,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         lastName: "",
         email: ""
     })
+    usePageTitle(`${loggedUserName}´s Profile`)
 
     const handleEditOrSaveUserData = async()=>{
         const initialIsEditing = isEditingData;

@@ -1,6 +1,8 @@
+import usePageTitle from '../hooks/usePageTitle'
 import styles from './TermsAndConditions.module.css'
 
 export function TermsAndConditions(){
+    usePageTitle("Terms & Conditions")
     return (
         <section className={styles.TCBody}>
             <h1>Terms and Conditions — The DieCaster</h1>
