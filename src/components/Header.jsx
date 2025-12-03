@@ -14,7 +14,7 @@ export function Header({loggedUserName, handleLogOut, loggedUserProfilePicture})
         <section>
             <div className={styles.header}>
                     <div className={styles.homeLink} onClick={()=>navigate('/')}>
-                        <img src="/wc.png" alt="Logotipo de WeCollect" />
+                        <img src="/logoLetras3.png" alt="Logotipo de WeCollect" />
                     </div>
                     <div className={styles.headerProfileContainer} onClick={()=>setMenuIsOpen(!menuIsOpen)}>
                         <img src={ loggedUserProfilePicture || profilePlaceholder} alt={`Profile picture of ${loggedUserName}`} className={styles.headerProfilePic}/>

@@ -52,7 +52,7 @@ export function MyGarageScreen(){
         
         const filteredCars = userCollectedCars?.filter(car=>{
             for(const[key, values] of Object.entries(selectedFilters)){
-                if(key==='query')continue
+                if(key==='query') continue
                 const carKey= FILTER_KEYS[key]
 
                 if(!values || values.length===0) continue;
