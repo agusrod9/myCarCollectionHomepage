@@ -24,6 +24,7 @@ export function AppContextProvider ({children}){
     const [loggedUserLanguage, setLoggedUserLanguage] = useState (null)
     const [loggedUserCurrency, setLoggedUserCurrency] = useState (null)
     const [userCarCount, setUserCarCount] = useState(0)
+    const [userFavoritesCount, setUserFavoritesCount] = useState(0)
     const [userCarsValue, setUserCarsValue] = useState([])
     const [userCollections, setUserCollections] = useState([])
     const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
@@ -88,6 +89,10 @@ export function AppContextProvider ({children}){
             body : JSON.stringify(languageUpdate)
         }
         fetch(languageUpdateUrl, languageUpdateOpts)
+        const favoritesUrl = `${API_BASEURL}users/${responseData.userId}/favoriteCarsCount`
+        const favoritesCountResponse = await fetch(favoritesUrl);
+        const favoritesCountResponseData = await favoritesCountResponse.json()
+        setUserFavoritesCount(favoritesCountResponseData.data)
         setLoggedUserLanguage(responseData.language || lang)
         setLoggedUserCurrency(responseData.mainCurrency)
         setLoggedUserId(responseData.userId)
@@ -171,6 +176,10 @@ export function AppContextProvider ({children}){
                     body : JSON.stringify(languageUpdate)
                 }
                 fetch(languageUpdateUrl, languageUpdateOpts)
+                const favoritesUrl = `${API_BASEURL}users/${responseData.userId}/favoriteCarsCount`
+                const favoritesCountResponse = await fetch(favoritesUrl);
+                const favoritesCountResponseData = await favoritesCountResponse.json()
+                setUserFavoritesCount(favoritesCountResponseData.data)
                 setLoggedUserLanguage(responseData.language || lang)
                 setLoggedUserCurrency(responseData.mainCurrency)
                 setLoggedUserId(responseData.userId)
@@ -240,6 +249,7 @@ export function AppContextProvider ({children}){
             handleLogOut,
             setUserCarCount,
             userCarCount,
+            userFavoritesCount,
             setUserCarsValue,
             userCarsValue,
             recentlyAddedCars,
@@ -259,6 +269,7 @@ export function AppContextProvider ({children}){
             loggedUserGoogleId,
             placeholder,
             profilePlaceholder,
+            setUserFavoritesCount
         }}
         >
             {children}
