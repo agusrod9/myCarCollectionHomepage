@@ -1,0 +1,93 @@
+.verifySection{
+    color: #222222;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 800px;
+    min-width: 400px;
+    min-height: 400px;
+    background-color: #fafafa;
+    border-radius: 15px;
+}
+
+.verifySection label{
+    color: #222222;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.verifySection input{
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
+.verifySection input::placeholder{
+    font-style: italic;
+    font-weight: 400;
+}
+
+.verifySection a{
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.verifySection a:visited{
+    color: inherit
+}
+
+.verifyForm{
+    display: flex;
+    flex-direction: column;
+    min-width: 70%;
+}
+
+.verifyBtn{
+    color: #fafafa;
+    font-size: 18px;
+    background: linear-gradient(to bottom , #3953a8, #a777e3);
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.verifyBtn:hover {
+    /*background-color: #efa424;*/
+    box-shadow: 3px 1px #3953a8;
+    top: 1px;
+}
+
+.verifyBtn:active{
+    transform: scale(0.9);
+}
+
+.verificationErrorLabel{
+    font-style: italic;
+    align-self:end;
+    color: red;
+    height: 20px;
+    font-size: 14px;
+}
+
+.loginLinksContainer{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+    justify-content: center;
+}
+
+.verifyLink{
+    align-self:end;
+    margin-bottom: 10px;
+    font-size: 12px;
+}

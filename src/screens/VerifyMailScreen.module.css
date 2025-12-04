@@ -1,0 +1,10 @@
+.verifyBody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(to bottom, #1e1e2f, #121212f1), url("/pexels-pixabay-315938.jpg");
+    background-position: center;
+}

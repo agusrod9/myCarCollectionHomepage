@@ -9,6 +9,7 @@ import { convertToWebp, uploadSingleImage } from '../utils/images.utils'
 import Loading from '../components/Loading'
 import toast from "react-hot-toast";
 import usePageTitle from '../hooks/usePageTitle'
+import { capitalize } from '../utils/textUtils'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -126,7 +127,7 @@ export function MyCollectionsScreen(){
                                 name='newColName' 
                                 className={styles.newColSectionFormInput} 
                                 onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, collectionName: e.target.value}))
+                                    setNewCollection(prev=>({...prev, collectionName: capitalize(e.target.value)}))
                                 }}
                             />
                         </div>
@@ -137,7 +138,7 @@ export function MyCollectionsScreen(){
                                 value={newCollection.description} 
                                 className={styles.newColDesc}
                                 onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, description: e.target.value}))
+                                    setNewCollection(prev=>({...prev, description: capitalize(e.target.value)}))
                                 }}
                             />
                         </div>

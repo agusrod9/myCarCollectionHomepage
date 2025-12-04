@@ -1,6 +1,5 @@
-import './VerifyMailScreen.css'
+import styles from './VerifyMailScreen.module.css'
 import { VerifyMail } from '../components/VerifyMail';
-import { Header } from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 import usePageTitle from '../hooks/usePageTitle';
 
@@ -13,10 +12,8 @@ export function VerifyMailScreen(){
         navigate('/login')
     }
     return(
-        <section className="verifyBody">
-            <div className='formContainer'>
-                <VerifyMail onSuccess={handleVerificationSuccess}/>
-            </div>
+        <section className={styles.verifyBody}>
+            <VerifyMail onSuccess={handleVerificationSuccess}/>
         </section>
     )
 }

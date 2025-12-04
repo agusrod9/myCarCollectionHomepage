@@ -100,7 +100,6 @@ export function Login ({onSuccess}){
             <h2>Login</h2>
             <form className={styles.loginForm}>
                 <label htmlFor="login-email-inp">E-mail</label>
-                <div></div>
                 <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="login-password-inp">Password</label>
                 <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} onKeyDown={(e)=>{
