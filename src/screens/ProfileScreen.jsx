@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
 import validator from 'validator'
 import usePageTitle from '../hooks/usePageTitle'
+import { capitalize } from '../utils/textUtils.js'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -34,6 +35,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         lastName: "",
         email: ""
     })
+
     usePageTitle(`${loggedUserName}´s Profile`)
 
     const handleEditOrSaveUserData = async()=>{
@@ -321,12 +323,12 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
             </div>
             <div className={styles.userDataContainer}>
                 <label>Name</label>
-                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(e.target.value)}/>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput} value={firstName} disabled={!isEditingData} onChange={(e)=>setFirstName(capitalize(e.target.value))}/>
                 <div className={styles.formInputError}>
                     {updateDataError.firstName ? firstName.length<3 ? <p>Name is too short</p> : firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : null}
                 </div>
                 <label>Last Name</label>
-                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(e.target.value)}/>
+                <input type="text" name="" className={isEditingData ? `${styles.formInput} ${styles.editingMode}` : styles.formInput}  value={lastName} disabled={!isEditingData} onChange={(e)=>setLastName(capitalize(e.target.value))}/>
                 <div className={styles.formInputError}>
                     {updateDataError.lastName ? lastName.length<3 ? <p>Last name is too short</p> : lastName.length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : null}
                 </div>

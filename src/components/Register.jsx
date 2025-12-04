@@ -1,8 +1,9 @@
-import './Register.css'
+import styles from './Register.module.css'
 import { useState } from "react"
 import { Link, useNavigate } from 'react-router'
 import validator from 'validator'
 import toast from 'react-hot-toast'
+import { capitalize } from '../utils/textUtils.js'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -24,7 +25,7 @@ export function Register(){
         }
 
         if(!validator.isEmail(email)){
-            return setRegisterError("Invalid E-mail address")
+            return setRegisterError("E-Mail is invalid.")
         }
 
         if(password!=password2){
@@ -62,7 +63,14 @@ export function Register(){
         const responseData = await response.json()
 
         if(response.status != 201){
-            setRegisterError(responseData.message)
+            if(responseData.message?.includes("USER ALREADY REGISTERED WITH GOOGLE")){
+                setRegisterError("This E-mail is already associated with a Google login.")
+                return
+            }
+            if(responseData.message?.includes("USER ALREADY REGISTERED")){
+                setRegisterError("This E-mail is already registered. Please log in instead.")
+                return
+            }
             toast.error(`Couldn't create your account`, {duration : 2500, id:t})
         }else{
             toast.success(`Welcome aboard, ${name}! Check your inbox.`, {duration : 5000, id:t})
@@ -92,17 +100,17 @@ export function Register(){
     }
 
     const handleNameChange=(e)=>{
-        setName(e.target.value)
+        setName(capitalize(e.target.value))
     }
 
     const handleLastNameChange=(e)=>{
-        setLastName(e.target.value)
+        setLastName(capitalize(e.target.value))
     }
 
     return(
-        <section className="register-section">
+        <section className={styles.registerSection}>
             <h2>Register</h2>
-            <form className="register-form">
+            <form className={styles.registerForm}>
                 <label htmlFor="register-name-inp">Name</label>
                 <input type="text" name="name" id="register-name-inp" placeholder="Type your name" value={name} onChange={handleNameChange}/>
                 <label htmlFor="register-name-inp">Last Name</label>
@@ -113,21 +121,21 @@ export function Register(){
                 <input type="password" name='password' id='register-password-inp' placeholder='Choose your password' value={password} onChange={handlePasswordChange} />
                 <label htmlFor="register-password2-inp">Confirm Password</label>
                 <input type="password" name='password2' id='register-password2-inp' placeholder='Re-Enter your password' value={password2} onChange={handlePassword2Change} />
-                <p id='registerErrorLabel'>{registerError}</p>
+                <p className={styles.registerErrorLabel}>{registerError}</p>
             </form>
 
-            <button id='register-btn' onClick={handleRegisterBtnClick}>
+            <button className={styles.registerBtn} onClick={handleRegisterBtnClick}>
                 Register
             </button>
 
             <div className='altLogins'>
                 <p>Or Sign up using:</p>
-                <button className="altLoginBtn" id='googleLogin' onClick={handleGoogleLoginBtnClick}/>
-                <button className= "altLoginBtn" id='facebookLogin' onClick={()=>{alert("Feature Coming Soon")}}/>
+                <button className={`${styles.altLoginBtn} ${styles.googleLogin}`} onClick={handleGoogleLoginBtnClick}/>
+                <button className={`${styles.altLoginBtn} ${styles.facebookLogin}`} onClick={()=>{alert("Feature Coming Soon")}}/>
             </div>
-            <div className='login-linksContainer'>
-                <p className='loginLink'>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
-                <p className='loginLink'>Already have an account? <span><Link to='/login' >Login</Link></span> </p>
+            <div className={styles.loginLinksContainer}>
+                <p className={styles.loginLink}>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
+                <p className={styles.loginLink}>Already have an account? <span><Link to='/login' >Login</Link></span> </p>
             </div>
         </section>
     )

@@ -1,4 +1,4 @@
-.register-section{
+.registerSection{
     color: #222222;
     display: flex;
     flex-direction: column;
@@ -11,13 +11,13 @@
     border-radius: 15px;
 }
 
-.register-section label{
+.registerSection label{
     color: #222222;
     font-weight: 600;
     margin-top: 10px;
 }
 
-.register-section input{
+.registerSection input{
     color: #444444;
     font-weight: 500;
     padding: 6px;
@@ -27,21 +27,21 @@
     background-color: transparent;
 }
 
-.register-section input::placeholder{
+.registerSection input::placeholder{
     font-style: italic;
     font-weight: 400;
 }
-.register-section a{
+.registerSection a{
     color: inherit;
     text-decoration: none;
     font-weight: 600;
 }
 
-.register-section a:visited{
+.registerSection a:visited{
     color: inherit
 }
 
-.register-form{
+.registerForm{
     display: flex;
     flex-direction: column;
     min-width: 70%
@@ -53,7 +53,7 @@
     font-size: 12px;
 }
 
-.login-linksContainer{
+.loginLinksContainer{
     display: flex;
     flex-direction: column;
     width: 70%;
@@ -80,29 +80,29 @@
     cursor: pointer;
 }
 
-#googleLogin{
+.googleLogin{
     background-image: url("/Google-icon.webp");
     transition: all 0.2s ease;
 }
 
-#facebookLogin{
+.facebookLogin{
     background-image: url("/Facebook-icon.png");
     transition: all 0.2s ease;
 }
 
-#facebookLogin:hover {
+.facebookLogin:hover {
     /*background-color: #efa424;*/
     box-shadow: 3px 1px #3953a8;
     top: 1px;
 }
 
-#googleLogin:hover {
+.googleLogin:hover {
     /*background-color: #efa424;*/
     box-shadow: 3px 1px #3953a8;
     top: 1px;
 }
 
-#register-btn{
+.registerBtn{
     color: #fafafa;
     font-size: 18px;
     background: linear-gradient(to bottom , #3953a8, #a777e3);
@@ -114,17 +114,17 @@
     cursor: pointer;
 }
 
-#register-btn:hover {
+.registerBtn:hover {
     /*background-color: #efa424;*/
     box-shadow: 3px 1px #3953a8;
     top: 1px;
 }
 
-#register-btn:active{
+.registerBtn:active{
     transform: scale(0.9);
 }
 
-#registerErrorLabel{
+.registerErrorLabel{
     font-style: italic;
     align-self:end;
     color: red;
