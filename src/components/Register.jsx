@@ -63,16 +63,16 @@ export function Register(){
 
         if(response.status != 201){
             setRegisterError(responseData.message)
-            toast.error(`Couldn't create your account`, {duration : 2000, id:t})
+            toast.error(`Couldn't create your account`, {duration : 2500, id:t})
         }else{
-            toast.success(`Welcome aboard, ${name}`, {duration : 2000, id:t})
+            toast.success(`Welcome aboard, ${name}! Check your inbox.`, {duration : 5000, id:t})
             setName("")
             setLastName("")
             setEmail("")
             setPassword("")
             setPassword2("")
             setRegisterError("")
-            navigate("/")
+            navigate("/verify")
         }
 
         return responseData

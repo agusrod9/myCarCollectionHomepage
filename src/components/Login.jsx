@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import './Login.css'
+import styles from './Login.module.css'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router-dom'
+import validator from 'validator';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -14,8 +15,12 @@ export function Login ({onSuccess}){
         e.preventDefault()
         setLoginError("")
         if(email=="" || password==""){
-            setLoginError("Missing mandatory fields.")
+            setLoginError("Please enter E-mail and Passsword.")
         }else{
+            if(!validator.isEmail(email)){
+                setLoginError("E-Mail is invalid.")
+                return
+            }
             const resp = await loginToApi(email,password, navigate)
             if(resp.message == "USER LOGGED"){
                 setEmail("")
@@ -53,25 +58,47 @@ export function Login ({onSuccess}){
             }
             
         }else{
-            setLoginError(responseData.message)
+            if(responseData.message?.includes("USER NOT FOUND")){
+                setLoginError("User not found.")
+                return
+            }
+            if(responseData.message?.includes("USER MUST VERIFY MAIL FIRST")){
+                setLoginError("You need to verify your E-Mail to login.")
+                return
+            }
+            if(responseData.message?.includes("USER NO LONGER ACTIVE")){
+                setLoginError("Your account is no longer active.")
+                return
+            }
+            if(responseData.message?.includes("USER MUST LOGIN USING GOOGLE")){
+                setLoginError("Please login using Google.")
+                return
+            }
+            if(responseData.message?.includes("INVALID CREDENTIALS")){
+                setLoginError("Invalid email or password.")
+                return
+            }
+            //setLoginError(responseData.message)
         }
         return responseData
         
     }
 
     const handleEmailChange =(e)=>{
+        setLoginError("")
         setEmail(e.target.value)
     }
 
     const handlePasswordChange =(e)=>{
+        setLoginError("")
         setPassword(e.target.value)
     }
 
 
     return(
-        <section className="login-section">
+        <section className={styles.loginSection}>
             <h2>Login</h2>
-            <form className="login-form">
+            <form className={styles.loginForm}>
                 <label htmlFor="login-email-inp">E-mail</label>
                 <div></div>
                 <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
@@ -81,22 +108,22 @@ export function Login ({onSuccess}){
                         handleLoginBtnClick(e)
                     }
                 }}/>
-                <p id='loginErrorLabel'>{loginError}</p>
-                <p className='loginLink'><Link to='/resetPass'>Forgot your password?</Link></p>
+                <p className={styles.loginErrorLabel}>{loginError}</p>
+                <p className={styles.loginLink}><Link to='/resetPass'>Forgot your password?</Link></p>
             </form>
 
-            <button id='login-btn' onClick={handleLoginBtnClick}>
+            <button className={styles.loginBtn} onClick={handleLoginBtnClick}>
                 Login
             </button>
 
-            <div className='altLogins'>
+            <div className={styles.altLogins}>
                 <p>Or Login using:</p>
-                <button className="altLoginBtn" id='googleLogin' onClick={handleGoogleLoginBtnClick}/>
-                <button className= "altLoginBtn" id='facebookLogin' onClick={()=>{alert("Feature Coming Soon")}}/>
+                <button className={`${styles.altLoginBtn} ${styles.googleLogin}`} onClick={handleGoogleLoginBtnClick}/>
+                <button className={`${styles.altLoginBtn} ${styles.facebookLogin}`} onClick={()=>{alert("Feature Coming Soon")}}/>
             </div>
-            <div className='login-linksContainer'>
-                <p className='loginLink'>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
-                <p className='loginLink'>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
+            <div className={styles.logininksContainer}>
+                <p className={styles.loginLink}>E-mail not verified? <span><Link to='/verify'>Verify</Link></span></p>
+                <p className={styles.loginLink}>Don´t have an account? <span><Link to='/register'>Register</Link></span> </p>
             </div>
         </section>
     )
