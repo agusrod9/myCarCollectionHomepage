@@ -91,3 +91,16 @@
     margin-bottom: 10px;
     font-size: 12px;
 }
+
+.getNewCodeLabel{
+    font-style: italic;
+    align-self:end;
+    color: #222;
+    height: 20px;
+    font-size: 14px;
+}
+
+.resendLink{
+    font-weight: 600;
+    cursor: pointer;
+}

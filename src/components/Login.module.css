@@ -89,6 +89,7 @@
 .facebookLogin{
     background-image: url("/Facebook-icon.png");
     transition: all 0.2s ease;
+    visibility: hidden;
 }
 
 .googleLogin:hover {

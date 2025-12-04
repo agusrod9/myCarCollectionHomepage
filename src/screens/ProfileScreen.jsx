@@ -107,7 +107,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         const response = await fetch(url, opts)
         if(response.status==200){
             if(changedEmailFlag){
-                const url = `${API_BASEURL}sessions/getVerificationCode?userId=${loggedUserId}`
+                const url = `${API_BASEURL}sessions/getVerificationCode?email=${updatedValues.email}`
                 const opts = {
                     method : "POST"
                 }
