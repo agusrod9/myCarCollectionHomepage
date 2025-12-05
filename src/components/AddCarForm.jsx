@@ -6,7 +6,6 @@ import { AppContext } from '../context/AppContext';
 import { CirclePicker } from 'react-color';
 import { uploadManyImages, convertToWebp } from '../utils/images.utils';
 import toast from "react-hot-toast";
-import { capitalize } from '../utils/textUtils';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function AddCarForm (){
@@ -240,11 +239,11 @@ export function AddCarForm (){
             <div className={styles.addCarFormBasicFields}>
                 <div className={styles.fieldContainer}> 
                     <label htmlFor='carMakeInput'>Make</label>
-                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(capitalize(e.target.value, true))} placeholder='e: Ford' />
+                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(e.target.value)} placeholder='e: Ford' />
                 </div>
                 <div className={styles.fieldContainer}>
                     <label htmlFor='carModelInput'>Model</label>
-                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(capitalize(e.target.value, true))} placeholder='e: Fiesta' />
+                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(e.target.value)} placeholder='e: Fiesta' />
                 </div>
                 <div className={styles.fieldContainer}>
                     <label htmlFor='carScaleSelectInput'>Scale</label>
@@ -318,7 +317,7 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carManufacturerInput'>Manufacturer</label>
-                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(capitalize(e.target.value, true))} placeholder='e: Hotwheels'/>
+                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(e.target.value)} placeholder='e: Hotwheels'/>
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carSeriesInput'>Series</label>
