@@ -27,7 +27,22 @@
     background-color: transparent;
 }
 
+.passwordInput{
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
 .loginSection input::placeholder{
+    font-style: italic;
+    font-weight: 400;
+}
+
+.passwordInput::placeholder{
     font-style: italic;
     font-weight: 400;
 }

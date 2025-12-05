@@ -3,6 +3,7 @@ import styles from './Login.module.css'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import validator from 'validator';
+import PasswordInput from './PasswordInput';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -102,7 +103,7 @@ export function Login ({onSuccess}){
                 <label htmlFor="login-email-inp">E-mail</label>
                 <input type="email" name="email" id="login-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="login-password-inp">Password</label>
-                <input type="password" name='password' id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} onKeyDown={(e)=>{
+                <PasswordInput id='login-password-inp' placeholder='Type your password' value={password} onChange={handlePasswordChange} onKeyDown={(e)=>{
                     if(e.key=='Enter'){
                         handleLoginBtnClick(e)
                     }
