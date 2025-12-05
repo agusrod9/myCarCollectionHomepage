@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export default function ContactForm(){
     const [error, setError] = useState("");
+    const [attachmentFile, setAttachmentFile] = useState(null)
     const [formData, setFormData] = useState({
         name : "",
         email : "",
@@ -118,6 +119,7 @@ export default function ContactForm(){
                     id='contactAttachment'
                     name='contactAttachment'
                     accept='.jpg,.jpeg,.png,.pdf,.heic,.heif'
+                    onChange={(e)=> setAttachmentFile(e.target.files[0] || null)}
 
                 />
                 <div className={styles.checkContainer}>
