@@ -21,6 +21,7 @@ import { Toaster } from 'react-hot-toast'
 import useActivityPing from './hooks/useActivityPing.js'
 import { TermsAndConditions } from './screens/TermsAndConditions.jsx'
 import { LandingScreen } from './screens/LandingScreen.jsx'
+import ContactScreen from './screens/ContactScreen.jsx'
 
 function Main(){
     
@@ -39,7 +40,7 @@ function Main(){
     if(isLandingDomain){
         return <>
             <BrowserRouter>
-                <Routes> //ver como hacer para detectar cookie de login y ya n otengo que preguntar por loggeduser sino que redirijo a app.thediecaster
+                <Routes> 
                     <Route path='/' element={<LandingScreen />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen/>} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
@@ -47,6 +48,7 @@ function Main(){
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
+                    <Route path='/contact' element={<ContactScreen />} />
                     <Route path='*' element={<NotFoundScreen />} />
                 </Routes>
             </BrowserRouter>
@@ -73,6 +75,7 @@ function Main(){
                     <Route path='/myGarage' element={<ProtectedRoute Component={MyGarageScreen} />} />
                     <Route path='/myCollections' element={<ProtectedRoute Component={MyCollectionsScreen} />} />
                     <Route path='/details' element={<ProtectedRoute Component={CarDetailsScreen}/>} />
+                    <Route path='/contact' element={<ContactScreen />} />
                     <Route path='*' element={<NotFoundScreen />} />
                 </Routes>
             </BrowserRouter>

@@ -127,7 +127,7 @@ export function MyCollectionsScreen(){
                                 name='newColName' 
                                 className={styles.newColSectionFormInput} 
                                 onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, collectionName: capitalize(e.target.value)}))
+                                    setNewCollection(prev=>({...prev, collectionName: capitalize(e.target.value, true)}))
                                 }}
                             />
                         </div>
@@ -138,7 +138,7 @@ export function MyCollectionsScreen(){
                                 value={newCollection.description} 
                                 className={styles.newColDesc}
                                 onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, description: capitalize(e.target.value)}))
+                                    setNewCollection(prev=>({...prev, description: e.target.value}))
                                 }}
                             />
                         </div>

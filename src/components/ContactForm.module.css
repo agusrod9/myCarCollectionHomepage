@@ -1,0 +1,57 @@
+.contactFormContainer{
+    color: #222222;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 800px;
+    min-width: 400px;
+    min-height: 500px;
+    background-color: #fafafa;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.contactForm{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.contactForm label{
+    color: #222222;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.contactForm input, select{
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
+.loginSection input::placeholder{
+    font-style: italic;
+    font-weight: 400;
+}
+
+.messageInput{
+    resize: none;
+    height: 200px;
+    padding: 6px;
+    color: #222222;
+    margin-top: 10px;
+    border-radius: 15px;
+}
+
+.formErrorLabel{
+    font-style: italic;
+    align-self:end;
+    color: red;
+    height: 20px;
+    font-size: 14px;
+}

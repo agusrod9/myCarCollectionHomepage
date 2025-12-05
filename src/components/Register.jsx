@@ -101,11 +101,11 @@ export function Register(){
     }
 
     const handleNameChange=(e)=>{
-        setName(capitalize(e.target.value))
+        setName(capitalize(e.target.value, true))
     }
 
     const handleLastNameChange=(e)=>{
-        setLastName(capitalize(e.target.value))
+        setLastName(capitalize(e.target.value, true))
     }
 
     return(

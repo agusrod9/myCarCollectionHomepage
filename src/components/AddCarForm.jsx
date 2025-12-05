@@ -240,11 +240,11 @@ export function AddCarForm (){
             <div className={styles.addCarFormBasicFields}>
                 <div className={styles.fieldContainer}> 
                     <label htmlFor='carMakeInput'>Make</label>
-                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(capitalize(e.target.value))} placeholder='e: Ford' />
+                    <input type="text" name='carMake' id='carMakeInput' value={make} onChange={(e)=>setMake(capitalize(e.target.value, true))} placeholder='e: Ford' />
                 </div>
                 <div className={styles.fieldContainer}>
                     <label htmlFor='carModelInput'>Model</label>
-                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(capitalize(e.target.value))} placeholder='e: Fiesta' />
+                    <input type="text" name='carModel' id='carModelInput' value={model} onChange={(e)=>setModel(capitalize(e.target.value, true))} placeholder='e: Fiesta' />
                 </div>
                 <div className={styles.fieldContainer}>
                     <label htmlFor='carScaleSelectInput'>Scale</label>
@@ -318,7 +318,7 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carManufacturerInput'>Manufacturer</label>
-                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(capitalize(e.target.value))} placeholder='e: Hotwheels'/>
+                        <input type="text" name='carManufacturer' id='carManufacturerInput' value={manufacturer} onChange={(e)=>setManufacturer(capitalize(e.target.value, true))} placeholder='e: Hotwheels'/>
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carSeriesInput'>Series</label>
@@ -375,7 +375,7 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carNotesInput'>Notes</label>
-                        <textarea type="text" name='carNotes' className={styles.carNotesInput} value={notes} onChange={(e)=>setNotes(capitalize(e.target.value))} placeholder='e: Birthday gift' rows={4}/>
+                        <textarea type="text" name='carNotes' className={styles.carNotesInput} value={notes} onChange={(e)=>setNotes(e.target.value)} placeholder='e: Birthday gift' rows={4}/>
                     </div>
                     <div className={styles.fieldContainer}>
                             
