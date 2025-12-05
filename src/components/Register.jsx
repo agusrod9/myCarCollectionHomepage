@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import validator from 'validator'
 import toast from 'react-hot-toast'
 import { capitalize } from '../utils/textUtils.js'
+import PasswordInput from './PasswordInput.jsx'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -118,9 +119,13 @@ export function Register(){
                 <label htmlFor="register-email-inp">E-mail</label>
                 <input type="email" name="email" id="register-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
                 <label htmlFor="register-password-inp">Password</label>
-                <input type="password" name='password' id='register-password-inp' placeholder='Choose your password' value={password} onChange={handlePasswordChange} />
+                <PasswordInput placeholder='Choose your password' value={password} onChange={handlePasswordChange}/>
                 <label htmlFor="register-password2-inp">Confirm Password</label>
-                <input type="password" name='password2' id='register-password2-inp' placeholder='Re-Enter your password' value={password2} onChange={handlePassword2Change} />
+                <PasswordInput placeholder='Re-Enter your password' value={password2} onChange={handlePassword2Change} onKeyDown={(e)=>{
+                    if(e.key=='Enter'){
+                        handleRegisterBtnClick(e)
+                    }
+                }}/>
                 <p className={styles.registerErrorLabel}>{registerError}</p>
             </form>
 
