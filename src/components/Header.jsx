@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styles from './Header.module.css'
-import { ChevronDown, ChevronUp, User, Car, Cog, LogOut } from 'lucide-react'
+import { ChevronDown, ChevronUp, User, Car, Cog, LogOut, Mail } from 'lucide-react'
 import { MenuItem } from './MenuItem'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
@@ -26,6 +26,7 @@ export function Header({loggedUserName, handleLogOut, loggedUserProfilePicture})
                     <MenuItem icon={<User />} text="Profile" onClick={()=>{navigate('/profile')}}/>
                     <MenuItem icon={<Car />} text="My Collections" onClick={()=>{navigate('/myCollections')}}/>
                     <MenuItem icon={<Cog />} text="Configuration"/>
+                    <MenuItem icon={<Mail />} text="Contact Us" onClick={()=>{navigate('/contact')}}/>
                     <MenuItem icon={<LogOut />} text="Log out" onClick={()=>handleLogOut(true)}/>
                 </div> 
                 : null
