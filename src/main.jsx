@@ -75,7 +75,7 @@ function Main(){
                     <Route path='/myGarage' element={<ProtectedRoute Component={MyGarageScreen} />} />
                     <Route path='/myCollections' element={<ProtectedRoute Component={MyCollectionsScreen} />} />
                     <Route path='/details' element={<ProtectedRoute Component={CarDetailsScreen}/>} />
-                    <Route path='/contact' element={<ContactScreen />} />
+                    <Route path='/contact' element={<ProtectedRoute Component={ContactScreen} />} />
                     <Route path='*' element={<NotFoundScreen />} />
                 </Routes>
             </BrowserRouter>
