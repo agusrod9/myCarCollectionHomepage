@@ -7,4 +7,5 @@
     width: 100vw;
     background-image: linear-gradient(to bottom, #1e1e2f, #121212f1), url("/pexels-pixabay-315938.jpg");
     background-position: center;
+    position: relative;
 }

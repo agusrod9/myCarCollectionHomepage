@@ -1,14 +1,15 @@
-import './RegisterScreen.css'
+import styles from './RegisterScreen.module.css'
 import {Register} from '../components/Register.jsx'
 import usePageTitle from '../hooks/usePageTitle.js'
+import BackHomeNav from '../components/BackHomeNav.jsx';
 
 export function RegisterScreen(){
     usePageTitle("Register")
+    
     return(
-        <section className='RegisterBody'>
-            <div className='formContainer'>
-                <Register />
-            </div>
+        <section className={styles.RegisterBody}>
+            <Register />
+            <BackHomeNav />
         </section>
     )
 }

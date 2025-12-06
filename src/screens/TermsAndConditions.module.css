@@ -1,28 +1,35 @@
 .TCBody {
     font-family: Inter, system-ui, sans-serif;
     line-height: 1.6;
-    padding: 32px;
-    max-width: 900px;
-    margin: auto;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    justify-content: center;
 }
 
-.TCBody h1 {
+.termsContainer{
+    max-width: 850px;
+    padding: 36px;
+    margin-top: 40px;
+}
+
+.termsContainer h1 {
     margin-bottom: 12px;
 }
 
-.TCBody h2 {
+.termsContainer h2 {
     margin-top: 28px;
 }
 
-.TCBody h3 {
+.termsContainer h3 {
     margin-top: 20px;
 }
 
-.TCBody ul {
+.termsContainer ul {
     margin: 12px 0;
     padding-left: 20px;
 }
 
-.TCBody p {
+.termsContainer p {
     margin: 12px 0;
 }
