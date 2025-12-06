@@ -1,4 +1,4 @@
-import './AddCarScreen.css'
+import styles from './AddCarScreen.module.css'
 import { AddCarForm } from "../components/AddCarForm";
 import { Header } from '../components/Header';
 import { useContext } from 'react';
@@ -9,12 +9,12 @@ export function AddCarScreen(){
     const {handleLogOut, loggedUserId, loggedUserName, loggedUserProfilePicture} = useContext(AppContext)
     usePageTitle("New car")
     return(
-        <section className="AddCarBody">
+        <section className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
-            <h1>New Car</h1>
-            <div className='AddCar-formContainer'>
+            <section className={styles.AddCarBody}>
+                <h1>New Car</h1>
                 <AddCarForm />
-            </div>
+            </section>
         </section>
     )
 }

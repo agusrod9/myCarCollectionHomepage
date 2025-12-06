@@ -112,85 +112,87 @@ export function MyCollectionsScreen(){
 
     if(loading) return <Loading />
     return(
-        <span className={styles.screenContainer}>
+        <section className={styles.root}>
             <Header loggedUserName={loggedUserName} loggedUserProfilePicture={loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
-            <h1 className={styles.screenTitle}>My collections</h1>
-            <div className={styles.mainContainer}>
-                <div className={styles.newColSection}>
-                    <p className={styles.newColSectionTitle}>Add new collection</p>
-                    <div className={styles.newColSectionForm}>
-                        <div className={styles.newColSectionFormItem}>
-                            <label htmlFor="newColName">Name</label>
-                            <input 
-                                type="text" 
-                                value={newCollection.collectionName} 
-                                name='newColName' 
-                                className={styles.newColSectionFormInput} 
-                                onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, collectionName: capitalize(e.target.value, true)}))
-                                }}
-                            />
+            <span className={styles.screenContainer}>
+                <h1 className={styles.screenTitle}>My collections</h1>
+                <div className={styles.mainContainer}>
+                    <div className={styles.newColSection}>
+                        <p className={styles.newColSectionTitle}>Add new collection</p>
+                        <div className={styles.newColSectionForm}>
+                            <div className={styles.newColSectionFormItem}>
+                                <label htmlFor="newColName">Name</label>
+                                <input 
+                                    type="text" 
+                                    value={newCollection.collectionName} 
+                                    name='newColName' 
+                                    className={styles.newColSectionFormInput} 
+                                    onChange={(e)=>{
+                                        setNewCollection(prev=>({...prev, collectionName: capitalize(e.target.value, true)}))
+                                    }}
+                                />
+                            </div>
+                            <div className={styles.newColSectionFormItem}>
+                                <label htmlFor="newColDesc">Description</label>
+                                <textarea 
+                                    name="newColDesc" 
+                                    value={newCollection.description} 
+                                    className={`${styles.newColSectionFormInput} ${styles.newColDesc}`}
+                                    onChange={(e)=>{
+                                        setNewCollection(prev=>({...prev, description: e.target.value}))
+                                    }}
+                                />
+                            </div>
+                            <div className={styles.newColSectionFormItem}>
+                                <label htmlFor="newColCover" className={styles.newColCoverLabel}>
+                                Select cover image
+                                </label>
+                                <input
+                                    type="file"
+                                    id='newColCover'
+                                    name='newColCover'
+                                    accept='image/*'
+                                    className={styles.newColCover}
+                                    onChange={handleColCoverSelect}
+                                />
+                                {colCoverPreview &&
+                                    <div className={styles.newColCoverPreviewContainer}>
+                                        <img src={colCoverPreview} alt="New collection cover image preview." className={styles.newColCoverPreview} />
+                                    </div>
+                                }
+                                
+                            </div>
+                            <div className={styles.newColSectionFormItem}>
+                                <label htmlFor="newColVisibility">Visibility</label>
+                                <select 
+                                    name="newColVisibility" 
+                                    value={newCollection.visibility} 
+                                    className={styles.newColSectionFormInput}
+                                    onChange={(e)=>{
+                                        setNewCollection(prev=>({...prev, visibility: e.target.value}))
+                                    }}
+                                >
+                                    <option value="public">Public</option>
+                                    <option value="friendsOnly">Friends</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <ActionBtn 
+                                label='Add collection' 
+                                icon={<Save />} 
+                                disabled={!okToSave} 
+                                onClick={handleSaveNewCollection}/>
                         </div>
-                        <div className={styles.newColSectionFormItem}>
-                            <label htmlFor="newColDesc">Description</label>
-                            <textarea 
-                                name="newColDesc" 
-                                value={newCollection.description} 
-                                className={styles.newColDesc}
-                                onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, description: e.target.value}))
-                                }}
-                            />
-                        </div>
-                        <div className={styles.newColSectionFormItem}>
-                            <label htmlFor="newColCover" className={styles.newColCoverLabel}>
-                            Select cover image
-                            </label>
-                            <input
-                                type="file"
-                                id='newColCover'
-                                name='newColCover'
-                                accept='image/*'
-                                className={styles.newColCover}
-                                onChange={handleColCoverSelect}
-                            />
-                            {colCoverPreview &&
-                                <div className={styles.newColCoverPreviewContainer}>
-                                    <img src={colCoverPreview} alt="New collection cover image preview." className={styles.newColCoverPreview} />
-                                </div>
-                            }
-                            
-                        </div>
-                        <div className={styles.newColSectionFormItem}>
-                            <label htmlFor="newColVisibility">Visibility</label>
-                            <select 
-                                name="newColVisibility" 
-                                value={newCollection.visibility} 
-                                className={styles.newColSectionFormInput}
-                                onChange={(e)=>{
-                                    setNewCollection(prev=>({...prev, visibility: e.target.value}))
-                                }}
-                            >
-                                <option value="public">Public</option>
-                                <option value="friendsOnly">Friends</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </div>
-                        <ActionBtn 
-                            label='Add collection' 
-                            icon={<Save />} 
-                            disabled={!okToSave} 
-                            onClick={handleSaveNewCollection}/>
+                    </div>
+                    <div className={styles.userCols}>
+                        {
+                            userCollections?.map((collection)=>{
+                                return <CollectionCard collection={collection} key={collection._id}/>
+                            })
+                        }
                     </div>
                 </div>
-                <div className={styles.userCols}>
-                    {
-                        userCollections?.map((collection)=>{
-                            return <CollectionCard collection={collection} key={collection._id}/>
-                        })
-                    }
-                </div>
-            </div>
-        </span>
+            </span>
+        </section>
     )
 }

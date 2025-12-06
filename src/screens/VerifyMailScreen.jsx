@@ -14,7 +14,7 @@ export function VerifyMailScreen(){
     }
     
     return(
-        <section className={styles.verifyBody}>
+        <section className={styles.root}>
             <VerifyMail onSuccess={handleVerificationSuccess}/>
             <BackHomeNav />
         </section>

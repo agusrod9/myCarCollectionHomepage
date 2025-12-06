@@ -6,7 +6,7 @@ import { BrushCleaning } from 'lucide-react'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
-export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
+export function FiltersPanel({setSelectedFilters, selectedFilters}){
     const {loggedUserId} = useContext(AppContext)
     const [availableFilters, setAvailableFilters] = useState({})
     
@@ -36,7 +36,7 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
     const hasFilters = Object.values(availableFilters).some((value) => Array.isArray(value) && value.length > 0);
 
     return(
-        <span className={className}>
+        <span className={styles.FPContainer}>
             {
                 Object.entries(availableFilters).map(([key, values])=>(
                     <div key={key} className={styles.filterGroup}>
@@ -75,7 +75,9 @@ export function FiltersPanel({className, setSelectedFilters, selectedFilters}){
             {
                 hasFilters
                 ?
-                <ActionBtn label={'Clear All'} icon={<BrushCleaning/>} onClick={clearAllFilters}/>
+                <div className={styles.BtnContainer}>
+                    <ActionBtn label={'Clear All'} icon={<BrushCleaning/>} onClick={clearAllFilters}/>
+                </div>
                 : null
             }
         </span>

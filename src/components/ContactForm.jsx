@@ -81,6 +81,7 @@ export default function ContactForm(){
 
     return(
         <div className={styles.contactFormContainer}>
+            <h1 className={styles.contactTitle}>Contact</h1>
             <form onSubmit={handleFormSubmit} className={styles.contactForm}>
                 <label htmlFor="">Name</label>
                 <input type="text" placeholder='Type your name' value={formData.name} onChange={(e)=>{

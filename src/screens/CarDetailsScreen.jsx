@@ -311,7 +311,7 @@ export function CarDetailsScreen(){
     },[])
 
     return(
-        <span className={styles.screen}>
+        <span className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserProfilePicture={loggedUserProfilePicture} loggedUserName={loggedUserName} handleLogOut={()=>{handleLogOut(true)}}/>
             <div className={styles.container}>
                 <div className={styles.imagesSection} tabIndex={0} ref={imgContainerRef} onKeyDown={

@@ -1,21 +1,21 @@
-.homeBody{
+.root{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
     width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
 }
+
 .main{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    padding-top: 30px;
     height: 100%;
 }
 
-.homeBody h1{
-    padding-top: 40px;
+.homeBody h2{
+    padding-top: 65px;
 }
 
 .usrInTitle{

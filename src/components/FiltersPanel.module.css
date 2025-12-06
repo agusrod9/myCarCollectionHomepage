@@ -1,7 +1,9 @@
 .FPContainer{
     display: flex;
     flex-direction: column;
-    background-color: #0000ff;
+    gap: 5px;
+    padding: 10px;
+    height: 100%;
     
 }
 
@@ -46,8 +48,12 @@
 }
 
 .filterCheck:checked::before {
-  content: "✓";
-  color: white;
-  font-size: 0.85rem;
-  font-weight: bold;
+    content: "✓";
+    color: white;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.BtnContainer{
+    margin-top: 25px;
 }

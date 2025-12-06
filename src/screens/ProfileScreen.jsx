@@ -293,7 +293,7 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
     }
     
     return(
-        <section className={styles.ProfileScreenBody}>
+        <section className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <div className={styles.userBriefDataContainer}>
                 <div className={styles.profilePictureOverlayContainer} onClick={handleSelectProfilePicture}>

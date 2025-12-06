@@ -1,4 +1,4 @@
-import './HomeScreen.css'
+import styles from './HomeScreen.module.css'
 import { Header } from '../components/Header.jsx'
 import { DashBoard } from '../components/DashBoard.jsx'
 import { useContext} from 'react'
@@ -14,10 +14,10 @@ export function HomeScreen(){
     }
     usePageTitle(`${loggedUserName}´s Home`)
     return(
-        <section className='homeBody'>
+        <section className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
-                <h2>Welcome <span className='usrInTitle'>{loggedUserName}</span>!</h2>
-            <div className='main'>
+                <h2>Welcome <span className={styles.usrInTitle}>{loggedUserName}</span>!</h2>
+            <div className={styles.main}>
                 <DashBoard userCarCount={userCarCount} userCarsValue={userCarsValue} userFavoritesCount={userFavoritesCount} handleAddCarBtnClick= {handleAddCarBtnClick} recentlyAddedCars={recentlyAddedCars}/>
             </div>
         </section>

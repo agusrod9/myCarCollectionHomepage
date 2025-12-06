@@ -6,7 +6,7 @@ export function TermsAndConditions(){
     usePageTitle("Terms & Conditions")
 
     return (
-        <section className={styles.TCBody}>
+        <section className={styles.root}>
             <BackHomeNav />
             <div className={styles.termsContainer}>
 

@@ -11,7 +11,7 @@ export function LoginScreen(){
     usePageTitle("Login")
 
     return(
-        <section className={styles.LoginBody}>
+        <section className={styles.root}>
             <Login onSuccess={handleLogin}/>
             <BackHomeNav />
         </section>

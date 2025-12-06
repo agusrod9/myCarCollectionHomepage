@@ -12,24 +12,26 @@ export function Login ({onSuccess}){
     const [password, setPassword] = useState("")
     const [loginError, setLoginError] = useState("")
     const navigate = useNavigate()
+
     const handleLoginBtnClick =async (e)=>{
         e.preventDefault()
         setLoginError("")
         if(email=="" || password==""){
             setLoginError("Please enter E-mail and Passsword.")
-        }else{
-            if(!validator.isEmail(email)){
-                setLoginError("E-Mail is invalid.")
-                return
-            }
-            const resp = await loginToApi(email,password, navigate)
-            if(resp.message == "USER LOGGED"){
-                setEmail("")
-            }
-            setPassword("")
+            return
         }
-        
+        if(!validator.isEmail(email)){
+            setLoginError("E-Mail is invalid.")
+            return
+        }
+        const resp = await loginToApi(email,password, navigate)
+        if(resp.message == "USER LOGGED"){
+            setEmail("")
+        }
+        setPassword("")
     }
+        
+    
 
     const handleGoogleLoginBtnClick = async(e)=>{
         e.preventDefault()

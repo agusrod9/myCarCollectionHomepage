@@ -1,5 +1,5 @@
 
-.loading-container {
+.loadingContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,7 +7,7 @@
     min-height: 100vh; 
 }
 
-.loading-spinner {
+.loadingSpinner {
     border: 5px solid #f3f3f3;
     border-top: 5px solid #0253B7;
     border-radius: 50%;
@@ -21,7 +21,7 @@
     100% { transform: rotate(360deg); }
 }
 
-.loading-container p {
+.loadingContainer p {
     margin-top: 10px;
     font-size: 18px;
 }

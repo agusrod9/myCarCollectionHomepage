@@ -7,7 +7,7 @@ export function RegisterScreen(){
     usePageTitle("Register")
     
     return(
-        <section className={styles.RegisterBody}>
+        <section className={styles.root}>
             <Register />
             <BackHomeNav />
         </section>

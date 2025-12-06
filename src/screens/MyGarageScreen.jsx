@@ -82,8 +82,12 @@ export function MyGarageScreen(){
         <section className={styles.root}>
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <div className={styles.myGarageContainer}>
-                <FiltersPanel className={styles.myGFilters} setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
-                <SearchBar className={styles.myGSearchBar} title='My Garage' handleSearch={handleSearch}/>
+                <div className={styles.myGFilters}>
+                    <FiltersPanel setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                </div>
+                <div className={styles.myGSearchBar}>
+                    <SearchBar  title='My Garage' handleSearch={handleSearch}/>
+                </div>
                 <div className={styles.myGMain}>
                     {
                         filteredCars?.map(car=> <CarCard key={car._id} car={car} acBtnClick={()=>acBtnClick(car)}/>)
