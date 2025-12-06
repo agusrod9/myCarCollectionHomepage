@@ -1,6 +1,9 @@
-import './ChangePassForm.css';
+import styles from './ChangePassForm.module.css';
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
+import PasswordInput from './PasswordInput';
+import validator from 'validator';
+import toast from 'react-hot-toast';
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
@@ -8,28 +11,36 @@ export function ChangePassForm(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [password2, setPassword2] = useState("")
+    const [formError, setFormError] = useState("")
     const navigate = useNavigate()
-    const handleChangePassBtnClick =async (e)=>{
-    
+
+    const handleChangePassBtnClick =async(e)=>{
         e.preventDefault()
+        setFormError("")
         if(email=="" || password=="" || password2==""){
-            return alert("Faltan datos")
+            setFormError("Please enter E-mail and Passsword.")
+            return
+        }
+
+        if(!validator.isEmail(email)){
+            setFormError("E-Mail is invalid.")
+            return
         }
 
         if(password!=password2){
-            return alert("Contraseñas no coinciden")
+            setFormError("Passwords don´t match.")
+            return
         }
-        
+        const t = toast.loading("Updating your password...", {duration : 20000})
         let response = await requestChangePass(email, password)
-        let responseData = await response.json()
         if(response.status != 200){
-            alert(responseData.message)
+            toast.error(`We couldn't create your account, please try again.`, {duration : 3000, id:t})
         }else{
-            alert(responseData.message)
-            navigate('/',{replace:true})
+            toast.success(`Password updated!`, {duration : 3000, id:t})
             setEmail("")
             setPassword("")
             setPassword2("")
+            navigate('/',{replace:true})
         }
         
     }
@@ -52,33 +63,39 @@ export function ChangePassForm(){
 
     const handleEmailChange =(e)=>{
         setEmail(e.target.value)
+        setFormError("")
     }
 
     const handlePasswordChange =(e)=>{
         setPassword(e.target.value)
+        setFormError("")
     }
 
     const handlePassword2Change =(e)=>{
         setPassword2(e.target.value)
+        setFormError("")
     }
 
     return(
-        <section className="changePass-section">
-            <h2>Nueva contraseña</h2>
-            <form className="changePass-form">
-                
+        <section className={styles.changePassSection}>
+            <h2>New password</h2>
+            <form className={styles.changePassForm}>
                 <label htmlFor="register-email-inp">E-mail</label>
-                <input type="email" name="email" id="register-email-inp" placeholder="Ingresa tu E-mail" value={email} onChange={handleEmailChange}/>
-                <label htmlFor="register-password-inp">Contraseña</label>
-                <input type="password" name='password' id='register-password-inp' placeholder='Ingresa tu contraseña' value={password} onChange={handlePasswordChange} />
-                <label htmlFor="register-password2-inp">Repite la contraseña</label>
-                <input type="password" name='password2' id='register-password2-inp' placeholder='Repite tu contraseña' value={password2} onChange={handlePassword2Change} />
-
-
-                <button id='register-btn' onClick={handleChangePassBtnClick}>
-                    Enviar
-                </button>
+                <input type="email" name="email" id="register-email-inp" placeholder="Type your E-mail" value={email} onChange={handleEmailChange}/>
+                <label htmlFor="register-password-inp">Password</label>
+                <PasswordInput className={styles.passwordInput} placeholder='Choose your password' value={password} onChange={handlePasswordChange} />
+                <label htmlFor="register-password2-inp">Confirm Password</label>
+                <PasswordInput className={styles.passwordInput} placeholder='Repeat your password' value={password2} onChange={handlePassword2Change} onKeyDown={(e)=>{
+                    if(e.key=='Enter'){
+                        e.preventDefault()
+                        handleChangePassBtnClick(e)
+                    }
+                }}/>
+                <p className={styles.formErrorLabel}>{formError}</p>
             </form>
+            <button type='submit' className={styles.formBtn} onClick={handleChangePassBtnClick}>
+                Send
+            </button>
             
         </section>
     )

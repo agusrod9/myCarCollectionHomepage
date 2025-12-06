@@ -3,14 +3,11 @@ import { Header } from '../components/Header'
 import { ChangePassForm } from '../components/ChangePassForm.jsx'
 import usePageTitle from '../hooks/usePageTitle.js';
 
-export function ChangePassScreen({loggedUserId}){
+export function ChangePassScreen(){
     usePageTitle("New password")
     return(
         <section className={styles.root}>
-            <Header loggedUserId={loggedUserId} />
-            <div className={styles.formContainer}>
-                <ChangePassForm />
-            </div>
+            <ChangePassForm />
         </section>
     )
 }

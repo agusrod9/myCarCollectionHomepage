@@ -259,7 +259,7 @@ export function AddCarForm (){
                     </select>
                 </div>
                 <div className={styles.fieldContainer}>
-                    <ActionBtn className={styles.AddCarFormMoreInfoButton} label={moreInfoBtnText} icon={moreInfoDisplayed ? <ChevronUp /> : <ChevronDown />} onClick={handleMoreInfoClick}>  </ActionBtn>
+                    <ActionBtn extraClass={styles.AddCarFormMoreInfoButton} label={moreInfoBtnText} icon={moreInfoDisplayed ? <ChevronUp /> : <ChevronDown />} onClick={handleMoreInfoClick}>  </ActionBtn>
                 </div>
                 
             </div>
@@ -383,7 +383,7 @@ export function AddCarForm (){
                 </div>
             </section>
             <div className={styles.saveBtnContainer}>
-                <ActionBtn className={styles.addCarFormSaveButton} icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
+                <ActionBtn extraClass={styles.addCarFormSaveButton} icon={<Save />} label={"Save"} onClick={handleAddCarButtonClick} disabled={!doneUploadingImages || !requiredFieldsSet } >
                 </ActionBtn>
             </div>
         </section>

@@ -121,7 +121,7 @@ export function Register(){
                 <label htmlFor="register-password-inp">Password</label>
                 <PasswordInput placeholder='Choose your password' value={password} onChange={handlePasswordChange}/>
                 <label htmlFor="register-password2-inp">Confirm Password</label>
-                <PasswordInput placeholder='Re-Enter your password' value={password2} onChange={handlePassword2Change} onKeyDown={(e)=>{
+                <PasswordInput placeholder='Repeat your password' value={password2} onChange={handlePassword2Change} onKeyDown={(e)=>{
                     if(e.key=='Enter'){
                         handleRegisterBtnClick(e)
                     }

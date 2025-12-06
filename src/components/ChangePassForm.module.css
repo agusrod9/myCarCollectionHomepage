@@ -1,0 +1,74 @@
+.changePassSection{
+    color: #222222;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 800px;
+    min-width: 400px;
+    min-height: 350px;
+    background-color: #fafafa;
+    border-radius: 15px;
+}
+
+.changePassSection label{
+    color: #222222;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.changePassSection input{
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
+.changePassForm{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.passwordInput{
+    color: #444444;
+    font-weight: 500;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid #333333;
+    outline: none;
+    background-color: transparent;
+}
+
+.formBtn{
+    color: #fafafa;
+    font-size: 18px;
+    background: linear-gradient(to bottom , #3953a8, #a777e3);
+    border: none;
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.formBtn:hover {
+    /*background-color: #efa424;*/
+    box-shadow: 3px 1px #3953a8;
+    top: 1px;
+}
+
+.formBtn:active{
+    transform: scale(0.9);
+}
+
+.formErrorLabel{
+    font-style: italic;
+    align-self:end;
+    color: red;
+    height: 20px;
+    font-size: 14px;
+}
