@@ -22,6 +22,7 @@ import useActivityPing from './hooks/useActivityPing.js'
 import { TermsAndConditions } from './screens/TermsAndConditions.jsx'
 import { LandingScreen } from './screens/LandingScreen.jsx'
 import ContactScreen from './screens/ContactScreen.jsx'
+import RredirectToApp from './components/RedirectToApp.jsx'
 
 function Main(){
     
@@ -41,8 +42,8 @@ function Main(){
         return <>
             <BrowserRouter>
                 <Routes> 
-                    <Route path='/' element={<LandingScreen />} />
-                    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/>: <LoginScreen/>} />
+                    <Route path='/' element={loggedUserId ? <RredirectToApp /> : <LandingScreen />} />
+                    <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/> : <LoginScreen/>} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
