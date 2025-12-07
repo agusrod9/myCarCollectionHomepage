@@ -310,7 +310,11 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                 </div>
                 <img src={loggedUserProfilePicture || profilePlaceholder} alt={`Profile picture of ${loggedUserName}`} className={styles.profilePicture}/>
                 <div className={styles.userNameInputContainer}>
-                    <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={editableUserName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)}/>
+                    <input type='text' name="" className={isEditingUserName ? `${styles.userNameInput} ${styles.editingMode}` : styles.userNameInput} value={editableUserName} disabled={!isEditingUserName} onChange={(e)=>handleUserNameChange(e)} onKeyDown={(e)=>{
+                    if(e.key=='Enter'){
+                        handleSaveUserName(e)
+                    }
+                }}/>
                     {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
                 </div>
                 <div className={styles.userNameSaveAndCancelContainer}>

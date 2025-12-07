@@ -15,11 +15,11 @@ const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function CarDetailsScreen(){
     const navigate = useNavigate()
     const location = useLocation()
-    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars, currenciesList, setCurrenciesList, placeholder} = useContext(AppContext)
+    const {loggedUserId, loggedUserProfilePicture, loggedUserName, handleLogOut, scaleList, userCollections, setUserCollections, userCollectedCars, setUserCollectedCars, setUserCarCount, setUserCarsValue, updateRecentlyAddedCars, currenciesList, setCurrenciesList, placeholder, userFavoritesCount, setUserFavoritesCount} = useContext(AppContext)
     const [car, setCar] = useState(location.state?.car)
     const [editingFields, setEditingFields] = useState({})
     const [editableCar, setEditableCar] = useState(Object.fromEntries(Object.entries(car).map(([key,value])=>{
-        if(key === "price"){
+        if(key === "purchasePrice"){
             if(value!=null){
                 return [key, value]
             }
@@ -53,7 +53,7 @@ export function CarDetailsScreen(){
     }
 
     const handleCurrencyChange = (e)=>{
-        setEditableCar(prev => ({...prev, price : {...prev.price, currency : e.target.value}}))
+        setEditableCar(prev => ({...prev, purchasePrice : {...prev.purchasePrice, currency : e.target.value}}))
     }
 
     const updateCarInContext=(updatedCar)=>{
@@ -85,13 +85,16 @@ export function CarDetailsScreen(){
                         return fetch(url,opts)
                     })
                     await Promise.all(deleteEveryImagePromise)
+                    if(car.isFavorite){
+                        setUserFavoritesCount(userFavoritesCount-1)
+                    }
                     toast.success("Car deleted!", {id: t})
                     setUserCollectedCars(prev => prev?.filter(c => c._id !== car._id) ?? []);
                     setUserCarCount(prev => prev -1)
                     setUserCarsValue(prev => {
                         return prev.map(entry=>{
-                            if(entry.currencyId === car.price?.currency){
-                                return{...entry, totalAmount: entry.totalAmount - car.price.amount};
+                            if(entry.currencyId === car.purchasePrice?.currency){
+                                return{...entry, totalAmount: entry.totalAmount - car.purchasePrice.amount};
                             }
                             return entry;
                         }).filter(entry=>entry.totalAmount>0)
@@ -110,11 +113,11 @@ export function CarDetailsScreen(){
         let newValue;
         let isDifferent = false;
         let priceEditedFlag = false
-        if(key==="price"){
-            const newAmount = Number(editableCar.price?.amount) || 0;
-            const newCurrency = editableCar.price?.currency ?? editableCar.price?.currencyId ?? null;
-            const oldAmount = Number(car.price?.amount) || 0;
-            const oldCurrency = car.price?.currency ?? car.price?.currencyId ?? null;
+        if(key==="purchasePrice"){
+            const newAmount = Number(editableCar.purchasePrice?.amount) || 0;
+            const newCurrency = editableCar.purchasePrice?.currency ?? editableCar.purchasePrice?.currencyId ?? null;
+            const oldAmount = Number(car.purchasePrice?.amount) || 0;
+            const oldCurrency = car.purchasePrice?.currency ?? car.purchasePrice?.currencyId ?? null;
             newValue = { amount : newAmount, currency : newCurrency };
 
             if (newAmount !== oldAmount || newCurrency !== oldCurrency) {
@@ -123,9 +126,9 @@ export function CarDetailsScreen(){
             if(newAmount === 0 || newCurrency===""){
                 toast("Please enter an amount and select a currency.", {icon: "⚠️", duration: 2500});
                 if(oldAmount!== 0 && oldCurrency!==""){
-                    setEditableCar(prev=>({...prev, price:{currency: oldCurrency, amount: oldAmount}}))
+                    setEditableCar(prev=>({...prev, purchasePrice:{currency: oldCurrency, amount: oldAmount}}))
                 }else{
-                    setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                    setEditableCar(prev=>({...prev, purchasePrice:{currency:"", amount:0}}))
                 }
                 return;
             }else{
@@ -169,23 +172,23 @@ export function CarDetailsScreen(){
         const updatedFields = {}
         let priceEditedFlag = false
         Object.keys(editingFields).forEach(key=>{
-            if(key==="price"){
-                const newAmount = Number(editableCar.price?.amount) || 0;
-                const newCurrency = editableCar.price?.currency ?? editableCar.price?.currencyId ?? null;
-                const carPrice = car?.price ?? {};
+            if(key==="purchasePrice"){
+                const newAmount = Number(editableCar.purchasePrice?.amount) || 0;
+                const newCurrency = editableCar.purchasePrice?.currency ?? editableCar.purchasePrice?.currencyId ?? null;
+                const carPrice = car?.purchasePrice ?? {};
                 const carAmount = Number(carPrice.amount) || 0;
                 const carCurrency = carPrice.currency ?? carPrice.currencyId ?? null;
 
                 if(newAmount === 0 || newCurrency ===""){
                     if(carAmount!== 0 && carCurrency!==""){
-                        setEditableCar(prev=>({...prev, price:{currency: carCurrency, amount: carAmount}}))
+                        setEditableCar(prev=>({...prev, purchasePrice:{currency: carCurrency, amount: carAmount}}))
                     }else{
-                        setEditableCar(prev=>({...prev, price:{currency:"", amount:0}}))
+                        setEditableCar(prev=>({...prev, purchasePrice:{currency:"", amount:0}}))
                     }
                     return;
                 }
                 if (newAmount !== carAmount || newCurrency !== carCurrency) {
-                    updatedFields.price = { amount: newAmount, currency: newCurrency };
+                    updatedFields.purchasePrice = { amount: newAmount, currency: newCurrency };
                     priceEditedFlag = true;
                 }
             }else {
@@ -557,9 +560,9 @@ export function CarDetailsScreen(){
                             </div>
                         </div>
                         <div className={styles.inputSubGroup}>
-                            <label htmlFor="price">Price</label>
-                            <div className={editingFields.price ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
-                                <select name="currency" className={styles.currencySelectInput} value={editableCar.price.currency} onChange={handleCurrencyChange} disabled={!editingFields.price}> 
+                            <label htmlFor="purchasePrice">Purchase price</label>
+                            <div className={editingFields.purchasePrice ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
+                                <select name="currency" className={styles.currencySelectInput} value={editableCar.purchasePrice.currency} onChange={handleCurrencyChange} disabled={!editingFields.purchasePrice}> 
                                     <option key={"noCurrency"} value={""}>Select</option>
                                     {
                                         currenciesList?.length>0 ?
@@ -576,26 +579,26 @@ export function CarDetailsScreen(){
                                     name='price' 
                                     type="number" 
                                     min={0} 
-                                    value={editableCar.price.amount} 
-                                    className={editingFields.price ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
-                                    disabled={!editingFields.price} 
+                                    value={editableCar.purchasePrice.amount} 
+                                    className={editingFields.purchasePrice ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.purchasePrice} 
                                     onChange={(e)=>{
                                         setEditableCar(prev=>({
                                             ...prev,
-                                            price: {
-                                                ...prev.price,
+                                            purchasePrice: {
+                                                ...prev.purchasePrice,
                                                 amount: Number(e.target.value)
                                             }
                                         }))
                                     }}
-                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"price")}
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"purchasePrice")}
                                 />
-                                {editingFields.price 
+                                {editingFields.purchasePrice 
                                 ? 
-                                <Save size={30} onClick={()=>handleSave("price")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
+                                <Save size={30} onClick={()=>handleSave("purchasePrice")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, price:true}))} className={styles.editIcon}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, purchasePrice:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>

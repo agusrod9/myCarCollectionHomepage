@@ -47,7 +47,7 @@ export function CarCard({car, acBtnClick}){
     }
     return(
         <div className={styles.cardContainer} key={car._id}>
-            <img src={car.img_urls[0] || placeholder} alt={`imágen de un ${car.carMake}`} className={styles.cardImg}/>
+            <img src={car.img_urls[0] || placeholder} alt={`Picture of ${car.carMake} car.`} className={styles.cardImg}/>
             <Star fill={car.isFavorite ? '#fff' : 'none'} className={styles.favoriteIcon} onClick={()=>handleAddToFavToggle(car)}/>
             <div className={styles.cardInfoContainer}>
                 <p className={styles.cardCarMake}>{car.carMake} {car.carModel}</p>

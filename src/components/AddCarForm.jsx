@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 export function AddCarForm (){
+    const{setUserCarCount, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId, setUserCollectedCars, userCollectedCars, updateRecentlyAddedCars, loggedUserCurrency } = useContext(AppContext);
+    
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [year, setYear] = useState("")
@@ -20,8 +22,8 @@ export function AddCarForm (){
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
-    const [currency, setCurrency] = useState("")
-    const [price, setPrice] = useState({currency, amount: 0})
+    const [currency, setCurrency] = useState(loggedUserCurrency || "")
+    const [purchasePrice, setPurchasePrice] = useState({currency, amount: 0})
     const [moreInfoDisplayed, setMoreInfoDisplayed] = useState(false)
     const [colorSelectDisplayed, setColorSelectDisplayed] = useState(false)
     const [moreInfoBtnText, setMoreInfoBtnText] = useState("More...")
@@ -32,7 +34,6 @@ export function AddCarForm (){
     const anioActual = today.getFullYear()
     const anioMinimo = 1885
 
-    const{setUserCarCount, setUserCarsValue, scaleList, loggedUserRole, userCollections, setUserCollections, currenciesList, setCurrenciesList, loggedUserId, setUserCollectedCars, userCollectedCars, updateRecentlyAddedCars, loggedUserCurrency } = useContext(AppContext);
     
     if(make != "" && model !="" && scale!=""){
         if(!requiredFieldsSet){
@@ -54,12 +55,12 @@ export function AddCarForm (){
             setSeries("")
             setSeriesNum("")
             setCollection("")
-            setPrice({currency, amount: 0})
+            setPurchasePrice({currency, amount: 0})
             setMoreInfoDisplayed(false)
             setDoneUploadingImages(true)
     }
 
-    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price){
+    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, purchasePrice){
         const url =`${API_BASEURL}cars`
         
         const data = {
@@ -77,11 +78,11 @@ export function AddCarForm (){
         if(seriesNum!=""){data.series_num = seriesNum}
         if(collection!=""){data.collectionId = collection}
         if(urls.length>0){data.img_urls = urls}
-        if(price.amount!=0 && price.currency!=""){
-            data.price = price
+        if(purchasePrice.amount!=0 && purchasePrice.currency!=""){
+            data.purchasePrice = purchasePrice
         }else{
             setCurrency("")
-            data.price= null;
+            data.purchasePrice= null;
         }
 
         const opts = {
@@ -97,7 +98,7 @@ export function AddCarForm (){
 
     const handleCurrencyChange = (e)=>{
         setCurrency(e.target.value)
-        setPrice(prev => ({...(prev || {}), currency : e.target.value}))
+        setPurchasePrice(prev => ({...(prev || {}), currency : e.target.value}))
     }
 
     const handleAddCarButtonClick = async(e)=>{
@@ -108,21 +109,21 @@ export function AddCarForm (){
         const end = Date.now();
         const elapsedSeconds = ((end - start) / 1000).toFixed(2);
         console.log(`Demoró ${elapsedSeconds} segundos en subir ${images.length} imágenes.`)
-        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, price)
+        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, purchasePrice)
         if(added.error){
             alert(added.error)
         }else{
             toast.success(`${added.data.carMake} ${added.data.carModel} created!`, { id: t , duration : 2500});
             setUserCollectedCars(prev=>[...prev, added.data])
             setUserCarCount(prev => prev +1)
-            if(added.data.price){
+            if(added.data.purchasePrice){
                 setUserCarsValue(prev => {
-                    const currencyExists = prev.find(entry=> entry.currencyId === added.data.price.currency);
+                    const currencyExists = prev.find(entry=> entry.currencyId === added.data.purchasePrice.currency);
 
                     if(currencyExists){
                         return prev.map(entry=>{
-                            if(entry.currencyId=== added.data.price.currency){
-                                return{...entry, totalAmount : entry.totalAmount + added.data.price.amount};
+                            if(entry.currencyId=== added.data.purchasePrice.currency){
+                                return{...entry, totalAmount : entry.totalAmount + added.data.purchasePrice.amount};
                             }
                             return entry;
                         })
@@ -131,8 +132,8 @@ export function AddCarForm (){
                     return [
                         ...prev,
                         {
-                            totalAmount: added.data.price.amount,
-                            currencyId: added.data.price.currency,
+                            totalAmount: added.data.purchasePrice.amount,
+                            currencyId: added.data.purchasePrice.currency,
                             currencyCode: added.data.currencyInfo.code,
                             currencyName: added.data.currencyInfo.name,
                             currencySymbol: added.data.currencyInfo.symbol,
@@ -354,7 +355,7 @@ export function AddCarForm (){
                         </select>
                     </div>
                     <div className={styles.fieldContainer}>
-                        <label htmlFor='carPriceInput'>Price</label>
+                        <label htmlFor='carPriceInput'>Purchase price</label>
                         <div className={styles.currencyFieldContainer}>
                             <select name="currency" className={styles.currencySelectInput} value={currency} onChange={handleCurrencyChange} > 
                                 <option key={"noCurrency"} value={""}>Select</option>
@@ -369,7 +370,7 @@ export function AddCarForm (){
                                     null
                                 }
                             </select>
-                            <input type="number" name='carPrice' id='carPriceInput' value={price?.amount} min={0} onChange={(e)=>setPrice(prev => ({...(prev || {}), amount : Number(e.target.value)}))} placeholder='e: 4.99'/>
+                            <input type="number" name='carPrice' id='carPriceInput' value={purchasePrice?.amount} min={0} onChange={(e)=>setPurchasePrice(prev => ({...(prev || {}), amount : Number(e.target.value)}))} placeholder='e: 4.99'/>
                         </div>
                     </div>
                     <div className={styles.fieldContainer}>

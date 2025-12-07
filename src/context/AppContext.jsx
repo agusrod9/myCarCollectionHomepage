@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import countries from "world-countries";
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 const APP_FRONT_URL = import.meta.env.VITE_APP_FRONT_URL
@@ -27,9 +28,10 @@ export function AppContextProvider ({children}){
     const [userFavoritesCount, setUserFavoritesCount] = useState(0)
     const [userCarsValue, setUserCarsValue] = useState([])
     const [userCollections, setUserCollections] = useState([])
-    const [recentlyAddedCars, setRecentlyAddedCars] = useState([])
+    const [recentlyAddedCars, setRecentlyAddedCars] = useState([]);
+    const [countryOptions, setCountryOptions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [userCollectedCars, setUserCollectedCars] = useState([])
+    const [userCollectedCars, setUserCollectedCars] = useState([]);
     const [loggedUserGoogleId, setLoggedUserGoogleId] = useState(null)
     const lang = navigator.language.split('-')[0]
     const [selectedFilters, setSelectedFilters] = useState({
@@ -39,6 +41,13 @@ export function AppContextProvider ({children}){
         query:""
     })
 
+    const countryOptionsFromWC= countries.map(c => ({
+        label: `${c.flag} ${c.name.common}`,
+        value: c.cca2  // esto es el iso2
+    }));
+
+    
+    
     const clearContext =()=>{
         setLoggedUserId(null);
         setLoggedUserName(null);
@@ -218,10 +227,12 @@ export function AppContextProvider ({children}){
                 credentials: "include"
             })
         }
+        setCountryOptions(countryOptionsFromWC)
     },[])
         
         useEffect(()=>{
             updateRecentlyAddedCars()
+            console.log(countryOptions)
         },[loggedUserId, userCollectedCars])
 
         if(loading){

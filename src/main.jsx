@@ -25,7 +25,6 @@ import ContactScreen from './screens/ContactScreen.jsx'
 import RredirectToApp from './components/RedirectToApp.jsx'
 
 function Main(){
-    
     const host = window.location.host;
     const isLandingDomain =
         host === "thediecaster.com" ||
