@@ -33,7 +33,15 @@ export function ChangePassForm(){
         }
         const t = toast.loading("Updating your password...", {duration : 20000})
         let response = await requestChangePass(email, password)
+        const responseData = await response.json()
         if(response.status != 200){
+            if(responseData?.message.includes("CANNOT SET PASSWORD - GOOGLE USER")){
+                toast.error("This account uses Google Sign-In. You can’t set a password for it.", {duration : 5000, id:t})
+                setEmail("")
+                setPassword("")
+                setPassword2("")
+                return
+            }
             toast.error(`We couldn't create your account, please try again.`, {duration : 3000, id:t})
         }else{
             toast.success(`Password updated!`, {duration : 3000, id:t})
