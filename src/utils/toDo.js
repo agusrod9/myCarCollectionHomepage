@@ -2,7 +2,7 @@ import Swal from 'sweetalert2'
 
 export function toDo(msg="🚧 To be implemented"){
     const MODE = import.meta.env.VITE_MODE
-    if(NODE !== 'development'){
+    if(MODE !== 'development'){
         return null
     }
     return(

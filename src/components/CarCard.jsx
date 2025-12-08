@@ -31,7 +31,10 @@ export function CarCard({car, acBtnClick}){
         const response = await fetch(url,opts);
         if(response.status === 200){
             action === "add" ? setUserFavoritesCount(userFavoritesCount+1) : setUserFavoritesCount(userFavoritesCount-1)
-            toast.success(`${car.carMake} ${car.carModel} added to favorites!`, {duration:2000, id : t});
+            action === "add" ? 
+                toast.success(`${car.carMake} ${car.carModel} added to favorites!`, {duration:2000, id : t})
+                :
+                toast.success(`${car.carMake} ${car.carModel} removed from favorites!`, {duration:2000, id : t})
             setUserCollectedCars(prev=> 
                 prev.map(c=> 
                     c._id === car._id

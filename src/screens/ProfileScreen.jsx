@@ -15,8 +15,23 @@ import { capitalize } from '../utils/textUtils.js'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
-export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePicture}){
-    const{loggedUserEmail, setLoggedUserEmail, loggedUserFirstName, loggedUserLastName, setLoggedUserName, setLoggedUserProfilePicture, setLoggedUserFirstName, setLoggedUserLastName, handleLogOut, loggedUserGoogleId, profilePlaceholder } = useContext(AppContext)
+export function ProfileScreen({}){
+    const{
+        loggedUserEmail, 
+        loggedUserGoogleId, 
+        loggedUserLastName, 
+        loggedUserFirstName,
+        loggedUserName,
+        loggedUserProfilePicture,
+        loggedUserId,
+        setLoggedUserEmail,
+        setLoggedUserName, 
+        setLoggedUserProfilePicture, 
+        setLoggedUserFirstName, 
+        setLoggedUserLastName, 
+        handleLogOut, 
+        profilePlaceholder 
+    } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [isEditingData, setIsEditingData] = useState(false)
     const [isEditingUserName, setIsEditingUserName] = useState(false)
@@ -136,6 +151,12 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
                     }, 1000);
                 return;
             }
+            if(updatedValues.firstName){
+                setLoggedUserFirstName(updatedValues.firstName)
+            }
+            if(updatedValues.lastName){
+                setLoggedUserLastName(updatedValues.lastName)
+            }
             toast.success("User data updated!", {id: t, duration : 2000})
         }else{
             toast.error("Error saving data", {id: t, duration : 2000})
@@ -224,7 +245,6 @@ export function ProfileScreen({loggedUserId, loggedUserName, loggedUserProfilePi
         if(typeTimeoutRef.current){
             clearTimeout(typeTimeoutRef.current)
         }
-        
         
         typeTimeoutRef.current = setTimeout(async() => {
             if(e.target.value.length!=0){
