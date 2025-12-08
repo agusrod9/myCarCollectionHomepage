@@ -23,6 +23,7 @@ import { TermsAndConditions } from './screens/TermsAndConditions.jsx'
 import { LandingScreen } from './screens/LandingScreen.jsx'
 import ContactScreen from './screens/ContactScreen.jsx'
 import RredirectToApp from './components/RedirectToApp.jsx'
+import CollectorScreen from './screens/CollectorScreen.jsx'
 
 function Main(){
     const host = window.location.host;
@@ -47,6 +48,7 @@ function Main(){
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
                     <Route path='/resetPass' element={<ResetPasswordScreen loggedUserId={loggedUserId}/>} />
                     <Route path='/changePass' element={<ChangePassScreen loggedUserId={loggedUserId}/>} />
+                    <Route path='/collector/:collectorUserName' element={<CollectorScreen />} />
                     <Route path='/terms-and-conditions' element={<TermsAndConditions />} />
                     <Route path='/contact' element={<ContactScreen />} />
                     <Route path='*' element={<NotFoundScreen />} />
@@ -77,6 +79,7 @@ function Main(){
                     <Route path='/myCollections' element={<ProtectedRoute> <MyCollectionsScreen /> </ProtectedRoute>} />
                     <Route path='/details' element={<ProtectedRoute> <CarDetailsScreen /> </ProtectedRoute>} />
                     <Route path='/contact' element={<ProtectedRoute> <ContactScreen /> </ProtectedRoute>} />
+                    <Route path='/collector/:collectorUserName' element={<CollectorScreen />} />
                     <Route path='*' element={<NotFoundScreen />} />
                 </Routes>
             </BrowserRouter>
