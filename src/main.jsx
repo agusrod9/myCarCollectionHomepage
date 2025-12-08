@@ -1,3 +1,4 @@
+import './main.css'
 import { AppContext, AppContextProvider } from './context/AppContext.jsx'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
@@ -11,9 +12,8 @@ import { ProfileScreen } from './screens/ProfileScreen.jsx'
 import { NotFoundScreen } from './screens/NotFoundScreen.jsx'
 import { VerifyMailScreen } from './screens/VerifyMailScreen.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
-import './main.css'
 import { CarListScreen } from './screens/CarListScreen.jsx'
 import { CarDetailsScreen } from './screens/CarDetailsScreen.jsx'
 import { MyCollectionsScreen } from './screens/MyCollectionsScreen.jsx'
@@ -35,7 +35,7 @@ function Main(){
         host === "app.thediecaster.com" ||
         host === "app.dev.thediecaster.com:5173";
     const {loggedUserId} = useContext(AppContext)
-    useActivityPing()
+    useActivityPing(1000)
 
     if(isLandingDomain){
         return <>
@@ -73,6 +73,7 @@ function Main(){
                     <Route path='/newCar' element={<ProtectedRoute> <AddCarScreen /> </ProtectedRoute>} />
                     <Route path='/profile' element={<ProtectedRoute> <ProfileScreen /> </ProtectedRoute>} />
                     <Route path='/myGarage' element={<ProtectedRoute> <CarListScreen mode = 'myGarage' /> </ProtectedRoute>} />
+                    <Route path='/myFavorites' element={<ProtectedRoute> <CarListScreen mode = 'myFavorites' /> </ProtectedRoute>} />
                     <Route path='/myCollections' element={<ProtectedRoute> <MyCollectionsScreen /> </ProtectedRoute>} />
                     <Route path='/details' element={<ProtectedRoute> <CarDetailsScreen /> </ProtectedRoute>} />
                     <Route path='/contact' element={<ProtectedRoute> <ContactScreen /> </ProtectedRoute>} />

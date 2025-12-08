@@ -23,7 +23,7 @@ export function CarListScreen({mode}){
             setSelectedFilters
         } = useContext(AppContext)
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [title, setTitle] = useState("")
     const [filteredCars, setFilteredCars] = useState([])
     const FILTER_KEYS = {
@@ -31,7 +31,11 @@ export function CarListScreen({mode}){
         availableCarMakes : 'carMake',
         availableScales : 'scale',
     }
-    usePageTitle(`${loggedUserName}´s Garage`)
+    if(mode==='myGarage'){
+        usePageTitle(`${loggedUserName}´s Garage`)
+    }else if(mode==='myFavorites'){
+        usePageTitle(`${loggedUserName}´s Favorites`)
+    }
 
     function handleSearch(q){
         setSelectedFilters(prev=>({
@@ -58,6 +62,12 @@ export function CarListScreen({mode}){
             }
             if(mode==='myFavorites'){
                 setTitle("My Favorites")
+                const url = `${API_BASEURL}cars?userId=${loggedUserId}&favorite=true`
+                const response = await fetch(url)
+                const responseData = await response.json()
+                setUserCollectedCars(responseData.data)
+                setFilteredCars(responseData.data)
+                setLoading(false)
             }
         }
         if(loggedUserId){
