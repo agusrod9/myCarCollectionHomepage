@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { Header } from '../components/Header'
-import styles from  './MyGarageScreen.module.css'
+import styles from  './CarListScreen.module.css'
 import { AppContext } from '../context/AppContext'
 import Loading from '../components/Loading'
 import { SearchBar } from '../components/SearchBar'
@@ -11,10 +11,20 @@ import usePageTitle from '../hooks/usePageTitle'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
-export function MyGarageScreen(){
-    const {loggedUserId, loggedUserName, loggedUserProfilePicture, handleLogOut, userCollectedCars, setUserCollectedCars, selectedFilters, setSelectedFilters} = useContext(AppContext)
+export function CarListScreen({mode}){
+    const {
+            loggedUserId, 
+            loggedUserName, 
+            loggedUserProfilePicture, 
+            handleLogOut, 
+            userCollectedCars, 
+            setUserCollectedCars, 
+            selectedFilters, 
+            setSelectedFilters
+        } = useContext(AppContext)
     const navigate = useNavigate()
     const [loading, setLoading] = useState(true)
+    const [title, setTitle] = useState("")
     const [filteredCars, setFilteredCars] = useState([])
     const FILTER_KEYS = {
         availableManufacturers : 'manufacturer',
@@ -35,18 +45,26 @@ export function MyGarageScreen(){
     },[])
 
     useEffect(()=>{
-        const getUsercollectedCars =async()=>{
-            const url = `${API_BASEURL}cars?userId=${loggedUserId}`
-            const response = await fetch(url)
-            const responseData = await response.json()
-            setUserCollectedCars(responseData.data)
-            setFilteredCars(responseData.data)
+        setLoading(true)
+        async function loadCars(){
+            if(mode==='myGarage'){
+                setTitle("My Garage")
+                const url = `${API_BASEURL}cars?userId=${loggedUserId}`
+                const response = await fetch(url)
+                const responseData = await response.json()
+                setUserCollectedCars(responseData.data)
+                setFilteredCars(responseData.data)
+                setLoading(false)
+            }
+            if(mode==='myFavorites'){
+                setTitle("My Favorites")
+            }
         }
-        if(userCollectedCars.length==0){
-            getUsercollectedCars()
+        if(loggedUserId){
+            loadCars()
         }
-        setLoading(!loading)
-    },[])
+        
+    },[mode, loggedUserId])
 
     useEffect(()=>{
         
@@ -86,7 +104,7 @@ export function MyGarageScreen(){
                     <FiltersPanel setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
                 </div>
                 <div className={styles.myGSearchBar}>
-                    <SearchBar  title='My Garage' handleSearch={handleSearch}/>
+                    <SearchBar  title={title} handleSearch={handleSearch}/>
                 </div>
                 <div className={styles.myGMain}>
                     {

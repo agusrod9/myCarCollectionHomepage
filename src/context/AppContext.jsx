@@ -232,7 +232,6 @@ export function AppContextProvider ({children}){
         
         useEffect(()=>{
             updateRecentlyAddedCars()
-            console.log(countryOptions)
         },[loggedUserId, userCollectedCars])
 
         if(loading){

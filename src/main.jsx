@@ -14,7 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { useContext, useEffect } from 'react'
 import { ChangePassScreen } from './screens/ChangePassScreen.jsx'
 import './main.css'
-import { MyGarageScreen } from './screens/MyGarageScreen.jsx'
+import { CarListScreen } from './screens/CarListScreen.jsx'
 import { CarDetailsScreen } from './screens/CarDetailsScreen.jsx'
 import { MyCollectionsScreen } from './screens/MyCollectionsScreen.jsx'
 import { Toaster } from 'react-hot-toast'
@@ -69,13 +69,13 @@ function Main(){
         return <>
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<ProtectedRoute Component={HomeScreen} />} />
-                    <Route path='/newCar' element={<ProtectedRoute Component={AddCarScreen} />} />
-                    <Route path='/profile' element={<ProtectedRoute Component={ProfileScreen} />} />
-                    <Route path='/myGarage' element={<ProtectedRoute Component={MyGarageScreen} />} />
-                    <Route path='/myCollections' element={<ProtectedRoute Component={MyCollectionsScreen} />} />
-                    <Route path='/details' element={<ProtectedRoute Component={CarDetailsScreen}/>} />
-                    <Route path='/contact' element={<ProtectedRoute Component={ContactScreen} />} />
+                    <Route path='/' element={<ProtectedRoute> <HomeScreen /> </ProtectedRoute>} />
+                    <Route path='/newCar' element={<ProtectedRoute> <AddCarScreen /> </ProtectedRoute>} />
+                    <Route path='/profile' element={<ProtectedRoute> <ProfileScreen /> </ProtectedRoute>} />
+                    <Route path='/myGarage' element={<ProtectedRoute> <CarListScreen mode = 'myGarage' /> </ProtectedRoute>} />
+                    <Route path='/myCollections' element={<ProtectedRoute> <MyCollectionsScreen /> </ProtectedRoute>} />
+                    <Route path='/details' element={<ProtectedRoute> <CarDetailsScreen /> </ProtectedRoute>} />
+                    <Route path='/contact' element={<ProtectedRoute> <ContactScreen /> </ProtectedRoute>} />
                     <Route path='*' element={<NotFoundScreen />} />
                 </Routes>
             </BrowserRouter>
