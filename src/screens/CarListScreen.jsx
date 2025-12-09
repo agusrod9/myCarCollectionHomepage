@@ -44,6 +44,13 @@ export function CarListScreen({mode}){
         }))
     }
 
+    function handleFavoriteToggle(carId, newValue) {
+        //newValue es el nuevo valor de true o false de si el auto es favorito
+        if (mode === 'myFavorites' && newValue === false) {
+            setUserCollectedCars(prev => prev.filter(car => car._id !== carId));
+        }
+    }
+
     const acBtnClick = useCallback((car)=>{
         navigate('/details', {state: {car}})
     },[])
@@ -118,7 +125,12 @@ export function CarListScreen({mode}){
                 </div>
                 <div className={styles.myGMain}>
                     {
-                        filteredCars?.map(car=> <CarCard key={car._id} car={car} acBtnClick={()=>acBtnClick(car)}/>)
+                        filteredCars?.map(car=> <CarCard 
+                                                    key={car._id} 
+                                                    car={car} 
+                                                    acBtnClick={()=>acBtnClick(car)}
+                                                    onFavoriteToggle={handleFavoriteToggle}
+                                                />)
                     }
                 </div>
             </div>

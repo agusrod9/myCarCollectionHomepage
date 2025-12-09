@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-export function CarCard({car, acBtnClick}){
+export function CarCard({car, acBtnClick, key, onFavoriteToggle}){
 
     const {placeholder, setUserFavoritesCount, userFavoritesCount, setUserCollectedCars} = useContext(AppContext)
     const handleAddToFavToggle = async(car)=>{
@@ -35,21 +35,23 @@ export function CarCard({car, acBtnClick}){
                 toast.success(`${car.carMake} ${car.carModel} added to favorites!`, {duration:2000, id : t})
                 :
                 toast.success(`${car.carMake} ${car.carModel} removed from favorites!`, {duration:2000, id : t})
-            setUserCollectedCars(prev=> 
-                prev.map(c=> 
-                    c._id === car._id
-                    ?
-                    {...c, isFavorite : !car.isFavorite}
-                    :
-                    c
+            setUserCollectedCars(prev=> {
+                const updated = prev.map(c=> 
+                    c._id === car._id 
+                    ? {...c, isFavorite : !car.isFavorite}
+                    : c
                 )
-            )
+                if(onFavoriteToggle){
+                    onFavoriteToggle(car._id, !car.isFavorite)
+                }
+                return updated
+            })
         }else{
             toast.error(`Error adding ${car.carMake} ${car.carModel} to favorites`, {duration:2000, id : t});
         }
     }
     return(
-        <div className={styles.cardContainer} key={car._id}>
+        <div className={styles.cardContainer} key={key}>
             <img src={car.img_urls[0] || placeholder} alt={`Picture of ${car.carMake} car.`} className={styles.cardImg}/>
             <Star fill={car.isFavorite ? '#fff' : 'none'} className={styles.favoriteIcon} onClick={()=>handleAddToFavToggle(car)}/>
             <div className={styles.cardInfoContainer}>
