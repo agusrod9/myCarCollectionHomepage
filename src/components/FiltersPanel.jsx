@@ -6,7 +6,7 @@ import { BrushCleaning } from 'lucide-react'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
-export function FiltersPanel({setSelectedFilters, selectedFilters}){
+export function FiltersPanel({mode, setSelectedFilters, selectedFilters}){
     const {loggedUserId} = useContext(AppContext)
     const [availableFilters, setAvailableFilters] = useState({})
     
@@ -26,8 +26,15 @@ export function FiltersPanel({setSelectedFilters, selectedFilters}){
 
     useEffect(()=>{
         const getFilters = async()=>{
-            let response = await fetch(`${API_BASEURL}filters?userId=${loggedUserId}`)
-            let responseData = await response.json()
+            let url="";
+            if(mode==='myGarage'){
+                url = `${API_BASEURL}filters?userId=${loggedUserId}`
+            }
+            if(mode==='myFavorites'){
+                url = `${API_BASEURL}filters?userId=${loggedUserId}&favorites=true`
+            }
+            const response = await fetch(url)
+            const responseData = await response.json()
             setAvailableFilters(responseData.data)
         } 
         getFilters()

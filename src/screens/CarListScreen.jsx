@@ -111,7 +111,7 @@ export function CarListScreen({mode}){
             <Header loggedUserId={loggedUserId} loggedUserName={loggedUserName} loggedUserProfilePicture= {loggedUserProfilePicture} handleLogOut={()=>{handleLogOut(true)}}/>
             <div className={styles.myGarageContainer}>
                 <div className={styles.myGFilters}>
-                    <FiltersPanel setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters}/>
+                    <FiltersPanel setSelectedFilters={setSelectedFilters} selectedFilters={selectedFilters} mode={mode}/>
                 </div>
                 <div className={styles.myGSearchBar}>
                     <SearchBar  title={title} handleSearch={handleSearch}/>
