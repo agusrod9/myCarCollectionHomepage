@@ -14,11 +14,12 @@ export function AddCarForm (){
     const [make, setMake] = useState("")
     const [model, setModel] = useState("")
     const [year, setYear] = useState("")
+    const [yearInput, setYearInput] = useState("");
     const [color, setColor] = useState("#fff")
     const [scale, setScale] = useState("")
     const [manufacturer, setManufacturer] = useState("")
     const [notes, setNotes] = useState("")
-    const [opened, setOpened] = useState("")
+    const [packaging, setPackaging] = useState("")
     const [series, setSeries] = useState("")
     const [seriesNum, setSeriesNum] = useState("")
     const [collection, setCollection] = useState("")
@@ -51,7 +52,7 @@ export function AddCarForm (){
             setManufacturer("")
             setImages([])
             setNotes("")
-            setOpened("")
+            setPackaging("")
             setSeries("")
             setSeriesNum("")
             setCollection("")
@@ -60,7 +61,7 @@ export function AddCarForm (){
             setDoneUploadingImages(true)
     }
 
-    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, purchasePrice){
+    async function newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, packaging, series, seriesNum, collection, purchasePrice){
         const url =`${API_BASEURL}cars`
         
         const data = {
@@ -73,7 +74,7 @@ export function AddCarForm (){
         if(year!=""){data.carYear = year}
         if(color!=""){data.carColor = color}
         if(notes!=""){data.notes = notes}
-        if(opened!=""){data.opened = opened}
+        if(packaging!=""){data.packaging = packaging}
         if(series!=""){data.series = series}
         if(seriesNum!=""){data.series_num = seriesNum}
         if(collection!=""){data.collectionId = collection}
@@ -101,6 +102,43 @@ export function AddCarForm (){
         setPurchasePrice(prev => ({...(prev || {}), currency : e.target.value}))
     }
 
+    const handleYearChange = (e) => {
+        const val = e.target.value;
+        
+        // permitio campo vacío para poder dejar el año vacio si quiere el user
+        if(val === "") {
+            setYearInput("");
+            setYear(null);
+            return;
+        }
+        
+        if(!/^\d{0,4}$/.test(val)) return;
+        
+        setYearInput(val)
+
+        if (val.length < 4) {
+            setYear(null); 
+            return;
+        }
+        
+        const num = Number(val);
+
+        if (num > anioActual + 1) {
+            setYearInput(String(anioActual + 1));
+            setYear(anioActual + 1);
+            return;
+        }
+
+        if (val.length === 4) {
+            if (num < anioMinimo) {
+                setYearInput(String(anioMinimo));
+                setYear(anioMinimo);
+                return;
+            }
+            setYear(num);
+        }
+    };
+
     const handleAddCarButtonClick = async(e)=>{
         e.preventDefault()
         const t = toast.loading("Creating new car...", {duration: 90000});
@@ -109,7 +147,7 @@ export function AddCarForm (){
         const end = Date.now();
         const elapsedSeconds = ((end - start) / 1000).toFixed(2);
         console.log(`Demoró ${elapsedSeconds} segundos en subir ${images.length} imágenes.`)
-        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, opened, series, seriesNum, collection, purchasePrice)
+        const added = await newCarToApi(urls, make, model, color, year, scale, manufacturer, notes, packaging, series, seriesNum, collection, purchasePrice)
         if(added.error){
             alert(added.error)
         }else{
@@ -330,7 +368,7 @@ export function AddCarForm (){
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carYearSelectInput'>Year</label>
-                        <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={year} onChange={(e)=>setYear(e.target.value)} placeholder='e: 2019'></input>
+                        <input type='number' min={anioMinimo} max={anioActual+1} name='carYear' id='carYearInput' value={yearInput} onChange={handleYearChange} placeholder='e: 2019'></input>
                     </div>
                     <div className={styles.fieldContainer}>
                         <label htmlFor='carColorInput'>Main Color</label>
@@ -346,12 +384,13 @@ export function AddCarForm (){
                         
                     </div>
                     <div className={styles.fieldContainer}>
-                        <label htmlFor='carOpenedSelectInput'>Package</label>
-                        <select name="carOpened" id="carOpenedSelectInput" value={opened} onChange={(e)=>setOpened(e.target.value)} >
+                        <label htmlFor='carPackaging'>Package</label>
+                        <select name="carPackaging" id="carPackaging" value={packaging} onChange={(e)=>setPackaging(e.target.value)} >
                             <option value={""}></option>
                             <option value='opened'>Opened</option>
-                            <option value='sealed'>Closed</option>
+                            <option value='sealed'>Sealed</option>
                             <option value='damaged'>Damaged</option>
+                            <option value='loose'>Loose</option>
                         </select>
                     </div>
                     <div className={styles.fieldContainer}>

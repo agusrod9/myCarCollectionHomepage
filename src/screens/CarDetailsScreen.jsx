@@ -27,6 +27,7 @@ export function CarDetailsScreen(){
         }
         return [key, value?? ""]
     })))
+    const [yearInput, setYearInput] = useState(editableCar?.carYear);
     const [changesMade, setChangesMade] = useState(false)
     const [viewingImageIndex, setViewingImageIndex] = useState(0)
     const today = new Date()
@@ -228,6 +229,43 @@ export function CarDetailsScreen(){
         }
     }
 
+    const handleEditableYearChange = (e) => {
+        const val = e.target.value;
+
+        // permitio campo vacío para poder dejar el año vacio si quiere el user
+        if(val === "") {
+            setYearInput("");
+            setYear(null);
+            return;
+        }
+        
+        if(!/^\d{0,4}$/.test(val)) return;
+        
+        setYearInput(val)
+
+        if (val.length < 4) {
+            setEditableCar(prev => ({ ...prev, carYear: null}));
+            return;
+        }
+        
+        const num = Number(val);
+
+        if (num > anioActual + 1) {
+            setYearInput(String(anioActual + 1));
+            setEditableCar(prev => ({ ...prev, carYear: anioActual + 1}));
+            return;
+        }
+
+        if (val.length === 4) {
+            if (num < anioMinimo) {
+                setYearInput(String(anioMinimo));
+                setEditableCar(prev => ({ ...prev, carYear: anioMinimo}));
+                return;
+            }
+            setEditableCar(prev => ({ ...prev, carYear: num }));
+        }
+    };
+
     const handleSaveAll = async()=>{
         await saveAllCar()
         setEditingFields({})
@@ -401,12 +439,10 @@ export function CarDetailsScreen(){
                                     type="number" 
                                     min={anioMinimo} 
                                     max={anioActual+1} 
-                                    value={editableCar.carYear} 
+                                    value={yearInput} 
                                     className={editingFields.carYear ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
                                     disabled={!editingFields.carYear} 
-                                    onChange={(e)=>{
-                                        setEditableCar(prev=>({...prev, carYear: e.target.value }))}
-                                    } 
+                                    onChange={handleEditableYearChange} 
                                     onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"carYear")}
                                 />
                                 {editingFields.carYear
@@ -603,29 +639,30 @@ export function CarDetailsScreen(){
                             </div>
                         </div>
                         <div className={styles.inputSubGroup}>
-                            <label htmlFor="opened">Package</label>
-                            <div className={editingFields.opened ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
+                            <label htmlFor="packaging">Package</label>
+                            <div className={editingFields.packaging ? `${styles.inputContainer} ${styles.editingMode}`: styles.inputContainer}>
                                 <select 
-                                    name="opened" 
-                                    value={editableCar.opened} 
-                                    className={editingFields.opened ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
-                                    disabled={!editingFields.opened} 
+                                    name="packaging" 
+                                    value={editableCar.packaging} 
+                                    className={editingFields.packaging ? `${styles.dataInput} ${styles.editingMode}` : styles.dataInput} 
+                                    disabled={!editingFields.packaging} 
                                     onChange={(e)=>{
-                                        setEditableCar(prev=>({...prev, opened: e.target.value }))}
+                                        setEditableCar(prev=>({...prev, packaging: e.target.value }))}
                                     } 
-                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"opened")}
+                                    onKeyDown={(e)=>handleKeyDownSaveOrCancel(e,"packaging")}
                                 >
                                     <option value={""}></option>
                                     <option value='opened'>Opened</option>
-                                    <option value='sealed'>Closed</option>
+                                    <option value='sealed'>Sealed</option>
                                     <option value='damaged'>Damaged</option>
+                                    <option value='loose'>Loose</option>
                                 </select>
-                                {editingFields.opened 
+                                {editingFields.packaging 
                                 ? 
-                                <Save size={30} onClick={()=>handleSave("opened")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
+                                <Save size={30} onClick={()=>handleSave("packaging")} className={changesMade ? styles.saveBtnActive : styles.saveBtnDisabled}
                                 /> 
                                 : 
-                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, opened:true}))} className={styles.editIcon}/>
+                                <Edit size={30} onClick={()=>setEditingFields(prev=>({...prev, packaging:true}))} className={styles.editIcon}/>
                                 }
                             </div>
                         </div>

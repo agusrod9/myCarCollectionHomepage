@@ -51,31 +51,34 @@ export function FiltersPanel({mode, setSelectedFilters, selectedFilters}){
                             {FILTER_LABELS[key]}
                         </h3>
 
-                        {values.map((val,i)=>(
-                            <label key={i} className={styles.filterLabel}>
-                                <input 
-                                    type="checkbox"
-                                    value={val}
-                                    checked={selectedFilters[key]?.includes(val) || false}
-                                    className={styles.filterCheck}
-                                    onChange={(e)=>{
-                                        const checked = e.target.checked
-                                        setSelectedFilters(prev=>{
-                                            const current = prev[key] || [];
-                                            return {
-                                                ...prev,
-                                                [key] : checked
-                                                ?
-                                                [...current, val]
-                                                :
-                                                current.filter(v=> v!= val)
-                                            };
-                                        });
-                                    }}
-                                />
-                                {val || "•Not Specified"}
-                            </label>
-                        ))}
+                        {values.map((val,i)=> {
+                            const safeVal = val ?? "•Unknown";
+                            return(
+                                <label key={i} className={styles.filterLabel}>
+                                    <input 
+                                        type="checkbox"
+                                        value={safeVal}
+                                        checked={selectedFilters[key]?.includes(val) || false}
+                                        className={styles.filterCheck}
+                                        onChange={(e)=>{
+                                            const checked = e.target.checked
+                                            setSelectedFilters(prev=>{
+                                                const current = prev[key] || [];
+                                                return {
+                                                    ...prev,
+                                                    [key] : checked
+                                                    ?
+                                                    [...current, val]
+                                                    :
+                                                    current.filter(v=> v!= val)
+                                                };
+                                            });
+                                        }}
+                                    />
+                                    {safeVal}
+                                </label>
+                            )})
+                        }
                     </div>
                 ))
             }

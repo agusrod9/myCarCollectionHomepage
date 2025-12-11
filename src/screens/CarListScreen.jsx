@@ -126,11 +126,11 @@ export function CarListScreen({mode}){
                 <div className={styles.myGMain}>
                     {
                         filteredCars?.map(car=> <CarCard 
-                                                    key={car._id} 
-                                                    car={car} 
-                                                    acBtnClick={()=>acBtnClick(car)}
-                                                    onFavoriteToggle={handleFavoriteToggle}
-                                                />)
+                            key={car._id} 
+                            car={car} 
+                            acBtnClick={()=>acBtnClick(car)}
+                            onFavoriteToggle={handleFavoriteToggle}
+                        />)
                     }
                 </div>
             </div>

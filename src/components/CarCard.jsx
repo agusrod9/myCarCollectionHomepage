@@ -4,11 +4,27 @@ import styles from './CarCard.module.css'
 import { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
+import { capitalize } from '../utils/textUtils'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
-export function CarCard({car, acBtnClick, key, onFavoriteToggle}){
+export function CarCard({car, acBtnClick, onFavoriteToggle}){
 
     const {placeholder, setUserFavoritesCount, userFavoritesCount, setUserCollectedCars} = useContext(AppContext)
+    const infoLine1 = `${car.carMake} ${car.carModel}`
+    const infoLine2Parts = [
+        car.manufacturer,
+        car.scale,
+        car.carYear
+    ].filter(Boolean)
+    const infoLine3Parts = [
+        capitalize(car.packaging),
+        capitalize(car.condition),
+        `Owned: ${car.quantityOwned}`
+    ].filter(Boolean)
+    const infoLine4Parts = [
+        car.isCustomized ? "Custom" : null
+    ].filter(Boolean)
+
     const handleAddToFavToggle = async(car)=>{
         let t;
         let action = "";
@@ -51,12 +67,26 @@ export function CarCard({car, acBtnClick, key, onFavoriteToggle}){
         }
     }
     return(
-        <div className={styles.cardContainer} key={key}>
+        <div className={styles.cardContainer}>
             <img src={car.img_urls[0] || placeholder} alt={`Picture of ${car.carMake} car.`} className={styles.cardImg}/>
             <Star size={30} color='#1458bd' fill={car.isFavorite ? '#3a7aec' : 'none'} className={styles.favoriteIcon} onClick={()=>handleAddToFavToggle(car)}/>
             <div className={styles.cardInfoContainer}>
-                <p className={styles.cardCarMake}>{car.carMake} {car.carModel}</p>
-                <p className={styles.cardCarScale}>{car.scale}</p>
+                <p className={styles.cardLine1}>{infoLine1}</p>
+                <div className={styles.infoPills}>
+                    {infoLine2Parts.map((part, i) => (
+                        <span key={i} className={styles.pill}>{part}</span>
+                    ))}
+                </div>
+                <div className={styles.infoPills}>
+                    {infoLine3Parts.map((part, i) => (
+                        <span key={i} className={styles.pill}>{part}</span>
+                    ))}
+                </div>
+                <div className={styles.infoPills}>
+                    {infoLine4Parts.map((part, i) => (
+                        <span key={i} className={styles.pill}>{part}</span>
+                    ))}
+                </div>
             </div>
             <ActionBtn label={'Details'} icon={<CircleEllipsis/>} extraClass={styles.carCardBtn} onClick={()=>acBtnClick(car._id)}/>
         </div>

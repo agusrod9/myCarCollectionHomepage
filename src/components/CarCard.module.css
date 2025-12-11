@@ -5,8 +5,7 @@
     background-color: #0c1020;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
-    height: 400px;
-    width: 300px;
+    width: 250px;
     overflow: hidden;
     position: relative; 
 }
@@ -19,12 +18,13 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    height: 110px;
     align-items: baseline;
     gap: 10px;
-    padding-left: 10px;
+    padding: 0 10px 0 10px;
 }
 
-.cardCarMake{
+.cardLine1{
     font-style: italic;
     font-weight: bold;
     font-size: 20px;
@@ -33,13 +33,24 @@
     text-overflow: ellipsis; 
 }
 
-.cardCarScale{
-    color: #fafafa;
+.infoPills {
     flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;       /* permite varias líneas si hay muchas */
+    gap: 6px;
+}
+
+.pill {
+    background-color: #1e2737;  /* o tu azul */
+    color: #fafafa;
+    padding: 3px 8px;
+    font-size: 0.70rem;
+    border-radius: 10px;
+    white-space: nowrap;        /* que cada pill no se parta */
 }
 
 .cardImg{
-    height: 60%;
+    height: 200px;
     width: 100%;
     object-fit: cover;
     object-position: center;
