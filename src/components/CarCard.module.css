@@ -53,6 +53,9 @@
     z-index: 3;
     cursor: pointer;
     transition: transform 0.15s ease, opacity 0.15s ease;
+    filter:
+        drop-shadow(0 0 2px rgba(0,0,0,0.4))   /* contorno oscuro */
+        drop-shadow(0 2px 3px rgba(0,0,0,0.3)); /* sombra suave */
 }
 
 .favoriteIcon:hover{

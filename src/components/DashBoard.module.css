@@ -118,6 +118,7 @@
     border-radius: 10px;
     overflow: hidden;   
     cursor: pointer;
+    position: relative;
 }
 
 .recentCardInfo{
