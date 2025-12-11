@@ -22,6 +22,8 @@
     width: 300px;
     border: 4px solid #0d1b2a;
     border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .fileInput{

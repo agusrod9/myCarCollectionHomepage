@@ -167,7 +167,7 @@ export function AddCarForm (){
         const role = loggedUserRole
         const maxImagesAllowed =    role === "PRO" ? 10 :
                                     role === "PREMIUM" ? 5 :
-                                    role === "BASIC" ? 2
+                                    role === "BASIC" ? 3
                                     : 1
         if(images.length + incomingFiles.length > maxImagesAllowed){
             alert(`Your ${loggedUserRole} account allows you to upload ${maxImagesAllowed} images per car.`)
@@ -292,7 +292,7 @@ export function AddCarForm (){
                     }
                 </section>
                 <section className={styles.AddCarFormImgSectionMessage}>
-                    <p hidden={doneUploadingImages}>Se están cargando las imágenes.</p>
+                    <p hidden={doneUploadingImages}>Processing images.</p>
 
                 </section>
             </section>

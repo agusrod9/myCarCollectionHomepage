@@ -1,0 +1,10 @@
+.row{
+    font-size: 16px;
+}
+
+.lastRow{
+    margin-top: auto;
+    font-size: 14px;
+    font-style: italic;
+    text-align: right;
+}

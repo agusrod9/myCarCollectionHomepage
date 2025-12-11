@@ -50,6 +50,7 @@
 
 .headerProfilePic{
     height: 50px;
+    width: 50px;
     background-color: transparent;
     border-radius: 50%;
     object-fit: cover;

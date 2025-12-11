@@ -36,7 +36,7 @@ function Main(){
         host === "app.thediecaster.com" ||
         host === "app.dev.thediecaster.com:5173";
     const {loggedUserId} = useContext(AppContext)
-    useActivityPing(1000)
+    useActivityPing()
 
     if(isLandingDomain){
         return <>
