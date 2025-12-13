@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { LevelBar } from '../components/LevelBar'
 import { validateNickFormat } from '../utils/nicknames.util'
 import { BadgeAlert, BadgeCheck, Edit, Save, Copy } from 'lucide-react'
+import { CountriesSelect } from '../components/CountriesSelect'
 
 
 export function ProfileScreen2(){
@@ -38,7 +39,9 @@ export function ProfileScreen2(){
         loggedUserDateOfBirth,
         setLoggedUserDateOfBirth,
         loggedUserGender,
-        setLoggedUserGender
+        setLoggedUserGender,
+        loggedUserCountry,
+        setLoggedUserCountry
         
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
@@ -52,7 +55,8 @@ export function ProfileScreen2(){
         bio : loggedUserBio || "",
         nickName : loggedUserName || "",
         gender : loggedUserGender || "",
-        dateOfBirth : loggedUserDateOfBirth || ""
+        dateOfBirth : loggedUserDateOfBirth || "",
+        country : loggedUserCountry || ""
     })
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
@@ -63,7 +67,6 @@ export function ProfileScreen2(){
     const [dobDay, setDobDay] = useState(0)
     const [dobMonth, setDobMonth] = useState(0)
     const [dobYear, setDobYear] = useState(0)
-    const [dateOfBirth, setDateOfBirth] = useState(null)
     const fileInputRef = useRef(null);
     const typeTimeoutRef = useRef(null)
     const initialUserInfoRef = useRef({
@@ -74,7 +77,8 @@ export function ProfileScreen2(){
         firstName: "",
         lastName: "",
         gender: "",
-        dateOfBirth: ""
+        dateOfBirth: "",
+        country : ""
     })
 
 
@@ -201,7 +205,8 @@ export function ProfileScreen2(){
             firstName : editableUserInfo.firstName,
             lastName : editableUserInfo.lastName,
             gender : editableUserInfo.gender,
-            dateOfBirth : editableUserInfo.dateOfBirth
+            dateOfBirth : editableUserInfo.dateOfBirth,
+            country : editableUserInfo.country
         }
     }
 
@@ -227,6 +232,7 @@ export function ProfileScreen2(){
             editableUserInfo.firstName === initial.firstName &&
             editableUserInfo.lastName === initial.lastName &&
             editableUserInfo.gender === initial.gender &&
+            editableUserInfo.country === initial.country &&
             formattedDob === initial.dateOfBirth 
         ){
             toast("No changes to save", {icon: "⚠️"})
@@ -237,6 +243,7 @@ export function ProfileScreen2(){
         editableUserInfo.firstName !== initial.firstName ? (updatedValues.firstName = editableUserInfo.firstName) : null
         editableUserInfo.lastName !== initial.lastName ? (updatedValues.lastName = editableUserInfo.lastName) : null
         editableUserInfo.gender !== initial.gender ? (updatedValues.gender = editableUserInfo.gender) : null
+        editableUserInfo.country !== initial.country ? (updatedValues.country = editableUserInfo.country) : null
         formattedDob !== initial.dateOfBirth ? (updatedValues.dateOfBirth = formattedDob) : null
 
         if(Object.keys(updatedValues).length===0){
@@ -246,7 +253,8 @@ export function ProfileScreen2(){
                 firstName : initial.firstName,
                 lastName : initial.lastName,
                 gender : initial.gender,
-                dateOfBirth : initial.dateOfBirth
+                dateOfBirth : initial.dateOfBirth,
+                country : initial.country
             }))
         }
 
@@ -271,6 +279,9 @@ export function ProfileScreen2(){
                 }
                 if(updatedValues.dateOfBirth){
                     setLoggedUserDateOfBirth(updatedValues.dateOfBirth)
+                }
+                if(updatedValues.country){
+                    setLoggedUserCountry(updatedValues.country)
                 }
                 toast.success("User data updated!", {id: t, duration : 2000})
             }else{
@@ -308,6 +319,7 @@ export function ProfileScreen2(){
             setLoggedUserBio(loggedUser.bio)
             setLoggedUserGender(loggedUser.gender)
             setLoggedUserDateOfBirth(loggedUser.dateOfBirth)
+            setLoggedUserCountry(loggedUser.country)
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -319,7 +331,8 @@ export function ProfileScreen2(){
                     followersCount : loggedUser.followersCount,
                     bio : loggedUser.bio || "",
                     gender : loggedUser.gender || "",
-                    dateOfBirth : loggedUser.dateOfBirth
+                    dateOfBirth : loggedUser.dateOfBirth,
+                    country : loggedUser.country || ""
                 }
             ))
             if(loggedUser.dateOfBirth){
@@ -344,7 +357,8 @@ export function ProfileScreen2(){
             !loggedUserFollowesCount ||
             !loggedUserBio ||
             !loggedUserGender ||
-            !loggedUserDateOfBirth
+            !loggedUserDateOfBirth ||
+            !loggedUserCountry
         ){
             getLoggedUserInfo()
         }else{
@@ -359,7 +373,8 @@ export function ProfileScreen2(){
                 bio : loggedUserBio || "",
                 nickName : loggedUserName,
                 gender : loggedUserGender || "",
-                dateOfBirth : loggedUserDateOfBirth
+                dateOfBirth : loggedUserDateOfBirth,
+                country : loggedUserCountry
             }))
             if(loggedUserDateOfBirth){
                 const date = new Date(loggedUserDateOfBirth);
@@ -544,6 +559,15 @@ export function ProfileScreen2(){
                         {updateDataError.dobMonth ? <p>Invalid Month</p> : <p></p>}
                         {updateDataError.dobYear ? <p>Invalid Year</p> : <p></p>}
                     </div>
+                    <CountriesSelect 
+                        className={styles.countriesDropDown}
+                        value={editableUserInfo.country}
+                        disabled={!isEditingPersonalInfo}
+                        onChange={(option)=>setEditableUserInfo(prev=>({
+                            ...prev,
+                            country : option.value
+                        }))}
+                    />
 
 
                 </div>

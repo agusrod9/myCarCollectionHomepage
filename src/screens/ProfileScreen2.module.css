@@ -140,7 +140,11 @@
 }
 
 .personalInfo{
-    display: flex;
+
+}
+
+.countriesDropDown{
+    color: #333;
 }
 
 .dobContainer{
