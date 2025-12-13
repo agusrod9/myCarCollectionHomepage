@@ -9,6 +9,7 @@
 
 .pageContainer{
     display: flex;
+    flex-direction: column;
     max-width: 1200px;
 }
 
@@ -97,11 +98,6 @@
     color: red;
 }
 
-.nameImputContainer{
-    display: flex;
-    gap: 6px;
-}
-
 .badgesContainer{
     display: flex;
     gap: 10px;
@@ -122,10 +118,34 @@
 
 .userButtons{
     grid-area: userButtons;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    text-align: right;
+    
+}
+
+.userButtons a{
+    font-style: italic;
+    color: #fafafa;
+}
+
+.userButtons a:visited{
+    font-style: italic;
+    color: #fafafa;
+}
+
+.copyUrlBtn{
+    cursor: pointer;
 }
 
 .personalInfo{
+    display: flex;
+}
 
+.dobContainer{
+    display: flex;
+    gap: 5px;
 }
 
 .social{
@@ -142,4 +162,8 @@
 
 .accountInfo{
 
+}
+
+.sectionTitle{
+    font-style: italic;
 }

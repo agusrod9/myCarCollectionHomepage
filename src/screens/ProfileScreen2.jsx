@@ -8,14 +8,16 @@ import { uploadSingleImage, convertToWebp } from '../utils/images.utils'
 import toast from 'react-hot-toast'
 import { LevelBar } from '../components/LevelBar'
 import { validateNickFormat } from '../utils/nicknames.util'
-import { BadgeAlert, BadgeCheck, CircleX, Edit, Save } from 'lucide-react'
+import { BadgeAlert, BadgeCheck, Edit, Save, Copy } from 'lucide-react'
 
 
 export function ProfileScreen2(){
     const API_BASEURL = import.meta.env.VITE_API_BASEURL;
+    const FRONT_URL = import.meta.env.VITE_FRONT_URL
     const {
         loggedUserId, 
         loggedUserName,
+        setLoggedUserName,
         loggedUserEmail,
         setLoggedUserEmail,
         loggedUserFirstName,
@@ -32,7 +34,12 @@ export function ProfileScreen2(){
         loggedUserFollowesCount,
         setLoggedUserFollowesCount,
         loggedUserBio,
-        setLoggedUserBio
+        setLoggedUserBio,
+        loggedUserDateOfBirth,
+        setLoggedUserDateOfBirth,
+        loggedUserGender,
+        setLoggedUserGender
+        
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [editableUserInfo, setEditableUserInfo] = useState({
@@ -43,16 +50,32 @@ export function ProfileScreen2(){
         level : loggedUserLevel || "",
         followersCount : loggedUserFollowesCount || "",
         bio : loggedUserBio || "",
-        nickName : loggedUserName || ""
+        nickName : loggedUserName || "",
+        gender : loggedUserGender || "",
+        dateOfBirth : loggedUserDateOfBirth || ""
     })
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
-    const[isEditingUserInfo, setIsEditingUserInfo] = useState(false)
-    const[isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false)
-    const[isEditingSocialInfo, setIsEditingSocialInfo] = useState(false)
+    const [isEditingUserInfo, setIsEditingUserInfo] = useState(false)
+    const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false)
+    const [isEditingSocialInfo, setIsEditingSocialInfo] = useState(false)
     const [updateDataError, setUpdateDataError] = useState({})
+    const [dobDay, setDobDay] = useState(0)
+    const [dobMonth, setDobMonth] = useState(0)
+    const [dobYear, setDobYear] = useState(0)
+    const [dateOfBirth, setDateOfBirth] = useState(null)
     const fileInputRef = useRef(null);
     const typeTimeoutRef = useRef(null)
+    const initialUserInfoRef = useRef({
+        nickName: "",
+        bio: ""
+    })
+    const initialPersonalInfoRef = useRef({
+        firstName: "",
+        lastName: "",
+        gender: "",
+        dateOfBirth: ""
+    })
 
 
     usePageTitle(`${loggedUserName}´s Profile`)
@@ -120,10 +143,149 @@ export function ProfileScreen2(){
 
     const handleEditUserInfo=()=>{
         setIsEditingUserInfo(true)
+        initialUserInfoRef.current = {
+            nickName : editableUserInfo.nickName,
+            bio : editableUserInfo.bio
+        }
     }
 
-    const handleSaveUserInfo=()=>{
+    const handleSaveUserInfo=async()=>{
+        
+        const initial = initialUserInfoRef.current;
+        if(
+            editableUserInfo.nickName === initial.nickName &&
+            editableUserInfo.bio === initial.bio
+        ){
+            toast("No changes to save", {icon: "⚠️"})
+            return
+        }
+
+        const updatedValues = {};
+        editableUserInfo.nickName !== initial.nickName ? (updatedValues.nickName = editableUserInfo.nickName) : null
+        editableUserInfo.bio !== initial.bio ? (updatedValues.bio = editableUserInfo.bio) : null
+
+        if(Object.keys(updatedValues).length===0){
+            toast("No changes to save", {icon: "⚠️"});
+            setEditableUserInfo(prev=>({
+                ...prev,
+                nickName : initial.nickName,
+                bio : initial.bio
+            }))
+        }
+
+        const t = toast.loading("Saving user data...", {duration:10000})
+        const url = `${API_BASEURL}users/${loggedUserId}`;
+        const opts = {
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(updatedValues)
+        }
+        const response = await fetch(url, opts)
+        if(response.status===200){
+            if(updatedValues.nickName){
+                setLoggedUserName(updatedValues.nickName)
+            }
+            if(updatedValues.bio){
+                setLoggedUserBio(updatedValues.bio)
+            }
+            toast.success("User data updated!", {id: t, duration : 2000})
+        }else{
+            toast.error("Error saving data", {id: t, duration : 2000})
+        }
         setIsEditingUserInfo(false)
+    }
+
+    const handleEditPersonalInfo=()=>{
+        setIsEditingPersonalInfo(true)
+        initialPersonalInfoRef.current = {
+            firstName : editableUserInfo.firstName,
+            lastName : editableUserInfo.lastName,
+            gender : editableUserInfo.gender,
+            dateOfBirth : editableUserInfo.dateOfBirth
+        }
+    }
+
+    const handleSavePersonalInfo=async()=>{
+        
+        const initial = initialPersonalInfoRef.current;
+        let formattedDob = null;
+
+        if(dobDay && dobMonth && dobYear){
+            const localDate = new Date(dobYear, dobMonth - 1, dobDay);
+            if (
+                localDate.getFullYear() !== Number(dobYear) ||
+                localDate.getMonth() !== Number(dobMonth - 1) ||
+                localDate.getDate() !== Number(dobDay)
+            ) {
+                toast.error("Invalid date of birth");
+                return;
+            }
+
+            formattedDob = localDate.toISOString().split("T")[0];
+        }
+        if(
+            editableUserInfo.firstName === initial.firstName &&
+            editableUserInfo.lastName === initial.lastName &&
+            editableUserInfo.gender === initial.gender &&
+            formattedDob === initial.dateOfBirth 
+        ){
+            toast("No changes to save", {icon: "⚠️"})
+            return
+        }
+
+        const updatedValues = {};
+        editableUserInfo.firstName !== initial.firstName ? (updatedValues.firstName = editableUserInfo.firstName) : null
+        editableUserInfo.lastName !== initial.lastName ? (updatedValues.lastName = editableUserInfo.lastName) : null
+        editableUserInfo.gender !== initial.gender ? (updatedValues.gender = editableUserInfo.gender) : null
+        formattedDob !== initial.dateOfBirth ? (updatedValues.dateOfBirth = formattedDob) : null
+
+        if(Object.keys(updatedValues).length===0){
+            toast("No changes to save", {icon: "⚠️"});
+            setEditableUserInfo(prev=>({
+                ...prev,
+                firstName : initial.firstName,
+                lastName : initial.lastName,
+                gender : initial.gender,
+                dateOfBirth : initial.dateOfBirth
+            }))
+        }
+
+        const t = toast.loading("Saving user data...", {duration:10000})
+        try {
+            const url = `${API_BASEURL}users/${loggedUserId}`;
+            const opts = {
+                method : "PUT",
+                headers : {'Content-Type' : 'application/json'},
+                body : JSON.stringify(updatedValues)
+            }
+            const response = await fetch(url, opts)
+            if(response.status===200){
+                if(updatedValues.firstName){
+                    setLoggedUserFirstName(updatedValues.firstName)
+                }
+                if(updatedValues.lastName){
+                    setLoggedUserLastName(updatedValues.lastName)
+                }
+                if(updatedValues.gender){
+                    setLoggedUserGender(updatedValues.gender)
+                }
+                if(updatedValues.dateOfBirth){
+                    setLoggedUserDateOfBirth(updatedValues.dateOfBirth)
+                }
+                toast.success("User data updated!", {id: t, duration : 2000})
+            }else{
+                toast.error("Error saving data", {id: t, duration : 2000})
+            }
+            setIsEditingPersonalInfo(false)
+        } catch (error) {
+            toast.error("Error saving data", { id: t, duration: 2000 });
+        }
+    }
+
+    const handleCopyUrl = async()=>{
+        const url = `${FRONT_URL}/collector/${loggedUserName}`;
+        await navigator.clipboard.writeText(url)
+        toast.success("Link copied!", {duration: 2000})
     }
 
     useEffect(()=>{
@@ -144,6 +306,8 @@ export function ProfileScreen2(){
             setLoggedUserLevel(loggedUser.level)
             setLoggedUserFollowesCount(loggedUser.followersCount)
             setLoggedUserBio(loggedUser.bio)
+            setLoggedUserGender(loggedUser.gender)
+            setLoggedUserDateOfBirth(loggedUser.dateOfBirth)
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -153,9 +317,22 @@ export function ProfileScreen2(){
                     role : loggedUser.role,
                     level : loggedUser.level,
                     followersCount : loggedUser.followersCount,
-                    bio : loggedUser.bio
+                    bio : loggedUser.bio || "",
+                    gender : loggedUser.gender || "",
+                    dateOfBirth : loggedUser.dateOfBirth
                 }
             ))
+            if(loggedUser.dateOfBirth){
+                const date = new Date(loggedUser.dateOfBirth);
+
+                setDobDay(date.getUTCDate())
+                setDobMonth(date.getUTCMonth()+1) //getMonth es 0-11
+                setDobYear(date.getUTCFullYear())
+            }else{
+                setDobDay("")
+                setDobMonth("")
+                setDobYear("")
+            }
             setLoading(false)
         }
         if(
@@ -165,7 +342,9 @@ export function ProfileScreen2(){
             !loggedUserRole ||
             !loggedUserLevel ||
             !loggedUserFollowesCount ||
-            !loggedUserBio
+            !loggedUserBio ||
+            !loggedUserGender ||
+            !loggedUserDateOfBirth
         ){
             getLoggedUserInfo()
         }else{
@@ -177,16 +356,27 @@ export function ProfileScreen2(){
                 role : loggedUserRole,
                 level : loggedUserLevel,
                 followersCount : loggedUserFollowesCount,
-                bio : loggedUserBio,
-                nickName : loggedUserName
-
+                bio : loggedUserBio || "",
+                nickName : loggedUserName,
+                gender : loggedUserGender || "",
+                dateOfBirth : loggedUserDateOfBirth
             }))
+            if(loggedUserDateOfBirth){
+                const date = new Date(loggedUserDateOfBirth);
+
+                setDobDay(date.getUTCDate())
+                setDobMonth(date.getUTCMonth()+1) //getMonth es 0-11
+                setDobYear(date.getUTCFullYear())
+            }else{
+                setDobDay("")
+                setDobMonth("")
+                setDobYear("")
+            }
             setLoading(false)
         }
     },[])
 
     useEffect(()=>{
-        console.log("entra")
         if(!editableUserInfo.firstName || !editableUserInfo.lastName){
             return
         }
@@ -250,25 +440,9 @@ export function ProfileScreen2(){
                             {isEditingUserInfo ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
                             <div className={styles.correctUserNameFormatContainer}>
                                 {isEditingUserInfo ? displayUserNameCorrectFormat ? <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> : null : null}
-                            </div></div>
-                        <div className={styles.nameImputContainer}>
-                            <input 
-                                type="text"
-                                value={editableUserInfo.firstName}
-                                disabled={!isEditingUserInfo}
-                                onChange={(e)=>setEditableUserInfo(prev=>({...prev, firstName : e.target.value}))}
-                            />
-                            <input 
-                                type="text"
-                                value={editableUserInfo.lastName}
-                                disabled={!isEditingUserInfo}
-                                onChange={(e)=>setEditableUserInfo(prev=>({...prev, lastName : e.target.value}))}
-                            />
+                            </div>
                         </div>
-                        <div className={styles.formInputError}>
-                            {updateDataError.firstName ? editableUserInfo.firstName.length<3 ? <p>Name is too short</p> : editableUserInfo.firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : <p/>}
-                            {updateDataError.lastName ? editableUserInfo.lastName .length<3 ? <p>Last name is too short</p> : editableUserInfo.lastName .length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : <p/>}
-                        </div>
+                        <p>{`${loggedUserFirstName} ${loggedUserLastName}`}</p>
                         <p>{`${editableUserInfo.role} •Level ${editableUserInfo.level}`}</p>
                         <LevelBar />
                         <div className={styles.badgesContainer}>
@@ -289,26 +463,99 @@ export function ProfileScreen2(){
                         />
                     </div>
                     <div className={styles.userButtons}>
-
+                        <a href={`${FRONT_URL}/collector/${loggedUserName}`}>
+                            {`thediecaster.com/collector/${loggedUserName}`}
+                        </a>
+                        <Copy
+                            className={styles.copyUrlBtn}
+                            onClick={handleCopyUrl}
+                        />
                     </div>
                 </div>
 
-
                 <div className={styles.personalInfo}>
+                    {isEditingPersonalInfo ? <Save onClick={handleSavePersonalInfo}/> :<Edit onClick={handleEditPersonalInfo}/>}
+                    <p className={styles.sectionTitle}>Personal Info</p>
+                    <label htmlFor="firstName">Name</label>
+                    <input 
+                        id='firstName'
+                        type="text"
+                        value={editableUserInfo.firstName}
+                        disabled={!isEditingPersonalInfo}
+                        onChange={(e)=>setEditableUserInfo(prev=>({...prev, firstName : e.target.value}))}
+                    />
+                    <div className={styles.formInputError}>
+                        {updateDataError.firstName ? editableUserInfo.firstName.length<3 ? <p>Name is too short</p> : editableUserInfo.firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : <p/>}
+                    </div>
+                    <label htmlFor="lastName">Last name</label>
+                    <input 
+                        id='lastName'
+                        type="text"
+                        value={editableUserInfo.lastName}
+                        disabled={!isEditingPersonalInfo}
+                        onChange={(e)=>setEditableUserInfo(prev=>({...prev, lastName : e.target.value}))}
+                    />
+                    <div className={styles.formInputError}>
+                        {updateDataError.lastName ? editableUserInfo.lastName .length<3 ? <p>Last name is too short</p> : editableUserInfo.lastName .length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : <p/>}
+                    </div>
+                    <label htmlFor="gender">Gender</label>
+                    <select 
+                        name="gender" 
+                        id="gender" 
+                        value={editableUserInfo.gender}
+                        disabled={!isEditingPersonalInfo}
+                        onChange={(e)=>{
+                            setEditableUserInfo(prev=>({
+                                ...prev,
+                                gender : e.target.value
+                            }))
+                        }}
+                    >
+                        <option value=""></option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <label>Date of Birth</label>
+                    <div className={styles.dobContainer}>
+                        <input 
+                            id='dobDay'
+                            type="number"
+                            value={dobDay}
+                            disabled={!isEditingPersonalInfo}
+                            onChange={(e)=>setDobDay(Number(e.target.value))}
+                        />
+                        <input 
+                            id='dobMonth'
+                            type="number"
+                            value={dobMonth}
+                            disabled={!isEditingPersonalInfo}
+                            onChange={(e)=>setDobMonth(Number(e.target.value))}
+                        />
+                        <input 
+                            id='dobYear'
+                            type="number"
+                            value={dobYear}
+                            disabled={!isEditingPersonalInfo}
+                            onChange={(e)=>setDobYear(Number(e.target.value))}
+                        />
+                    </div>
+                    <div className={styles.dobErrors}>
+                        {updateDataError.dobDay ? <p>Invalid Day</p> : <p></p>}
+                        {updateDataError.dobMonth ? <p>Invalid Month</p> : <p></p>}
+                        {updateDataError.dobYear ? <p>Invalid Year</p> : <p></p>}
+                    </div>
+
 
                 </div>
-
 
                 <div className={styles.social}>
 
                 </div>
 
-
                 <div className={styles.bottomContainer}>
                     <div className={styles.userStats}>
 
                     </div>
-
 
                     <div className={styles.accountInfo}>
 
