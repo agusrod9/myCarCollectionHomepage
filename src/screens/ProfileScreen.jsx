@@ -15,7 +15,7 @@ import { capitalize } from '../utils/textUtils.js'
 
 const API_BASEURL = import.meta.env.VITE_API_BASEURL;
 
-export function ProfileScreen({}){
+export function ProfileScreen(){
     const{
         loggedUserEmail, 
         loggedUserGoogleId, 
@@ -334,7 +334,7 @@ export function ProfileScreen({}){
                     if(e.key=='Enter'){
                         handleSaveUserName(e)
                     }
-                }}/>
+                    }}/>
                     {isEditingUserName ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
                 </div>
                 <div className={styles.userNameSaveAndCancelContainer}>

@@ -126,7 +126,11 @@
 }
 
 .formInputError{
-    height: 16px;
+    height: 40px;
+}
+
+.formInputError p{
+    color: red;
 }
 
 .editingMode{

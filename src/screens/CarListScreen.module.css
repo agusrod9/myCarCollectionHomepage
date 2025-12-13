@@ -7,11 +7,11 @@
 }
 
 .myGarageContainer{
-    flex:1;
-    width: 100vw;
+    flex: 1;
+    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 4fr;
-    grid-template-rows: auto 1fr;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 65px 1fr;
     grid-template-areas: 
         "filters search"
         "filters main";
@@ -20,8 +20,7 @@
 .myGFilters{
     grid-area: filters;
     padding-top: 65px;
-    width: 100%;
-    height: 100%;
+    min-width: 0;
 }
 
 .myGSearchBar{
@@ -32,10 +31,8 @@
 .myGMain{
     grid-area: main;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    overflow-x: hidden;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
     padding: 10px;
+    max-width: 100%;
 }

@@ -13,8 +13,6 @@
   /*font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;*/
   line-height: 1.5;
   font-weight: 400;
-  display: flex;
-  justify-content: center;
   background: var(--bgBottomGradient);
   color: #fafafa;
   background-color: rgba(66, 66, 66, 0.726);

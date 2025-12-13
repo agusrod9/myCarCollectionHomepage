@@ -18,6 +18,10 @@ export function AppContextProvider ({children}){
     const [loggedUserEmail, setLoggedUserEmail] = useState(null)
     const [loggedUserName, setLoggedUserName] = useState(null)
     const [loggedUserFirstName, setLoggedUserFirstName] = useState(null)
+    const [loggedUserFollowesCount,setLoggedUserFollowesCount] = useState(null)
+    const [loggedUserBadges, setLoggedUserBadges] = useState(null)
+    const [loggedUserLevel, setLoggedUserLevel] = useState(null)
+    const [loggedUserBio, setLoggedUserBio] = useState(null)
     const [loggedUserLastName, setLoggedUserLastName] = useState(null)
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
@@ -247,6 +251,7 @@ export function AppContextProvider ({children}){
             loggedUserLastName,
             loggedUserLanguage,
             loggedUserRole,
+            setLoggedUserRole,
             setLoggedUserId, 
             setLoggedUserName,
             loggedUserCurrency,
@@ -279,7 +284,15 @@ export function AppContextProvider ({children}){
             loggedUserGoogleId,
             placeholder,
             profilePlaceholder,
-            setUserFavoritesCount
+            setUserFavoritesCount,
+            loggedUserLevel,
+            setLoggedUserLevel,
+            loggedUserBadges,
+            setLoggedUserBadges,
+            loggedUserFollowesCount,
+            setLoggedUserFollowesCount,
+            loggedUserBio,
+            setLoggedUserBio
         }}
         >
             {children}

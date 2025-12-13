@@ -1,0 +1,145 @@
+.root{
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 65px;
+}
+
+.pageContainer{
+    display: flex;
+    max-width: 1200px;
+}
+
+.banner{
+    display: grid;
+    grid-template-areas: "picture userInfo userButtons";
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+.pictureSectionContainer{
+    grid-area: picture;
+    padding: 22px;
+    width: 100%;
+}
+
+.profilePictureOverlayContainer{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    position: absolute;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.profilePictureOverlayContainer:hover{
+    opacity: 1;
+}
+
+.profilePictureOverlay{
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0));
+    height: 60px;
+    padding: 40px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.profilePicture{
+    height: 250px;
+    width: 250px;
+    border: 4px solid #0d1b2a;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.fileInput{
+    display: none;
+}
+
+.userInfo{
+    grid-area: userInfo;
+}
+
+.userNameInputContainer{
+
+}
+
+.formInputError{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 40px;
+}
+
+.formInputError p{
+    font-size: 0.8rem;
+    color: red;
+}
+
+.correctUserNameFormatContainer{
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5px;
+}
+
+.correctUserNameFormatInfo{
+    font-size: 0.8rem;
+    color: red;
+}
+
+.nameImputContainer{
+    display: flex;
+    gap: 6px;
+}
+
+.badgesContainer{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.badgeImg{
+    height: 40px;
+    width: 40px;
+    border: 1px solid #fafafa;
+    border-radius: 50px;
+}
+
+.bio{
+    font-style: italic;
+}
+
+.userButtons{
+    grid-area: userButtons;
+}
+
+.personalInfo{
+
+}
+
+.social{
+
+}
+
+.bottomContainer{
+
+}
+
+.userStats{
+
+}
+
+.accountInfo{
+
+}

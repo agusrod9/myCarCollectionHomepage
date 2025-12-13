@@ -24,6 +24,7 @@ import { LandingScreen } from './screens/LandingScreen.jsx'
 import ContactScreen from './screens/ContactScreen.jsx'
 import RredirectToApp from './components/RedirectToApp.jsx'
 import CollectorScreen from './screens/CollectorScreen.jsx'
+import { ProfileScreen2 } from './screens/ProfileScreen2.jsx'
 
 function Main(){
     const host = window.location.host;
@@ -73,7 +74,7 @@ function Main(){
                 <Routes>
                     <Route path='/' element={<ProtectedRoute> <HomeScreen /> </ProtectedRoute>} />
                     <Route path='/newCar' element={<ProtectedRoute> <AddCarScreen /> </ProtectedRoute>} />
-                    <Route path='/profile' element={<ProtectedRoute> <ProfileScreen /> </ProtectedRoute>} />
+                    <Route path='/profile' element={<ProtectedRoute> <ProfileScreen2 /> </ProtectedRoute>} />
                     <Route path='/myGarage' element={<ProtectedRoute> <CarListScreen mode = 'myGarage' /> </ProtectedRoute>} />
                     <Route path='/myFavorites' element={<ProtectedRoute> <CarListScreen mode = 'myFavorites' /> </ProtectedRoute>} />
                     <Route path='/myCollections' element={<ProtectedRoute> <MyCollectionsScreen /> </ProtectedRoute>} />
