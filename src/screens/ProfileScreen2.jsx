@@ -41,7 +41,9 @@ export function ProfileScreen2(){
         loggedUserGender,
         setLoggedUserGender,
         loggedUserCountry,
-        setLoggedUserCountry
+        setLoggedUserCountry,
+        loggedUserCollectorSince,
+        setLoggedUserCollectorSince
         
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
@@ -56,7 +58,8 @@ export function ProfileScreen2(){
         nickName : loggedUserName || "",
         gender : loggedUserGender || "",
         dateOfBirth : loggedUserDateOfBirth || "",
-        country : loggedUserCountry || ""
+        country : loggedUserCountry || "",
+        collectorSince : loggedUserCollectorSince || ""
     })
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
@@ -71,6 +74,7 @@ export function ProfileScreen2(){
     const typeTimeoutRef = useRef(null)
     const initialUserInfoRef = useRef({
         nickName: "",
+        loggedUserCollectorSince,
         bio: ""
     })
     const initialPersonalInfoRef = useRef({
@@ -145,10 +149,18 @@ export function ProfileScreen2(){
         }, 500);
     }
 
+    const handleCollectorSinceChange = (e)=>{
+        setEditableUserInfo(prev=>({
+            ...prev,
+            collectorSince : e.target.value
+        }))
+    }
+
     const handleEditUserInfo=()=>{
         setIsEditingUserInfo(true)
         initialUserInfoRef.current = {
             nickName : editableUserInfo.nickName,
+            loggedUserCollectorSince : editableUserInfo.collectorSince,
             bio : editableUserInfo.bio
         }
     }
@@ -158,6 +170,7 @@ export function ProfileScreen2(){
         const initial = initialUserInfoRef.current;
         if(
             editableUserInfo.nickName === initial.nickName &&
+            editableUserInfo.collectorSince === initial.collectorSince &&
             editableUserInfo.bio === initial.bio
         ){
             toast("No changes to save", {icon: "⚠️"})
@@ -166,6 +179,7 @@ export function ProfileScreen2(){
 
         const updatedValues = {};
         editableUserInfo.nickName !== initial.nickName ? (updatedValues.nickName = editableUserInfo.nickName) : null
+                editableUserInfo.collectorSince !== initial.collectorSince ? (updatedValues.collectorSince = editableUserInfo.collectorSince) : null
         editableUserInfo.bio !== initial.bio ? (updatedValues.bio = editableUserInfo.bio) : null
 
         if(Object.keys(updatedValues).length===0){
@@ -173,6 +187,7 @@ export function ProfileScreen2(){
             setEditableUserInfo(prev=>({
                 ...prev,
                 nickName : initial.nickName,
+                collectorSince : initial.collectorSince,
                 bio : initial.bio
             }))
         }
@@ -188,6 +203,9 @@ export function ProfileScreen2(){
         if(response.status===200){
             if(updatedValues.nickName){
                 setLoggedUserName(updatedValues.nickName)
+            }
+            if(updatedValues.collectorSince){
+                setLoggedUserCollectorSince(updatedValues.collectorSince)
             }
             if(updatedValues.bio){
                 setLoggedUserBio(updatedValues.bio)
@@ -226,14 +244,15 @@ export function ProfileScreen2(){
                 return;
             }
 
-            formattedDob = localDate.toISOString().split("T")[0];
+            formattedDob = `${dobYear}-${String(dobMonth).padStart(2, "0")}-${String(dobDay).padStart(2, "0")}`;
         }
+        
         if(
             editableUserInfo.firstName === initial.firstName &&
             editableUserInfo.lastName === initial.lastName &&
             editableUserInfo.gender === initial.gender &&
             editableUserInfo.country === initial.country &&
-            formattedDob === initial.dateOfBirth 
+            formattedDob === initial.dateOfBirth.slice(0, 10)
         ){
             toast("No changes to save", {icon: "⚠️"})
             return
@@ -320,6 +339,7 @@ export function ProfileScreen2(){
             setLoggedUserGender(loggedUser.gender)
             setLoggedUserDateOfBirth(loggedUser.dateOfBirth)
             setLoggedUserCountry(loggedUser.country)
+            setLoggedUserCollectorSince(loggedUser.collectorSince)
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -332,7 +352,8 @@ export function ProfileScreen2(){
                     bio : loggedUser.bio || "",
                     gender : loggedUser.gender || "",
                     dateOfBirth : loggedUser.dateOfBirth,
-                    country : loggedUser.country || ""
+                    country : loggedUser.country || "",
+                    collectorSince : loggedUser.collectorSince || ""
                 }
             ))
             if(loggedUser.dateOfBirth){
@@ -358,7 +379,8 @@ export function ProfileScreen2(){
             !loggedUserBio ||
             !loggedUserGender ||
             !loggedUserDateOfBirth ||
-            !loggedUserCountry
+            !loggedUserCountry ||
+            !loggedUserCollectorSince
         ){
             getLoggedUserInfo()
         }else{
@@ -374,7 +396,8 @@ export function ProfileScreen2(){
                 nickName : loggedUserName,
                 gender : loggedUserGender || "",
                 dateOfBirth : loggedUserDateOfBirth,
-                country : loggedUserCountry
+                country : loggedUserCountry,
+                collectorSince : loggedUserCollectorSince
             }))
             if(loggedUserDateOfBirth){
                 const date = new Date(loggedUserDateOfBirth);
@@ -458,6 +481,13 @@ export function ProfileScreen2(){
                             </div>
                         </div>
                         <p>{`${loggedUserFirstName} ${loggedUserLastName}`}</p>
+                        <label htmlFor="collectorSince">Collector since</label>
+                        <input 
+                            type="number"
+                            value={editableUserInfo.collectorSince}
+                            disabled={!isEditingUserInfo}
+                            onChange={handleCollectorSinceChange}
+                        />
                         <p>{`${editableUserInfo.role} •Level ${editableUserInfo.level}`}</p>
                         <LevelBar />
                         <div className={styles.badgesContainer}>

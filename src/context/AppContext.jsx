@@ -23,6 +23,7 @@ export function AppContextProvider ({children}){
     const [loggedUserBadges, setLoggedUserBadges] = useState(null)
     const [loggedUserLevel, setLoggedUserLevel] = useState(null)
     const [loggedUserBio, setLoggedUserBio] = useState(null)
+    const [loggedUserCollectorSince, setLoggedUserCollectorSince] = useState(null)
     const [loggedUserLastName, setLoggedUserLastName] = useState(null)
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
@@ -291,7 +292,9 @@ export function AppContextProvider ({children}){
             loggedUserDateOfBirth,
             setLoggedUserDateOfBirth,
             loggedUserCountry,
-            setLoggedUserCountry
+            setLoggedUserCountry,
+            loggedUserCollectorSince,
+            setLoggedUserCollectorSince
         }}
         >
             {children}
