@@ -10,6 +10,8 @@ import { LevelBar } from '../components/LevelBar'
 import { validateNickFormat } from '../utils/nicknames.util'
 import { BadgeAlert, BadgeCheck, Edit, Save, Copy } from 'lucide-react'
 import { CountriesSelect } from '../components/CountriesSelect'
+import { SocialLinkCard } from '../components/SocialLinkCard'
+import { SocialLinkModal } from '../components/SocialLinksModal'
 
 
 export function ProfileScreen2(){
@@ -43,10 +45,13 @@ export function ProfileScreen2(){
         loggedUserCountry,
         setLoggedUserCountry,
         loggedUserCollectorSince,
-        setLoggedUserCollectorSince
+        setLoggedUserCollectorSince,
+        loggedUserSocialLinks,
+        setLoggedUserSocialLinks
         
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
+    const [socialLinkModalOpen, setSocialLinkModalOpen] = useState(false)
     const [editableUserInfo, setEditableUserInfo] = useState({
         firstName : loggedUserFirstName || "",
         lastName : loggedUserLastName || "",
@@ -59,13 +64,13 @@ export function ProfileScreen2(){
         gender : loggedUserGender || "",
         dateOfBirth : loggedUserDateOfBirth || "",
         country : loggedUserCountry || "",
-        collectorSince : loggedUserCollectorSince || ""
+        collectorSince : loggedUserCollectorSince || "",
+        socialLinks : loggedUserSocialLinks || []
     })
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
     const [isEditingUserInfo, setIsEditingUserInfo] = useState(false)
     const [isEditingPersonalInfo, setIsEditingPersonalInfo] = useState(false)
-    const [isEditingSocialInfo, setIsEditingSocialInfo] = useState(false)
     const [updateDataError, setUpdateDataError] = useState({})
     const [dobDay, setDobDay] = useState(0)
     const [dobMonth, setDobMonth] = useState(0)
@@ -74,7 +79,7 @@ export function ProfileScreen2(){
     const typeTimeoutRef = useRef(null)
     const initialUserInfoRef = useRef({
         nickName: "",
-        loggedUserCollectorSince,
+        collectorSince : "",
         bio: ""
     })
     const initialPersonalInfoRef = useRef({
@@ -85,8 +90,18 @@ export function ProfileScreen2(){
         country : ""
     })
 
-
     usePageTitle(`${loggedUserName}´s Profile`)
+
+    async function updateUser(updatedValues){
+        const url = `${API_BASEURL}users/${loggedUserId}`;
+        const opts = {
+            method : "PUT",
+            headers : {'Content-Type' : 'application/json'},
+            body : JSON.stringify(updatedValues)
+        }
+        const response = await fetch(url, opts)
+        return response
+    }
 
     const handleSelectProfilePicture = ()=>{
         fileInputRef.current.click()
@@ -160,7 +175,7 @@ export function ProfileScreen2(){
         setIsEditingUserInfo(true)
         initialUserInfoRef.current = {
             nickName : editableUserInfo.nickName,
-            loggedUserCollectorSince : editableUserInfo.collectorSince,
+            collectorSince : editableUserInfo.collectorSince,
             bio : editableUserInfo.bio
         }
     }
@@ -179,7 +194,7 @@ export function ProfileScreen2(){
 
         const updatedValues = {};
         editableUserInfo.nickName !== initial.nickName ? (updatedValues.nickName = editableUserInfo.nickName) : null
-                editableUserInfo.collectorSince !== initial.collectorSince ? (updatedValues.collectorSince = editableUserInfo.collectorSince) : null
+        editableUserInfo.collectorSince !== initial.collectorSince ? (updatedValues.collectorSince = editableUserInfo.collectorSince) : null
         editableUserInfo.bio !== initial.bio ? (updatedValues.bio = editableUserInfo.bio) : null
 
         if(Object.keys(updatedValues).length===0){
@@ -279,13 +294,8 @@ export function ProfileScreen2(){
 
         const t = toast.loading("Saving user data...", {duration:10000})
         try {
-            const url = `${API_BASEURL}users/${loggedUserId}`;
-            const opts = {
-                method : "PUT",
-                headers : {'Content-Type' : 'application/json'},
-                body : JSON.stringify(updatedValues)
-            }
-            const response = await fetch(url, opts)
+            const response = await updateUser(updatedValues)
+            
             if(response.status===200){
                 if(updatedValues.firstName){
                     setLoggedUserFirstName(updatedValues.firstName)
@@ -318,6 +328,39 @@ export function ProfileScreen2(){
         toast.success("Link copied!", {duration: 2000})
     }
 
+    const handleSocialLinkModalOnSave =async(data)=>{
+        const t = toast.loading("Updating social links...", {duration : 5000})
+        console.log(loggedUserSocialLinks)
+        const socialLinks = [
+            ...loggedUserSocialLinks,
+            {
+                platform : data.platform,
+                alias : data.alias,
+                url : data.url,
+                label : data.label
+            }
+        ]
+        const response = await updateUser({socialLinks})
+        if(response.status===200){
+            setLoggedUserSocialLinks(prev=>([
+                ...prev,
+                ...socialLinks
+            ]))
+            setEditableUserInfo(prev=>({
+                ...prev,
+                socialLinks
+            }))
+            toast.success("Social links updated!", {duration : 2000, id: t})
+            setSocialLinkModalOpen(false)
+        }else{
+            toast.error("Error updating social links, try again", {duration : 2000, id: t})
+        }
+    }
+
+    const handleSocialLinkModalOnCancel =()=>{
+        setSocialLinkModalOpen(false)
+    }
+
     useEffect(()=>{
         async function getLoggedUserInfo(){
             const url = `${API_BASEURL}sessions/onlineUserData`
@@ -340,6 +383,7 @@ export function ProfileScreen2(){
             setLoggedUserDateOfBirth(loggedUser.dateOfBirth)
             setLoggedUserCountry(loggedUser.country)
             setLoggedUserCollectorSince(loggedUser.collectorSince)
+            setLoggedUserSocialLinks(loggedUser.socialLinks || [])
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -353,7 +397,8 @@ export function ProfileScreen2(){
                     gender : loggedUser.gender || "",
                     dateOfBirth : loggedUser.dateOfBirth,
                     country : loggedUser.country || "",
-                    collectorSince : loggedUser.collectorSince || ""
+                    collectorSince : loggedUser.collectorSince || "",
+                    socialLinks : loggedUser.socialLinks || []
                 }
             ))
             if(loggedUser.dateOfBirth){
@@ -380,7 +425,8 @@ export function ProfileScreen2(){
             !loggedUserGender ||
             !loggedUserDateOfBirth ||
             !loggedUserCountry ||
-            !loggedUserCollectorSince
+            !loggedUserCollectorSince ||
+            !loggedUserSocialLinks
         ){
             getLoggedUserInfo()
         }else{
@@ -397,7 +443,8 @@ export function ProfileScreen2(){
                 gender : loggedUserGender || "",
                 dateOfBirth : loggedUserDateOfBirth,
                 country : loggedUserCountry,
-                collectorSince : loggedUserCollectorSince
+                collectorSince : loggedUserCollectorSince,
+                socialLinks : loggedUserSocialLinks
             }))
             if(loggedUserDateOfBirth){
                 const date = new Date(loggedUserDateOfBirth);
@@ -520,7 +567,7 @@ export function ProfileScreen2(){
 
                 <div className={styles.personalInfo}>
                     {isEditingPersonalInfo ? <Save onClick={handleSavePersonalInfo}/> :<Edit onClick={handleEditPersonalInfo}/>}
-                    <p className={styles.sectionTitle}>Personal Info</p>
+                    <p className={styles.sectionTitle}>About you</p>
                     <label htmlFor="firstName">Name</label>
                     <input 
                         id='firstName'
@@ -598,11 +645,20 @@ export function ProfileScreen2(){
                             country : option.value
                         }))}
                     />
-
-
                 </div>
 
                 <div className={styles.social}>
+                        <p className={styles.sectionTitle}>Social links</p>
+                        {editableUserInfo.socialLinks.length ? editableUserInfo.socialLinks.map(link=>(
+                            <SocialLinkCard link={link}/>
+                        )) : null}
+                        <button 
+                            type='button'
+                            className={styles.addSocialLinkBtn}
+                            onClick={()=> setSocialLinkModalOpen(true)}
+                        >
+                            Add social link
+                        </button>
 
                 </div>
 
@@ -617,6 +673,7 @@ export function ProfileScreen2(){
                 </div>
             </div>
 
+            {socialLinkModalOpen ? <SocialLinkModal onSave={handleSocialLinkModalOnSave} onCancel={handleSocialLinkModalOnCancel}/> : null}
         </section>
     )
 }

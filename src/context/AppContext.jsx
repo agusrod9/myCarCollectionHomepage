@@ -22,6 +22,7 @@ export function AppContextProvider ({children}){
     const [loggedUserFollowesCount,setLoggedUserFollowesCount] = useState(null)
     const [loggedUserBadges, setLoggedUserBadges] = useState(null)
     const [loggedUserLevel, setLoggedUserLevel] = useState(null)
+    const [loggedUserSocialLinks, setLoggedUserSocialLinks] = useState([])
     const [loggedUserBio, setLoggedUserBio] = useState(null)
     const [loggedUserCollectorSince, setLoggedUserCollectorSince] = useState(null)
     const [loggedUserLastName, setLoggedUserLastName] = useState(null)
@@ -294,7 +295,9 @@ export function AppContextProvider ({children}){
             loggedUserCountry,
             setLoggedUserCountry,
             loggedUserCollectorSince,
-            setLoggedUserCollectorSince
+            setLoggedUserCollectorSince,
+            loggedUserSocialLinks,
+            setLoggedUserSocialLinks
         }}
         >
             {children}
