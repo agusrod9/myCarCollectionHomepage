@@ -1,8 +1,9 @@
+import styles from './SocialLinkCard.module.css'
 import { faInstagram, faTiktok, faFacebook, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons"
-import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons"
+import { faEarthAmericas, faEdit } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-export function SocialLinkCard({link}){
+export function SocialLinkCard({link, setLinkToBeEdited, setSocialLinkModalOpen}){
     let linkIcon = null;
     if(link.platform==='ig'){
         linkIcon = faInstagram
@@ -22,12 +23,33 @@ export function SocialLinkCard({link}){
     if(link.platform==='ws'){
         linkIcon = faEarthAmericas
     }
+
+    const handleVisitLink =(url)=>{
+        window.open(url,'_blank','noopener,noreferrer')
+    }
+    
+    const handleEditLink =(link)=>{
+        setLinkToBeEdited(link)
+        setSocialLinkModalOpen(true)
+    }
+
     return(
-        <div>
-            <FontAwesomeIcon icon={linkIcon} />
-            <p>{`${link.label}  ${link.alias}`}</p>
-            <p>{link.platform}</p>
-            <p>{link.url}</p>
+        <div className={styles.cardContainer}>
+            <div className={styles.platformIconContainer}>
+                <FontAwesomeIcon icon={linkIcon} size='xl'/>
+            </div>
+            <div 
+                className={styles.mainContainer}
+                onClick={()=>handleVisitLink(link.url)}
+            >
+                <p>{link.label} {link.alias ? link.alias : null}</p>
+            </div>
+            <div 
+                className={styles.editIconContainer}
+                onClick={()=>handleEditLink(link)}
+            >
+                <FontAwesomeIcon icon={faEdit} size='lg' />
+            </div>
         </div>
     )
 }

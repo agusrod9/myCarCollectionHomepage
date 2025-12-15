@@ -52,6 +52,7 @@ export function ProfileScreen2(){
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [socialLinkModalOpen, setSocialLinkModalOpen] = useState(false)
+    const [linkToBeEdited, setLinkToBeEdited] = useState(null)
     const [editableUserInfo, setEditableUserInfo] = useState({
         firstName : loggedUserFirstName || "",
         lastName : loggedUserLastName || "",
@@ -328,30 +329,76 @@ export function ProfileScreen2(){
         toast.success("Link copied!", {duration: 2000})
     }
 
-    const handleSocialLinkModalOnSave =async(data)=>{
-        const t = toast.loading("Updating social links...", {duration : 5000})
-        console.log(loggedUserSocialLinks)
-        const socialLinks = [
-            ...loggedUserSocialLinks,
-            {
-                platform : data.platform,
-                alias : data.alias,
-                url : data.url,
-                label : data.label
+    const handleAddSocialLink =()=>{
+        if(loggedUserRole==='FREE'){
+            if(editableUserInfo.socialLinks.length){
+                toast("Upgrade to Basic to add more social links", {duration: 3000})
+            }else{
+                setSocialLinkModalOpen(true)
             }
-        ]
+        }
+
+        if(loggedUserRole==='BASIC'){
+            if(editableUserInfo.socialLinks.length<3){
+                setSocialLinkModalOpen(true)
+            }else{
+                toast("More links coming soon for Premium plans", {duration: 3000})
+            }
+        }
+
+        if(loggedUserRole==='PREMIUM'){
+            if(editableUserInfo.socialLinks.length<6){
+                setSocialLinkModalOpen(true)
+            }else{
+                toast("Upgrade to Pro to add more social links", {duration: 3000})
+            }
+        }
+
+        if(loggedUserRole==='PRO'){
+            if(editableUserInfo.socialLinks.length<10){
+                setSocialLinkModalOpen(true)
+            }else{
+                toast("Maximum of 10 social links reached", {duration: 3000})
+            }
+        }
+
+    }
+    const handleSocialLinkModalOnSave =async(data, mode)=>{
+        const t = toast.loading("Updating social links...", {duration : 5000})
+        let socialLinks = loggedUserSocialLinks
+        if(mode==='edit'){
+            const updatedSocialLinks = loggedUserSocialLinks.map(link=>{
+                if(link._id===data._id){
+                    return{
+                        ...link,
+                        ...data
+                    }
+                }
+                return link
+            })
+            socialLinks = updatedSocialLinks
+        }else{
+            socialLinks = [
+                ...loggedUserSocialLinks,
+                {
+                    platform : data.platform,
+                    alias : data.alias,
+                    url : data.url,
+                    label : data.label
+                }
+            ]
+        }
         const response = await updateUser({socialLinks})
         if(response.status===200){
-            setLoggedUserSocialLinks(prev=>([
-                ...prev,
-                ...socialLinks
-            ]))
+            const responseData = await response.json()
+            setLoggedUserSocialLinks(responseData.data.socialLinks)
             setEditableUserInfo(prev=>({
                 ...prev,
-                socialLinks
+                socialLinks : responseData.data.socialLinks
             }))
             toast.success("Social links updated!", {duration : 2000, id: t})
             setSocialLinkModalOpen(false)
+            setLinkToBeEdited(null)
         }else{
             toast.error("Error updating social links, try again", {duration : 2000, id: t})
         }
@@ -359,8 +406,9 @@ export function ProfileScreen2(){
 
     const handleSocialLinkModalOnCancel =()=>{
         setSocialLinkModalOpen(false)
+        setLinkToBeEdited(null)
     }
-
+    console.log(loggedUserSocialLinks)
     useEffect(()=>{
         async function getLoggedUserInfo(){
             const url = `${API_BASEURL}sessions/onlineUserData`
@@ -460,7 +508,7 @@ export function ProfileScreen2(){
             setLoading(false)
         }
     },[])
-
+    console.log(loggedUserSocialLinks)
     useEffect(()=>{
         if(!editableUserInfo.firstName || !editableUserInfo.lastName){
             return
@@ -650,12 +698,12 @@ export function ProfileScreen2(){
                 <div className={styles.social}>
                         <p className={styles.sectionTitle}>Social links</p>
                         {editableUserInfo.socialLinks.length ? editableUserInfo.socialLinks.map(link=>(
-                            <SocialLinkCard link={link}/>
+                            <SocialLinkCard link={link} setLinkToBeEdited={setLinkToBeEdited} setSocialLinkModalOpen={setSocialLinkModalOpen}/>
                         )) : null}
                         <button 
                             type='button'
                             className={styles.addSocialLinkBtn}
-                            onClick={()=> setSocialLinkModalOpen(true)}
+                            onClick={handleAddSocialLink}
                         >
                             Add social link
                         </button>
@@ -673,7 +721,14 @@ export function ProfileScreen2(){
                 </div>
             </div>
 
-            {socialLinkModalOpen ? <SocialLinkModal onSave={handleSocialLinkModalOnSave} onCancel={handleSocialLinkModalOnCancel}/> : null}
+            {socialLinkModalOpen?
+                <SocialLinkModal
+                    editData={linkToBeEdited} 
+                    onSave={handleSocialLinkModalOnSave} 
+                    onCancel={handleSocialLinkModalOnCancel}
+                /> : 
+                null
+            }
         </section>
     )
 }

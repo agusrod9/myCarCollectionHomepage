@@ -204,7 +204,7 @@ export function AddCarForm (){
         const incomingFiles = Array.from(e.target.files)
         const role = loggedUserRole
         const maxImagesAllowed =    role === "PRO" ? 10 :
-                                    role === "PREMIUM" ? 5 :
+                                    role === "PREMIUM" ? 6 :
                                     role === "BASIC" ? 3
                                     : 1
         if(images.length + incomingFiles.length > maxImagesAllowed){

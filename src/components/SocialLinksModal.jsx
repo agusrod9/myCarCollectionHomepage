@@ -51,7 +51,13 @@ export function SocialLinkModal({editData, onSave, onCancel}){
         return `https://${trimmed}`;
     }
 
-    const handleSave = ()=>{
+    const handleSaveOrEdit = ()=>{
+        let mode = null;
+        if(editData){
+            mode = 'edit'
+        }else{
+            mode = 'create'
+        }
         if(
             !platform ||
             !url 
@@ -65,13 +71,24 @@ export function SocialLinkModal({editData, onSave, onCancel}){
             return
         }
         const option = options.find(opt => opt.id === platform)
-        const dataToSave={
-            platform,
-            url : normalizedUrl,
-            alias,
-            label : option.label
+        let dataToSave = null;
+        if(mode==='edit'){
+            dataToSave={
+                platform,
+                url : normalizedUrl,
+                alias,
+                label : option.label,
+                _id : editData._id
+            }
+        }else{
+            dataToSave={
+                platform,
+                url : normalizedUrl,
+                alias,
+                label : option.label
+            }
         }
-        onSave(dataToSave)
+        onSave(dataToSave, mode)
     }
 
     const handleCancel =()=>{
@@ -100,7 +117,7 @@ export function SocialLinkModal({editData, onSave, onCancel}){
     },[platform, url, alias])
 
     return(
-        <div className={styles.modalLayout}>
+        <div className={styles.modalOverlay}>
             <div className={styles.modalContainer}>
                 <div className={styles.platformBtnContainer}>
                     {options.map(opt=>(
@@ -137,7 +154,7 @@ export function SocialLinkModal({editData, onSave, onCancel}){
                     </button>
                     <button 
                         type='button'
-                        onClick={handleSave}
+                        onClick={handleSaveOrEdit}
                         disabled={!isOkToSave}
                     >
                         Save
