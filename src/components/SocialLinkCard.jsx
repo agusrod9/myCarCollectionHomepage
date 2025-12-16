@@ -46,7 +46,10 @@ export function SocialLinkCard({link, setLinkToBeEdited, setSocialLinkModalOpen}
             </div>
             <div 
                 className={styles.editIconContainer}
-                onClick={()=>handleEditLink(link)}
+                onClick={(e)=>{
+                    e.stopPropagation()
+                    handleEditLink(link)
+                }}
             >
                 <FontAwesomeIcon icon={faEdit} size='lg' />
             </div>

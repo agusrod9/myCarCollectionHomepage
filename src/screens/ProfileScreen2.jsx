@@ -707,12 +707,12 @@ export function ProfileScreen2(){
                         >
                             Add social link
                         </button>
-
                 </div>
 
                 <div className={styles.bottomContainer}>
                     <div className={styles.userStats}>
-
+                        <p className={styles.sectionTitle}>Stats</p>
+                        
                     </div>
 
                     <div className={styles.accountInfo}>
