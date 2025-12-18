@@ -12,6 +12,8 @@ import { BadgeAlert, BadgeCheck, Edit, Save, Copy } from 'lucide-react'
 import { CountriesSelect } from '../components/CountriesSelect'
 import { SocialLinkCard } from '../components/SocialLinkCard'
 import { SocialLinkModal } from '../components/SocialLinksModal'
+import { ProfileScreenStatCard } from '../components/ProfileScreenStatCard'
+import { faBoxArchive, faCar, faWarehouse } from '@fortawesome/free-solid-svg-icons'
 
 
 export function ProfileScreen2(){
@@ -47,7 +49,9 @@ export function ProfileScreen2(){
         loggedUserCollectorSince,
         setLoggedUserCollectorSince,
         loggedUserSocialLinks,
-        setLoggedUserSocialLinks
+        setLoggedUserSocialLinks,
+        loggedUserStats,
+        setLoggedUserStats
         
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
@@ -66,7 +70,8 @@ export function ProfileScreen2(){
         dateOfBirth : loggedUserDateOfBirth || "",
         country : loggedUserCountry || "",
         collectorSince : loggedUserCollectorSince || "",
-        socialLinks : loggedUserSocialLinks || []
+        socialLinks : loggedUserSocialLinks || [],
+        stats : loggedUserStats || {}
     })
     const [userNameOKtoSave, setUserNameOKtoSave] = useState(false)
     const [displayUserNameCorrectFormat ,setDisplayUserNameCorrectFormat] = useState(false)
@@ -262,6 +267,11 @@ export function ProfileScreen2(){
 
             formattedDob = `${dobYear}-${String(dobMonth).padStart(2, "0")}-${String(dobDay).padStart(2, "0")}`;
         }
+
+        if(!editableUserInfo.country){
+            toast.error("Please select your country from the list");
+            return;
+        }
         
         if(
             editableUserInfo.firstName === initial.firstName &&
@@ -408,7 +418,7 @@ export function ProfileScreen2(){
         setSocialLinkModalOpen(false)
         setLinkToBeEdited(null)
     }
-    console.log(loggedUserSocialLinks)
+
     useEffect(()=>{
         async function getLoggedUserInfo(){
             const url = `${API_BASEURL}sessions/onlineUserData`
@@ -432,6 +442,7 @@ export function ProfileScreen2(){
             setLoggedUserCountry(loggedUser.country)
             setLoggedUserCollectorSince(loggedUser.collectorSince)
             setLoggedUserSocialLinks(loggedUser.socialLinks || [])
+            setLoggedUserStats(loggedUser.stats)
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -446,7 +457,8 @@ export function ProfileScreen2(){
                     dateOfBirth : loggedUser.dateOfBirth,
                     country : loggedUser.country || "",
                     collectorSince : loggedUser.collectorSince || "",
-                    socialLinks : loggedUser.socialLinks || []
+                    socialLinks : loggedUser.socialLinks || [],
+                    stats : loggedUser.stats
                 }
             ))
             if(loggedUser.dateOfBirth){
@@ -474,7 +486,8 @@ export function ProfileScreen2(){
             !loggedUserDateOfBirth ||
             !loggedUserCountry ||
             !loggedUserCollectorSince ||
-            !loggedUserSocialLinks
+            !loggedUserSocialLinks ||
+            !loggedUserStats
         ){
             getLoggedUserInfo()
         }else{
@@ -492,7 +505,8 @@ export function ProfileScreen2(){
                 dateOfBirth : loggedUserDateOfBirth,
                 country : loggedUserCountry,
                 collectorSince : loggedUserCollectorSince,
-                socialLinks : loggedUserSocialLinks
+                socialLinks : loggedUserSocialLinks,
+                stats : loggedUserStats
             }))
             if(loggedUserDateOfBirth){
                 const date = new Date(loggedUserDateOfBirth);
@@ -508,7 +522,8 @@ export function ProfileScreen2(){
             setLoading(false)
         }
     },[])
-    console.log(loggedUserSocialLinks)
+
+
     useEffect(()=>{
         if(!editableUserInfo.firstName || !editableUserInfo.lastName){
             return
@@ -572,7 +587,10 @@ export function ProfileScreen2(){
                             />
                             {isEditingUserInfo ? userNameOKtoSave ? <BadgeCheck color='green'/> : <BadgeAlert color='red'/> : null}
                             <div className={styles.correctUserNameFormatContainer}>
-                                {isEditingUserInfo ? displayUserNameCorrectFormat ? <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> : null : null}
+                                {isEditingUserInfo ?
+                                displayUserNameCorrectFormat ? 
+                                <p className={styles.correctUserNameFormatInfo}>Only lowercase letters, numbers, dots (.), hyphens (-) and underscores (_) are allowed.</p> 
+                                : null : null}
                             </div>
                         </div>
                         <p>{`${loggedUserFirstName} ${loggedUserLastName}`}</p>
@@ -625,7 +643,11 @@ export function ProfileScreen2(){
                         onChange={(e)=>setEditableUserInfo(prev=>({...prev, firstName : e.target.value}))}
                     />
                     <div className={styles.formInputError}>
-                        {updateDataError.firstName ? editableUserInfo.firstName.length<3 ? <p>Name is too short</p> : editableUserInfo.firstName.length>50 ? <p>Name is too long</p> : <p>Invalid characters in Name</p> : <p/>}
+                        {updateDataError.firstName ? 
+                        editableUserInfo.firstName.length<3 ? 
+                        <p>Name is too short</p> : editableUserInfo.firstName.length>50 ? 
+                        <p>Name is too long</p> : <p>Invalid characters in Name</p> : 
+                        <p/>}
                     </div>
                     <label htmlFor="lastName">Last name</label>
                     <input 
@@ -636,7 +658,10 @@ export function ProfileScreen2(){
                         onChange={(e)=>setEditableUserInfo(prev=>({...prev, lastName : e.target.value}))}
                     />
                     <div className={styles.formInputError}>
-                        {updateDataError.lastName ? editableUserInfo.lastName .length<3 ? <p>Last name is too short</p> : editableUserInfo.lastName .length>50 ? <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : <p/>}
+                        {updateDataError.lastName ? editableUserInfo.lastName .length<3 ? 
+                        <p>Last name is too short</p> : editableUserInfo.lastName .length>50 ? 
+                        <p>Last name is too long</p> : <p>Invalid characters in Last Name</p>  : 
+                        <p/>}
                     </div>
                     <label htmlFor="gender">Gender</label>
                     <select 
@@ -690,7 +715,7 @@ export function ProfileScreen2(){
                         disabled={!isEditingPersonalInfo}
                         onChange={(option)=>setEditableUserInfo(prev=>({
                             ...prev,
-                            country : option.value
+                            country : option?.value ?? null
                         }))}
                     />
                 </div>
@@ -698,7 +723,12 @@ export function ProfileScreen2(){
                 <div className={styles.social}>
                         <p className={styles.sectionTitle}>Social links</p>
                         {editableUserInfo.socialLinks.length ? editableUserInfo.socialLinks.map(link=>(
-                            <SocialLinkCard link={link} setLinkToBeEdited={setLinkToBeEdited} setSocialLinkModalOpen={setSocialLinkModalOpen}/>
+                            <SocialLinkCard 
+                                link={link} 
+                                setLinkToBeEdited={setLinkToBeEdited} 
+                                setSocialLinkModalOpen={setSocialLinkModalOpen}
+                                key={link._id}
+                            />
                         )) : null}
                         <button 
                             type='button'
@@ -712,6 +742,18 @@ export function ProfileScreen2(){
                 <div className={styles.bottomContainer}>
                     <div className={styles.userStats}>
                         <p className={styles.sectionTitle}>Stats</p>
+                        <div className={styles.statCardsContainer}>
+                            <ProfileScreenStatCard 
+                                icon={faWarehouse}
+                                val={editableUserInfo.stats.totalCars}
+                                label='Total cars'
+                            />
+                            <ProfileScreenStatCard
+                                icon={faBoxArchive}
+                                val={editableUserInfo.stats.totalCollections}
+                                label={'Total collections'}
+                            />
+                        </div>
                         
                     </div>
 

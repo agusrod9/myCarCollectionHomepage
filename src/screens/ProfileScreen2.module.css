@@ -158,7 +158,6 @@
 
 .addSocialLinkBtn{
     height: 40px;
-    
 }
 
 .bottomContainer{
@@ -166,7 +165,16 @@
 }
 
 .userStats{
+    display: flex;
+    flex-direction: column;
+}
 
+.statCardsContainer{
+    display: grid;
+    width: 600px;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+    gap: 20px
 }
 
 .accountInfo{

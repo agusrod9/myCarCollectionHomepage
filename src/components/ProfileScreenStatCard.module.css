@@ -1,0 +1,33 @@
+.profileStatCardWrapper{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: 
+        "icon value"
+        "icon label";
+    border: 1px solid #fafafa;
+    border-radius: 15px;
+    height: 100px;
+    width: 150px;
+}
+
+.iconWrapper{
+    grid-area: icon;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.valueWrapper{
+    grid-area: value;
+    display: flex;
+    align-items: flex-end;
+    font-size: 1.5rem;
+}
+
+.labelWrapper{
+    grid-area: label;
+    display: flex;
+    align-items: flex-start;
+    font-size: 1rem;
+}

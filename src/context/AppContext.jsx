@@ -29,6 +29,7 @@ export function AppContextProvider ({children}){
     const [loggedUserProfilePicture, setLoggedUserProfilePicture] = useState(null)
     const [loggedUserRole, setLoggedUserRole] = useState(null)
     const [loggedUserMustResetPass, setLoggedUserMustResetPass] = useState(false)
+    const [loggedUserStats, setLoggedUserStats] = useState(false)
     const [loggedUserLanguage, setLoggedUserLanguage] = useState (null)
     const [loggedUserCountry, setLoggedUserCountry] = useState(null)
     const [loggedUserCurrency, setLoggedUserCurrency] = useState (null)
@@ -297,7 +298,9 @@ export function AppContextProvider ({children}){
             loggedUserCollectorSince,
             setLoggedUserCollectorSince,
             loggedUserSocialLinks,
-            setLoggedUserSocialLinks
+            setLoggedUserSocialLinks,
+            loggedUserStats,
+            setLoggedUserStats
         }}
         >
             {children}

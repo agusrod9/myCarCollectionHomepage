@@ -14,7 +14,7 @@ export function CountriesSelect({className, value, onChange, disabled}){
             onChange={onChange}
             value={selectedOption}
             className={className}
-            isSearchable 
+            isSearchable
             isClearable
         />
     )
