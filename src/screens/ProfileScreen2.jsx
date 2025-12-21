@@ -414,6 +414,33 @@ export function ProfileScreen2(){
         }
     }
 
+    const handleSocialLinkModalOnDelete=async(data)=>{
+        const t = toast.loading("Deleting social link...", {duration : 5000});
+        try {
+            let updatedSocialLinks = editableUserInfo.socialLinks.filter(link=>
+                link._id!==data._id
+            )
+            const response = await updateUser({socialLinks: updatedSocialLinks});
+            if(response.status===200){
+                toast.success("Social links updated!", {duration : 2000, id: t})
+                setEditableUserInfo(prev=>(
+                    {
+                        ...prev,
+                        socialLinks : updatedSocialLinks
+                    }
+                ))
+                setLoggedUserSocialLinks(updatedSocialLinks)
+                setSocialLinkModalOpen(false)
+                setLinkToBeEdited(null)
+            }else{
+                toast.error("We couldn't delete your link, please try again.", {duration : 2000, id: t})
+            }
+        } catch (error) {
+            toast.error("Error updating social links, try again", {duration : 2000, id: t})
+        }
+
+    }
+
     const handleSocialLinkModalOnCancel =()=>{
         setSocialLinkModalOpen(false)
         setLinkToBeEdited(null)
@@ -768,6 +795,7 @@ export function ProfileScreen2(){
                     editData={linkToBeEdited} 
                     onSave={handleSocialLinkModalOnSave} 
                     onCancel={handleSocialLinkModalOnCancel}
+                    onDelete={handleSocialLinkModalOnDelete}
                 /> : 
                 null
             }

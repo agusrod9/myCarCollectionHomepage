@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import validator from 'validator'
 
-export function SocialLinkModal({editData, onSave, onCancel}){
+export function SocialLinkModal({editData, onSave, onCancel, onDelete}){
     const [platform, setPlatform] = useState("")
     const [url, setUrl] = useState("")
     const [alias, setAlias] = useState("")
@@ -91,6 +91,11 @@ export function SocialLinkModal({editData, onSave, onCancel}){
         onSave(dataToSave, mode)
     }
 
+    const handleDeleteLink=(data)=>{
+        //prompt para preguntar antes de borrar
+        onDelete(data)
+    }
+
     const handleCancel =()=>{
         setPlatform("")
         setUrl("")
@@ -152,6 +157,17 @@ export function SocialLinkModal({editData, onSave, onCancel}){
                     >
                         Cancel
                     </button>
+                    {editData ?
+                        <button 
+                            type='button'
+                            onClick={()=>handleDeleteLink(editData)}
+                            disabled={!isOkToSave}
+                        >
+                            Delete
+                        </button> :
+                        null
+                    }
+
                     <button 
                         type='button'
                         onClick={handleSaveOrEdit}
