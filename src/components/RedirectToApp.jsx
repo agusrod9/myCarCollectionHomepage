@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function RredirectToApp(){
+export default function RedirectToApp(){
 
     const MODE = import.meta.env.VITE_MODE
 

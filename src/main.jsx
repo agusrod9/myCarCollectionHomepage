@@ -22,7 +22,7 @@ import useActivityPing from './hooks/useActivityPing.js'
 import { TermsAndConditions } from './screens/TermsAndConditions.jsx'
 import { LandingScreen } from './screens/LandingScreen.jsx'
 import ContactScreen from './screens/ContactScreen.jsx'
-import RredirectToApp from './components/RedirectToApp.jsx'
+import RedirectToApp from './components/RedirectToApp.jsx'
 import CollectorScreen from './screens/CollectorScreen.jsx'
 import { ProfileScreen2 } from './screens/ProfileScreen2.jsx'
 
@@ -43,7 +43,7 @@ function Main(){
         return <>
             <BrowserRouter>
                 <Routes> 
-                    <Route path='/' element={loggedUserId ? <RredirectToApp /> : <LandingScreen />} />
+                    <Route path='/' element={loggedUserId ? <RedirectToApp /> : <LandingScreen />} />
                     <Route path='/login' element={loggedUserId ? <Navigate to={'/'}/> : <LoginScreen/>} />
                     <Route path='/register' element={loggedUserId ? <Navigate to={'/'}/> : <RegisterScreen />} />
                     <Route path='/verify' element={loggedUserId ? <Navigate to={'/'}/> : <VerifyMailScreen />} />
