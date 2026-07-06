@@ -38,6 +38,7 @@ export function AppContextProvider ({children}){
     const [userCarsValue, setUserCarsValue] = useState([])
     const [userCollections, setUserCollections] = useState([])
     const [recentlyAddedCars, setRecentlyAddedCars] = useState([]);
+    const [carsAddedThisMonth, setCarsAddedThisMonth] = useState(0)
     const [loading, setLoading] = useState(true);
     const [userCollectedCars, setUserCollectedCars] = useState([]);
     const [loggedUserGoogleId, setLoggedUserGoogleId] = useState(null)
@@ -60,6 +61,7 @@ export function AppContextProvider ({children}){
         setUserCarCount(0);
         setUserCarsValue([]);
         setRecentlyAddedCars([]);
+        setTotalCarsThisMonth(0);
         setUserCollections([]);
         setUserCollectedCars([]);
         setLoggedUserGoogleId(null);
@@ -275,6 +277,8 @@ export function AppContextProvider ({children}){
             currenciesList,
             setCurrenciesList,
             updateRecentlyAddedCars,
+            carsAddedThisMonth,
+            setCarsAddedThisMonth,
             loggedUserEmail,
             setLoggedUserEmail,
             loggedUserGoogleId,

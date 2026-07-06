@@ -8,12 +8,13 @@ import { uploadSingleImage, convertToWebp } from '../utils/images.utils'
 import toast from 'react-hot-toast'
 import { LevelBar } from '../components/LevelBar'
 import { validateNickFormat } from '../utils/nicknames.util'
+import { copyToClipboard } from '../utils/textUtils'
 import { BadgeAlert, BadgeCheck, Edit, Save, Copy } from 'lucide-react'
 import { CountriesSelect } from '../components/CountriesSelect'
 import { SocialLinkCard } from '../components/SocialLinkCard'
 import { SocialLinkModal } from '../components/SocialLinksModal'
 import { ProfileScreenStatCard } from '../components/ProfileScreenStatCard'
-import { faBoxArchive, faCar, faWarehouse } from '@fortawesome/free-solid-svg-icons'
+import { faBoxArchive, faCar, faWarehouse, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 
 export function ProfileScreen2(){
@@ -51,8 +52,9 @@ export function ProfileScreen2(){
         loggedUserSocialLinks,
         setLoggedUserSocialLinks,
         loggedUserStats,
-        setLoggedUserStats
-        
+        setLoggedUserStats,
+        carsAddedThisMonth,
+        setCarsAddedThisMonth
     } = useContext(AppContext)
     const [loading, setLoading] = useState(true)
     const [socialLinkModalOpen, setSocialLinkModalOpen] = useState(false)
@@ -334,9 +336,13 @@ export function ProfileScreen2(){
     }
 
     const handleCopyUrl = async()=>{
-        const url = `${FRONT_URL}/collector/${loggedUserName}`;
-        await navigator.clipboard.writeText(url)
-        toast.success("Link copied!", {duration: 2000})
+        try {
+            const url = `${FRONT_URL}/collector/${loggedUserName}`;
+            await copyToClipboard(url);
+            toast.success("Link copied!", {duration: 2000})
+        } catch (error) {
+            toast.error("Error copying link", {duration: 2000})
+        }
     }
 
     const handleAddSocialLink =()=>{
@@ -470,6 +476,7 @@ export function ProfileScreen2(){
             setLoggedUserCollectorSince(loggedUser.collectorSince)
             setLoggedUserSocialLinks(loggedUser.socialLinks || [])
             setLoggedUserStats(loggedUser.stats)
+            setCarsAddedThisMonth(loggedUser.carsAddedThisMonth)
             setEditableUserInfo(prev=>(
                 {
                     ...prev,
@@ -779,6 +786,11 @@ export function ProfileScreen2(){
                                 icon={faBoxArchive}
                                 val={editableUserInfo.stats.totalCollections}
                                 label={'Total collections'}
+                            />
+                            <ProfileScreenStatCard
+                                icon={faCalendar}
+                                val={carsAddedThisMonth}
+                                label={'Cars this month'}
                             />
                         </div>
                         

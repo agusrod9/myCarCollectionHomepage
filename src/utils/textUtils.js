@@ -1,3 +1,10 @@
+export async function copyToClipboard(text) {
+    if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return;
+    }
+}
+
 export const capitalize = (str, nameOrBrand) => {
     if(!str){
         return ""
